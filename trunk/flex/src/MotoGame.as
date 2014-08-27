@@ -15,13 +15,15 @@ package
 	{
 		public function MotoGame()
 		{
+			this.stage.align = StageAlign.TOP_LEFT;
+			this.stage.scaleMode = StageScaleMode.NO_SCALE;
+			
 			this.addEventListener(Event.ADDED_TO_STAGE, initialize);
 		}
 		
 		protected function initialize(event:Event):void
 		{
-			this.stage.align = StageAlign.TOP_LEFT;
-			this.stage.scaleMode = StageScaleMode.NO_SCALE;
+			this.removeEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 			this.addEventListener(Event.ENTER_FRAME, onUpdate);
 			
