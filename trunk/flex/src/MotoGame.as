@@ -99,8 +99,7 @@ package
 				if(m_life < 0)
 					m_life = 0;
 				m_ui.life = m_life;
-			}
-				
+			}	
 		}
 		
 		protected function onUpdate(event:Event):void
@@ -113,7 +112,6 @@ package
 				m_rider.y -= 3;
 			else if(m_rider.moveDirection == Rider.MOVE_DOWN)
 				m_rider.y += 3;
-			
 		}
 	}
 }
