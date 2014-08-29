@@ -2,6 +2,7 @@ package
 {
 	import com.loma.game.background.GameBackground;
 	import com.loma.game.player.Rider;
+	import com.loma.game.quest.QuestManager;
 	import com.loma.game.ui.GameUI;
 	
 	import flash.display.Sprite;
@@ -30,6 +31,7 @@ package
 		private var m_speed:int = 0;
 		private var m_speedDamping:int = 5;
 		private var m_acceleration:int = 8;
+		private var m_bGameStart:Boolean = false;
 			
 		
 		public function MotoGame()
@@ -44,20 +46,19 @@ package
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, initialize);
 			
-			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-			this.addEventListener(Event.ENTER_FRAME, onUpdate);
-			
 			m_bg = new GameBackground();
 			this.addChild(m_bg);
 			
-			m_rider = this.addChild(new Rider()) as Rider
-			m_rider.state = Rider.STATE_MOVE;
+			m_rider = new Rider();
+			m_rider.state = Rider.STATE_STOP;
 			m_rider.y = 250;
+			m_rider.x = 30;
 			
 			m_ui = new GameUI();
+			m_ui.gameStartCallback = gameStart;
 			this.addChild(m_ui);
 			
+			QuestManager.instance.ininialize();
 			
 		}
 		
@@ -70,8 +71,7 @@ package
 			else if(event.keyCode == Keyboard.S || event.keyCode == Keyboard.DOWN)
 			{
 				m_rider.moveDirection = Rider.MOVE_NONE;
-			}
-			
+			}			
 		}
 		
 		protected function onKeyDown(event:KeyboardEvent):void
@@ -100,10 +100,16 @@ package
 					m_life = 0;
 				m_ui.life = m_life;
 			}	
+			else if(event.keyCode == Keyboard.I)
+			{
+				m_bg.addObject(0, new Rider(), 400, 150);
+			}
 		}
 		
 		protected function onUpdate(event:Event):void
 		{
+			if(!m_bGameStart) return;
+			
 			m_bg.update();
 			
 			if(m_rider.x > 750)
@@ -112,6 +118,36 @@ package
 				m_rider.y -= 3;
 			else if(m_rider.moveDirection == Rider.MOVE_DOWN)
 				m_rider.y += 3;
+		}
+		
+		public function gameStart():void
+		{
+			m_bGameStart = true;
+			
+			m_ui.hideMenu();
+			
+			this.addChild(m_rider);
+			
+			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			this.addEventListener(Event.ENTER_FRAME, onUpdate);
+		}
+		
+		public function gameMenu():void
+		{
+			m_bGameStart = false;
+			m_ui.showMenu();
+			
+			this.removeChild(m_rider);
+			
+			this.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			this.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			this.removeEventListener(Event.ENTER_FRAME, onUpdate);
+		}
+		
+		public function set gamePause(value:Boolean):void
+		{
+			
 		}
 	}
 }
