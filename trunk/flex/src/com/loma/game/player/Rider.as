@@ -38,6 +38,11 @@ package com.loma.game.player
 			m_mc.gotoAndStop(_state);
 		}
 		
+		public function get state():int
+		{
+			return m_mc.currentFrame;
+		}
+		
 		public function set moveDirection(dir:String):void
 		{
 			m_moveDir = dir;

@@ -7,8 +7,20 @@ package com.loma.game.quest
 	 */	
 	public class QuestFirst implements IQuest
 	{
+		private var m_game:MotoGame;
+		
 		public function QuestFirst()
 		{
+		}
+		
+		public function set game(g:MotoGame):void
+		{
+			m_game = g;
+		}
+		
+		public function get game():MotoGame
+		{
+			return m_game;
 		}
 		
 		public function set type(t:int):void
@@ -16,6 +28,15 @@ package com.loma.game.quest
 		}
 		
 		public function get type():int
+		{
+			return 0;
+		}
+		
+		public function set state(s:int):void
+		{
+		}
+		
+		public function get state():int
 		{
 			return 0;
 		}
@@ -28,8 +49,18 @@ package com.loma.game.quest
 		{
 		}
 		
+		public function check():Boolean
+		{
+			return false;
+		}
+		
 		public function end():void
 		{
+		}
+		
+		public function release():void
+		{
+			
 		}
 	}
 }

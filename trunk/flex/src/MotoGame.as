@@ -2,6 +2,7 @@ package
 {
 	import com.loma.game.background.GameBackground;
 	import com.loma.game.player.Rider;
+	import com.loma.game.quest.QuestFirst;
 	import com.loma.game.quest.QuestManager;
 	import com.loma.game.ui.GameUI;
 	
@@ -50,16 +51,27 @@ package
 			this.addChild(m_bg);
 			
 			m_rider = new Rider();
-			m_rider.state = Rider.STATE_STOP;
-			m_rider.y = 250;
-			m_rider.x = 30;
 			
 			m_ui = new GameUI();
 			m_ui.gameStartCallback = gameStart;
 			this.addChild(m_ui);
 			
-			QuestManager.instance.ininialize();
-			
+			QuestManager.instance.ininialize(this);			
+		}
+		
+		public function get ui():GameUI
+		{
+			return m_ui;
+		}
+		
+		public function get player():Rider
+		{
+			return m_rider;
+		}
+		
+		public function get background():GameBackground
+		{
+			return m_bg;
 		}
 		
 		protected function onKeyUp(event:KeyboardEvent):void
@@ -104,21 +116,41 @@ package
 			{
 				m_bg.addObject(0, new Rider(), 400, 150);
 			}
+			else if(event.keyCode == Keyboard.ESCAPE)
+			{
+				this.gameMenu();
+			}
 		}
 		
 		protected function onUpdate(event:Event):void
 		{
 			if(!m_bGameStart) return;
 			
+			updateBackground();
+			
+			updateRider();
+			
+			QuestManager.instance.update();			
+		}
+		
+		private function updateBackground():void
+		{
 			m_bg.update();
+		}
+		
+		private function updateRider():void
+		{
+			if(m_rider.state == Rider.STATE_STOP)
+				return;
 			
 			if(m_rider.x > 750)
 				m_rider.x = 0;
 			if(m_rider.moveDirection == Rider.MOVE_UP)
 				m_rider.y -= 3;
 			else if(m_rider.moveDirection == Rider.MOVE_DOWN)
-				m_rider.y += 3;
+				m_rider.y += 3;	
 		}
+		
 		
 		public function gameStart():void
 		{
@@ -126,11 +158,17 @@ package
 			
 			m_ui.hideMenu();
 			
+			m_rider.state = Rider.STATE_STOP;
+			m_rider.y = 250;
+			m_rider.x = 50;
 			this.addChild(m_rider);
 			
 			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			this.addEventListener(Event.ENTER_FRAME, onUpdate);
+			
+			// add first quest
+			QuestManager.instance.addQuest(new QuestFirst());
 		}
 		
 		public function gameMenu():void
