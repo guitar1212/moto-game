@@ -5,7 +5,7 @@ package com.loma.game.quest
 	 * @long  Aug 29, 2014
 	 * 
 	 */	
-	public class QuestFirst implements IQuest
+	public class QuestFirst extends QuestBase
 	{
 		private var m_game:MotoGame;
 		
@@ -13,52 +13,25 @@ package com.loma.game.quest
 		{
 		}
 		
-		public function set game(g:MotoGame):void
+		override public function start():void
 		{
-			m_game = g;
+			
 		}
 		
-		public function get game():MotoGame
-		{
-			return m_game;
-		}
-		
-		public function set type(t:int):void
+		override public function onUpdate():void
 		{
 		}
 		
-		public function get type():int
-		{
-			return 0;
-		}
-		
-		public function set state(s:int):void
-		{
-		}
-		
-		public function get state():int
-		{
-			return 0;
-		}
-		
-		public function start():void
-		{
-		}
-		
-		public function onUpdate():void
-		{
-		}
-		
-		public function check():Boolean
+		override public function check():Boolean
 		{
 			return false;
 		}
 		
-		public function end():void
+		override public function end():void
 		{
 		}
 		
-		public function release():void
+		override public function release():void
 		{
 			
 		}

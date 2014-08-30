@@ -37,14 +37,14 @@ package com.loma.game.quest
 			return m_game;
 		}
 		
-		public function addQuest(quest:IQuest):void
+		public function addQuest(quest:QuestBase):void
 		{
 			quest.game = m_game;
 			m_questList.push(quest);
 			quest.state = QuestState.ADD;
 		}
 		
-		public function removeQuest(quest:IQuest):void
+		public function removeQuest(quest:QuestBase):void
 		{
 			var index:int = m_questList.indexOf(quest);		
 			if(index > -1)
@@ -56,10 +56,10 @@ package com.loma.game.quest
 		
 		public function update():void
 		{
-			var q:IQuest;
+			var q:QuestBase;
 			for(var i:int = 0; i < m_questList.length; i++)
 			{
-				q = m_questList[i] as IQuest;
+				q = m_questList[i] as QuestBase;
 				
 				if(q.state == QuestState.ADD)
 				{

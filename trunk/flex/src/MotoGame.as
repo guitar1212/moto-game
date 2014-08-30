@@ -157,6 +157,7 @@ package
 			m_bGameStart = true;
 			
 			m_ui.hideMenu();
+			m_ui.initialize();
 			
 			m_rider.state = Rider.STATE_STOP;
 			m_rider.y = 250;

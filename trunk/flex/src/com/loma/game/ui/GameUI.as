@@ -27,11 +27,6 @@ package com.loma.game.ui
 			
 			m_gameUI = new UI();
 			
-			
-			speed = 0;
-			oil = 0;
-			score = 0;
-			
 			m_maxLife = m_gameUI.LifeBar_mc.totalFrames - 1;
 			
 			life = m_maxLife;
@@ -112,5 +107,12 @@ package com.loma.game.ui
 		}
 		
 		
+		public function initialize():void
+		{	
+			speed = 0;
+			oil = 100;
+			score = 0;
+			life = 6;
+		}
 	}
 }

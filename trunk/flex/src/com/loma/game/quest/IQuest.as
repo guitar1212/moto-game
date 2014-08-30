@@ -10,15 +10,5 @@ package com.loma.game.quest
 			
 		function set state(s:int):void
 		function get state():int
-			
-		function start():void
-		
-		function onUpdate():void
-			
-		function check():Boolean
-			
-		function end():void
-			
-		function release():void
 	}
 }
