@@ -60,7 +60,7 @@ package com.loma.game.background
 		{
 			for(var i:int = 0; i < m_roadArr.length; i++)
 			{
-				m_roadArr[i].x -= m_moveSpeed;
+				m_roadArr[i].x -= m_moveSpeed*0.5;
 			}
 		}
 		

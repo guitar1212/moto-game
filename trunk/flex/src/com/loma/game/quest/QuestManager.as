@@ -49,8 +49,9 @@ package com.loma.game.quest
 			var index:int = m_questList.indexOf(quest);		
 			if(index > -1)
 			{
-				//m_questList.splice(
+				m_questList.splice(index, 1);
 				quest.release();
+				quest = null;
 			}
 		}
 		
@@ -69,12 +70,16 @@ package com.loma.game.quest
 				else if(q.state == QuestState.DOING)
 				{
 					q.onUpdate();
-					q.check();
+					if(q.check())
+					{
+						q.end();
+						q.state = QuestState.END;
+					}
 				}
-				else if(q.state == QuestState.END)
+				/*else if(q.state == QuestState.END)
 				{
 					q.end();
-				}
+				}*/
 				else if(q.state == QuestState.DESTORY)
 				{
 					this.removeQuest(q);

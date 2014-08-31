@@ -18,6 +18,9 @@ package com.loma.game.player
 		public static const MOVE_UP:String = "up";
 		public static const MOVE_DOWN:String = "down";
 		
+		public static const MAX_X:int = 300;
+		public static const MIN_X:int = 50;
+		
 		private var m_mc:Role;
 		
 		private var m_moveDir:String;

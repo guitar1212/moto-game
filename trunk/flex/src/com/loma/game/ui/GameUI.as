@@ -15,7 +15,7 @@ package com.loma.game.ui
 		private var m_gameUI:UI
 		private var m_menu:Menu;
 		
-		private var m_btnStartCallback:Function = null;
+		private var m_btnStartCallback:Function = null;		
 		
 		public function GameUI()
 		{
@@ -61,6 +61,11 @@ package com.loma.game.ui
 		public function set score(value:int):void
 		{
 			m_gameUI.score_num.text = value.toString();
+		}
+		
+		public function addScore(value:int):void
+		{
+			
 		}
 		
 		public function show(value:Boolean):void
