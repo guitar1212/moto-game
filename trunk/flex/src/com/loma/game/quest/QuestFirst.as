@@ -18,11 +18,12 @@ package com.loma.game.quest
 	public class QuestFirst extends QuestBase
 	{
 		
-		private var m_bOK:Boolean = false; 
+		private var m_bOK:Boolean = false;
+		private var u:Sprite;
 		
 		public function QuestFirst()
 		{
-			
+			excuteTimes = 1; 
 		}
 		
 		override public function start():void
@@ -34,41 +35,12 @@ package com.loma.game.quest
 			game.player.state = Rider.STATE_START;
 			
 			// show ui 
-			testUI();
-		}
-		
-		private var u:Sprite;
-		private function testUI():void
-		{
-			// TODO Auto Generated method stub
-			var t:TextField = new TextField();
-			t.text = "要不要戴安全帽呢?";
-			u = new Sprite();
-			u.addChild(t);
-			u.graphics.beginFill(0x33ee11, 0.75);
-			u.graphics.drawRoundRect(0, 0, t.width + 50, t.height + 50, 8);
-			u.graphics.endFill();
-			u.x = 300;
-			u.y = 200;
-			
-			var b:Sprite = new Sprite();
-			b.graphics.beginFill(0x9911cc, 0.9);
-			b.graphics.drawCircle(0, 0, 20);
-			b.x = 50;
-			b.y = 100;
-			var bt:TextField = new TextField();
-			bt.text = "好";
-			bt.selectable = false;			
-			b.addChild(bt);
-			b.addEventListener(MouseEvent.CLICK, onMouseClick);
-			
-			
-			u.addChild(b);
+			u = game.ui.createAlertUI("要不要戴安全帽呢??", onMouseClick, null);
 			
 			game.addObjToLayer(MotoGame.LAYER_UI, u);
 		}
-		
-		protected function onMouseClick(event:MouseEvent):void
+				
+		protected function onMouseClick():void
 		{
 			m_bOK = true;
 		}
@@ -88,10 +60,22 @@ package com.loma.game.quest
 		
 		override public function end():void
 		{
+			this.state = QuestState.DESTORY;
+			
 			game.gamePause = false;
 			game.removeObjFormLayer(MotoGame.LAYER_UI, u);
 			
 			game.addScore(5);
+			
+			game.stage.focus = game.stage;
+			
+			// add quest
+			var q:QuestSpeedLimit = new QuestSpeedLimit();
+			q.speedLimit = 70;
+			QuestManager.instance.addQuest(q);
+			
+			var qc:QuestOtherCars = new QuestOtherCars();
+			QuestManager.instance.addQuest(qc);
 		}
 		
 		override public function release():void

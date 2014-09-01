@@ -10,5 +10,11 @@ package com.loma.game.quest
 			
 		function set state(s:int):void
 		function get state():int
+			
+		function set excuteTimes(e:int):void
+		function get excuteTimes():int
+			
+		function set pause(b:Boolean):void
+		function get pause():Boolean
 	}
 }

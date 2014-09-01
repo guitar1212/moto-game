@@ -5,6 +5,9 @@ package com.loma.game.quest
 		private var m_type:int;
 		private var m_state:int;
 		private var m_game:MotoGame;
+		private var m_excuteTimes:int; // 此任務的執行次數
+		private var m_bCompleted:Boolean = false;
+		private var m_bPause:Boolean = false;
 		
 		public function QuestBase()
 		{
@@ -40,6 +43,25 @@ package com.loma.game.quest
 			return m_state;
 		}
 		
+		public function set pause(b:Boolean):void
+		{
+			m_bPause = b;
+		}
+		
+		public function get pause():Boolean
+		{
+			return m_bPause;
+		}
+		
+		public function set excuteTimes(times:int):void
+		{
+			m_excuteTimes = times;
+		}
+		
+		public function get excuteTimes():int
+		{
+			return m_excuteTimes;
+		}
 		
 		//=================================================================================
 		//
@@ -59,12 +81,22 @@ package com.loma.game.quest
 			return false;
 		}
 		
+		public function onCompleted():void
+		{
+			m_bCompleted = true;
+		}
+		
 		public function end():void
 		{
 		}
 		
 		public function release():void
 		{
+		}
+		
+		public function isCompletetd():Boolean
+		{
+			return m_bCompleted;
 		}
 	}
 }

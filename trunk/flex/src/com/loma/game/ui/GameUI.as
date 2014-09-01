@@ -2,6 +2,8 @@ package com.loma.game.ui
 {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
 
 	/**
 	 * 
@@ -119,5 +121,35 @@ package com.loma.game.ui
 			score = 0;
 			life = 6;
 		}
+		
+		public function createAlertUI(context:String, yesCB:Function, noCB:Function):Sprite
+		{
+			var t:TextField = new TextField();
+			t.text = context;
+			t.autoSize = TextFieldAutoSize.LEFT;
+			var u:Sprite = new Sprite();
+			u.addChild(t);
+			u.graphics.beginFill(0x33ee11, 0.75);
+			u.graphics.drawRoundRect(0, 0, t.width + 50, t.height + 80, 8);
+			u.graphics.endFill();
+			u.x = 300;
+			u.y = 200;
+			
+			var b:Sprite = new Sprite();
+			b.graphics.beginFill(0x9911cc, 0.9);
+			b.graphics.drawCircle(0, 0, 20);
+			b.x = 50;
+			b.y = 60;
+			var bt:TextField = new TextField();
+			bt.text = "好";
+			bt.selectable = false;			
+			b.addChild(bt);
+			b.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void{ yesCB(); });
+			
+			u.addChild(b);
+			
+			return u;
+		}
+		
 	}
 }

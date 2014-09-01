@@ -252,6 +252,12 @@ package
 			if(m_speed > 0)
 				m_rider.state = Rider.STATE_MOVE;
 			
+			// 控制煞車燈
+			if(m_acceleration == -1)
+				m_rider.isBreak = true;
+			else
+				m_rider.isBreak = false;
+			
 			if(m_rider.state == Rider.STATE_STOP)
 				return;
 			
@@ -286,9 +292,7 @@ package
 			m_ui.hideMenu();
 			m_ui.initialize();
 			
-			m_rider.state = Rider.STATE_STOP;
-			m_rider.y = 250;
-			m_rider.x = Rider.MIN_X;
+			riderStart();
 			this.addObjToLayer(LAYER_SCENE, m_rider);	
 			
 			m_oppRider.state = Rider.STATE_MOVE;
@@ -317,6 +321,18 @@ package
 			this.removeEventListener(Event.ENTER_FRAME, onUpdate);
 		}
 		
+		public function riderStart():void
+		{
+			m_rider.state = Rider.STATE_STOP;
+			m_rider.y = 250;
+			m_rider.x = Rider.MIN_X;
+			m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
+		
+			m_acceleration = 0;
+			m_speed = 0;
+			updateSpeed();
+		}
+		
 		public function set gamePause(value:Boolean):void
 		{
 			m_bGameStart = !value;
@@ -333,5 +349,32 @@ package
 			m_score += value;
 			this.ui.score = m_score;
 		}
+		
+		public function get currentSpeed():Number
+		{
+			return m_speed;
+		}
+
+		public function get life():int
+		{
+			return m_life;
+		}
+
+		public function set life(value:int):void
+		{			
+			m_life = value;
+			if(m_life > MAX_LIFE)
+				m_life = MAX_LIFE;
+			else if(m_life < 0)
+				m_life = 0;
+			
+			ui.life = m_life;
+		}
+		
+		public function addLife(value:int):void
+		{
+			life = (m_life + value);
+		}
+
 	}
 }

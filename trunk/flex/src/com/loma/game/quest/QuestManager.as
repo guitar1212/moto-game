@@ -62,6 +62,8 @@ package com.loma.game.quest
 			{
 				q = m_questList[i] as QuestBase;
 				
+				if(q.pause) continue;
+				
 				if(q.state == QuestState.ADD)
 				{
 					q.start();
@@ -72,14 +74,26 @@ package com.loma.game.quest
 					q.onUpdate();
 					if(q.check())
 					{
-						q.end();
-						q.state = QuestState.END;
+						q.onCompleted();
+						q.state = QuestState.COMPLETED;
+						if(q.excuteTimes == 1)
+						{
+							q.state = QuestState.END;
+							q.end();
+						}
 					}
 				}
-				/*else if(q.state == QuestState.END)
+				else if(q.state == QuestState.COMPLETED)
 				{
-					q.end();
-				}*/
+					if(q.excuteTimes == -1)
+					{
+						q.state = QuestState.DOING; // repeat quest
+					}
+				}
+				else if(q.state == QuestState.END)
+				{
+					
+				}
 				else if(q.state == QuestState.DESTORY)
 				{
 					this.removeQuest(q);
