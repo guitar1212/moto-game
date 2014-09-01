@@ -51,8 +51,14 @@ package com.loma.game.quest
 			{
 				car = m_carList[i];
 				car.x = car.x + 30 - curSpeed;
-			}
 				
+				if(car.x < -700)
+				{
+					m_carList.splice(i, 1);
+					car = null;
+					i++;
+				}	
+			}	
 		}
 		
 		override public function check():Boolean
