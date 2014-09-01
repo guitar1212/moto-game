@@ -2,7 +2,9 @@ package com.loma.game.quest
 {
 	import com.loma.game.player.Rider;
 	import com.loma.game.quest.define.QuestState;
+	import com.loma.game.ui.FirstQuestionDialog;
 	
+	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
@@ -19,7 +21,6 @@ package com.loma.game.quest
 	{
 		
 		private var m_bOK:Boolean = false;
-		private var u:Sprite;
 		
 		public function QuestFirst()
 		{
@@ -34,17 +35,24 @@ package com.loma.game.quest
 			// 設置騎士為位配戴安全帽狀態
 			game.player.state = Rider.STATE_START;
 			
-			// show ui 
-			u = game.ui.createAlertUI("要不要戴安全帽呢??", onMouseClick, null);
+			// show ui
+			var alert:FirstQuestionDialog = new FirstQuestionDialog();
+			alert.addEventListener(MouseEvent.CLICK, onAlertMouseClick);
 			
-			game.addObjToLayer(MotoGame.LAYER_UI, u);
-		}
-				
-		protected function onMouseClick():void
-		{
-			m_bOK = true;
+			game.addObjToLayer(MotoGame.LAYER_UI, alert);
 		}
 		
+		protected function onAlertMouseClick(event:MouseEvent):void
+		{
+			if(event.target is SimpleButton)
+			{
+				m_bOK = true;
+			
+				var alert:FirstQuestionDialog = event.currentTarget as FirstQuestionDialog;
+				alert.removeSelf();
+			}
+		}
+				
 		override public function onUpdate():void
 		{
 		}
@@ -63,7 +71,7 @@ package com.loma.game.quest
 			this.state = QuestState.DESTORY;
 			
 			game.gamePause = false;
-			game.removeObjFormLayer(MotoGame.LAYER_UI, u);
+			//game.removeObjFormLayer(MotoGame.LAYER_UI, u);
 			
 			game.addScore(5);
 			

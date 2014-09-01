@@ -15,27 +15,29 @@ package com.loma.game.quest
 		
 		private var m_carList:Array = [];
 		
+		private var m_target:int = 100;
+		
+		private var m_curCount:int = 0;
+		
 		public function QuestOtherCars()
 		{
 			super();
 		}
 		
 		override public function start():void
-		{			
-			m_timerIdx = TimerManager.instance.register(onTimeUp, 3000, -1);
+		{	
 		}
-		
-		private function onTimeUp():void
-		{
-			createCar();
-		}
-		
+				
 		private function createCar():void
 		{
 			var car:Car = new Car();
-			car.x = 1250;
-			car.y = 100;
-			//car.transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+			
+			if(game.currentSpeed < 5)
+				car.x = -350;
+			else
+				car.x = 1250;
+			car.y = 60 + Math.random()*40;
+			car.transform.colorTransform = new ColorTransform(1, Math.random(), Math.random());
 			game.addObjToLayer(MotoGame.LAYER_SCENE, car);
 			
 			m_carList.push(car);
@@ -43,6 +45,14 @@ package com.loma.game.quest
 		
 		override public function onUpdate():void
 		{
+			m_curCount++;
+			if(m_curCount >= m_target)
+			{
+				m_curCount = 0;
+				m_target = 80 + Math.random()*70;
+				createCar();
+			}
+			
 			var i:int = 0, len:int = m_carList.length;
 			var curSpeed:Number = game.currentSpeed;			
 			var car:Car;
@@ -52,11 +62,11 @@ package com.loma.game.quest
 				car = m_carList[i];
 				car.x = car.x + 30 - curSpeed;
 				
-				if(car.x < -700)
+				if(car.x < -700 || car.x > 2000)
 				{
 					m_carList.splice(i, 1);
 					car = null;
-					i++;
+					len--;
 				}	
 			}	
 		}
