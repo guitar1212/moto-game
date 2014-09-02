@@ -63,9 +63,23 @@ package com.loma.game.randomevent
 			var q:QuestBase = null;
 			switch(randomIdx)
 			{
+				// 路面障礙物
 				case 0:
-					q = new QuestObstacles();
-					
+					q = new QuestObstacles();					
+					break;
+				
+				// 問答
+				case 1:
+					break;
+				
+				// 
+				case 2:
+					break;
+				
+				case 3:
+					break;
+				
+				case 4:
 					break;
 				
 				default:
