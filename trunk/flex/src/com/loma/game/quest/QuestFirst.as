@@ -2,6 +2,7 @@ package com.loma.game.quest
 {
 	import com.loma.game.player.Rider;
 	import com.loma.game.quest.define.QuestState;
+	import com.loma.game.randomevent.RandomEventManager;
 	import com.loma.game.string.StringTable;
 	import com.loma.game.ui.FirstQuestionDialog;
 	
@@ -9,6 +10,7 @@ package com.loma.game.quest
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
+	import com.loma.game.quest.base.QuestBase;
 
 	/**
 	 * 遊戲開始的第一個任務
@@ -111,6 +113,8 @@ package com.loma.game.quest
 			
 			var qn:QuestNoTouch = new QuestNoTouch();
 			QuestManager.instance.addQuest(qn);
+			
+			RandomEventManager.instance.start();
 		}
 		
 		override public function release():void

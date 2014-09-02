@@ -1,6 +1,7 @@
 package com.loma.game.quest
 {
 	import com.loma.game.quest.define.QuestState;
+	import com.loma.game.quest.base.QuestBase;
 
 	/**
 	 * 

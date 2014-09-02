@@ -19,7 +19,7 @@ package com.loma.game.player
 		public static const MOVE_UP:String = "up";
 		public static const MOVE_DOWN:String = "down";
 		
-		public static const MAX_X:int = 270;
+		public static const MAX_X:int = 200;
 		public static const MIN_X:int = 60;
 		
 		private var m_hitArea:Sprite;

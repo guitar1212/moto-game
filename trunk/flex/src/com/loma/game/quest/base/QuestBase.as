@@ -1,11 +1,11 @@
-package com.loma.game.quest
+package com.loma.game.quest.base
 {
 	public class QuestBase implements IQuest
 	{
 		private var m_type:int;
 		private var m_state:int;
 		private var m_game:MotoGame;
-		private var m_excuteTimes:int; // 此任務的執行次數
+		private var m_excuteTimes:int = 1; // 此任務的執行次數
 		private var m_bCompleted:Boolean = false;
 		private var m_bPause:Boolean = false;
 		

@@ -6,6 +6,7 @@ package com.loma.game.quest
 	import flash.geom.ColorTransform;
 	
 	import flashx.textLayout.operations.CopyOperation;
+	import com.loma.game.quest.base.QuestBase;
 
 	/**
 	 * 

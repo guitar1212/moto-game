@@ -1,5 +1,7 @@
 package com.loma.game.quest
 {
+	import com.loma.game.quest.base.QuestBase;
+
 	/**
 	 * 
 	 * @long  Sep 1, 2014

@@ -4,6 +4,8 @@ package
 	import com.loma.game.player.Rider;
 	import com.loma.game.quest.QuestFirst;
 	import com.loma.game.quest.QuestManager;
+	import com.loma.game.quest.QuestObstacles;
+	import com.loma.game.randomevent.RandomEventManager;
 	import com.loma.game.ui.GameUI;
 	
 	import flash.display.DisplayObject;
@@ -84,6 +86,8 @@ package
 			
 			QuestManager.instance.ininialize(this);
 			QuestManager.instance.start = true;
+			
+			RandomEventManager.instance.initialize();
 		}
 		
 		private function initLayer():void
@@ -154,17 +158,13 @@ package
 			//test
 			if(event.keyCode == Keyboard.INSERT)
 			{
-				m_life++;
-				if(m_life > MAX_LIFE)
-					m_life = MAX_LIFE;
-				m_ui.life = m_life;
+				var q:QuestObstacles = new QuestObstacles();
+				QuestManager.instance.addQuest(q);
 			}
 			else if(event.keyCode == Keyboard.DELETE)
 			{
-				m_life--;
-				if(m_life < 0)
-					m_life = 0;
-				m_ui.life = m_life;
+				
+				
 			}	
 			else if(event.keyCode == Keyboard.I)
 			{
@@ -209,19 +209,29 @@ package
 			
 			updateRider();
 			
+			RandomEventManager.instance.update();
+			
 			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + "\nacc = " + m_acceleration + 
 							   "\nstageX = " + stage.mouseX + ". stageY = " + stage.mouseY;
 		}
 		
 		private function updateSpeed():void
 		{
+			var dS:Number;
+			if(m_speed < 30)
+				dS = 0.45;
+			else if(m_speed < 50)
+				dS = 0.35;
+			else
+				dS = 0.2;
+			
 			if(m_acceleration > 0)
 			{
-				m_speed += 0.5;
+				m_speed += dS;
 			}
 			else if(m_acceleration < 0)
 			{
-				m_speed -=2;
+				m_speed -= 2;
 			}
 			else if(m_acceleration == 0)
 			{

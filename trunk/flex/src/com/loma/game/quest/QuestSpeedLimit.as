@@ -1,6 +1,7 @@
 package com.loma.game.quest
 {
 	import flash.display.Sprite;
+	import com.loma.game.quest.base.QuestBase;
 
 	/**
 	 * 

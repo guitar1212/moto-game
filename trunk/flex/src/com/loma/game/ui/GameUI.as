@@ -2,6 +2,7 @@ package com.loma.game.ui
 {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.geom.ColorTransform;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 
@@ -46,8 +47,13 @@ package com.loma.game.ui
 		
 		public function set speed(value:int):void
 		{
+			if(value > 50)
+				m_gameUI.speed_num.textColor = 0xff1100;
+			else
+				m_gameUI.speed_num.textColor = 0x003366;
+			
 			m_gameUI.speed_num.text = value.toString();
-		}
+		}	
 		
 		/**
 		 * 
@@ -66,11 +72,6 @@ package com.loma.game.ui
 		public function set score(value:int):void
 		{
 			m_gameUI.score_num.text = value.toString();
-		}
-		
-		public function addScore(value:int):void
-		{
-			
 		}
 		
 		public function show(value:Boolean):void

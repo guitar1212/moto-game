@@ -3,6 +3,7 @@ package com.loma.game.quest
 	import com.loma.game.string.StringTable;
 	
 	import flash.display.Sprite;
+	import com.loma.game.quest.base.QuestBase;
 
 	/**
 	 * 
