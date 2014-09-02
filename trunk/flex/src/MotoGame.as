@@ -87,7 +87,7 @@ package
 			QuestManager.instance.ininialize(this);
 			QuestManager.instance.start = true;
 			
-			RandomEventManager.instance.initialize();
+			RandomEventManager.instance.initialize(this);
 		}
 		
 		private function initLayer():void

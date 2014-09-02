@@ -1,9 +1,9 @@
 package com.loma.game.quest
 {
+	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.quest.define.QuestState;
 	
 	import flash.events.Event;
-	import com.loma.game.quest.base.QuestBase;
 
 	/**
 	 * 
@@ -27,16 +27,20 @@ package com.loma.game.quest
 		}
 		
 		override public function onUpdate():void
-		{	
+		{
+			m_bOK = game.player.hitObject.hitTestObject(m_obs);
+			if(!m_bOK)
+				m_bOK = m_obs.parent == null;
 		}
 		
 		override public function check():Boolean
 		{			
-			return game.player.hitObject.hitTestObject(m_obs);
+			return m_bOK;
 		}
 		
 		override public function onCompleted():void
 		{
+			game.dispatchEvent(new Event("QueseComplete"));
 			game.addScore(-5);
 		}
 		
@@ -59,6 +63,7 @@ package com.loma.game.quest
 			game.background.addObject(2, m_obs, 0, 0);
 			
 			m_obs.addEventListener(Event.REMOVED, onRemoveObstacle);
+			m_obs.addEventListener(Event.REMOVED_FROM_STAGE, onRemoveObstacle);
 		}
 		
 		protected function onRemoveObstacle(event:Event):void

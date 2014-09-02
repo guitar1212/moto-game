@@ -3,6 +3,9 @@ package com.loma.game.randomevent
 	import com.loma.game.quest.QuestManager;
 	import com.loma.game.quest.QuestObstacles;
 	import com.loma.game.quest.base.QuestBase;
+	
+	import flash.display.Sprite;
+	import flash.events.Event;
 
 	/**
 	 * 
@@ -21,6 +24,10 @@ package com.loma.game.randomevent
 		
 		private var m_curCount:int = 0;
 		
+		private var m_game:MotoGame;
+		
+		private var m_bFinish:Boolean = true;
+		
 		public function RandomEventManager()
 		{
 		}
@@ -33,8 +40,16 @@ package com.loma.game.randomevent
 			return m_instance;
 		}
 		
-		public function initialize():void
+		public function initialize(g:MotoGame):void
 		{	
+			m_game = g;
+			m_game.addEventListener("QueseComplete", onQuestComplete);
+		}
+		
+		protected function onQuestComplete(event:Event):void
+		{
+			m_bFinish = true;
+			trace("QueseComplete");
 		}
 		
 		public function start():void
@@ -45,6 +60,8 @@ package com.loma.game.randomevent
 		public function update():void
 		{
 			if(!m_bStart) return;
+			
+			if(!m_bFinish) return;
 			
 			m_curCount++;
 			if(m_curCount >= m_target)
@@ -87,7 +104,10 @@ package com.loma.game.randomevent
 			}
 			
 			if(q)
+			{
 				QuestManager.instance.addQuest(q);
+				m_bFinish = false;
+			}
 		}
 		
 		private function randomTarget():void
