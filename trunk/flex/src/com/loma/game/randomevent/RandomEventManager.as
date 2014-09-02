@@ -1,5 +1,9 @@
 package com.loma.game.randomevent
 {
+	import com.loma.game.quest.QuestManager;
+	import com.loma.game.quest.QuestObstacles;
+	import com.loma.game.quest.base.QuestBase;
+
 	/**
 	 * 
 	 * @long  Sep 2, 2014
@@ -9,7 +13,7 @@ package com.loma.game.randomevent
 	{
 		private static var m_instance:RandomEventManager = null;
 		
-		private var m_eventList:Array = [];
+		private static const TOTAL_EVENTS:int = 1;
 		
 		private var m_bStart:Boolean = false;
 		
@@ -30,7 +34,7 @@ package com.loma.game.randomevent
 		}
 		
 		public function initialize():void
-		{			
+		{	
 		}
 		
 		public function start():void
@@ -45,9 +49,31 @@ package com.loma.game.randomevent
 			m_curCount++;
 			if(m_curCount >= m_target)
 			{
+				m_curCount = 0;
 				randomTarget();
+				
+				randomQuest();
 			}
 			
+		}
+		
+		private function randomQuest():void
+		{
+			var randomIdx:int = ~~(Math.random()*(TOTAL_EVENTS - 1) + 0.5);
+			var q:QuestBase = null;
+			switch(randomIdx)
+			{
+				case 0:
+					q = new QuestObstacles();
+					
+					break;
+				
+				default:
+					break;
+			}
+			
+			if(q)
+				QuestManager.instance.addQuest(q);
 		}
 		
 		private function randomTarget():void

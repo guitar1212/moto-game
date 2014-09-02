@@ -27,21 +27,17 @@ package com.loma.game.quest
 		}
 		
 		override public function onUpdate():void
-		{
-			if(game.player.hitObject.hitTestObject(m_obs))
-			{
-				
-			}
+		{	
 		}
 		
 		override public function check():Boolean
 		{			
-			return m_bOK;
+			return game.player.hitObject.hitTestObject(m_obs);
 		}
 		
 		override public function onCompleted():void
 		{
-			
+			game.addScore(-5);
 		}
 		
 		override public function end():void
