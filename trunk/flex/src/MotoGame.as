@@ -82,7 +82,8 @@ package
 			m_debugText.autoSize = TextFieldAutoSize.LEFT;
 			this.addObjToLayer(LAYER_UI, m_debugText);
 			
-			QuestManager.instance.ininialize(this);			
+			QuestManager.instance.ininialize(this);
+			QuestManager.instance.start = true;
 		}
 		
 		private function initLayer():void
@@ -208,7 +209,8 @@ package
 			
 			updateRider();
 			
-			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + "\nacc = " + m_acceleration;
+			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + "\nacc = " + m_acceleration + 
+							   "\nstageX = " + stage.mouseX + ". stageY = " + stage.mouseY;
 		}
 		
 		private function updateSpeed():void
@@ -319,6 +321,8 @@ package
 			this.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			this.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			this.removeEventListener(Event.ENTER_FRAME, onUpdate);
+			
+			QuestManager.instance.release();
 		}
 		
 		public function riderStart():void

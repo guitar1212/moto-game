@@ -6,7 +6,7 @@ package com.loma.game.quest
 	 * 
 	 */	
 	public class EmptyQuest extends QuestBase
-	{
+	{		
 		public function EmptyQuest()
 		{
 			super();
@@ -14,7 +14,6 @@ package com.loma.game.quest
 		
 		override public function start():void
 		{
-			
 		}
 		
 		override public function onUpdate():void

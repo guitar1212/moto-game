@@ -2,6 +2,7 @@ package com.loma.game.quest
 {
 	import com.loma.game.player.Rider;
 	import com.loma.game.quest.define.QuestState;
+	import com.loma.game.string.StringTable;
 	import com.loma.game.ui.FirstQuestionDialog;
 	
 	import flash.display.SimpleButton;
@@ -21,6 +22,7 @@ package com.loma.game.quest
 	{
 		
 		private var m_bOK:Boolean = false;
+		private var m_bRight:Boolean = false;
 		
 		public function QuestFirst()
 		{
@@ -46,12 +48,31 @@ package com.loma.game.quest
 		{
 			if(event.target is SimpleButton)
 			{
-				m_bOK = true;
-			
+				// 取消
+				if(event.target.x == 341.95)
+				{
+					game.ui.showViolationUI(StringTable.HELMET, OK);
+					m_bRight = false;
+				}
+				// 確定
+				else if(event.target.x == 442.8)
+				{		
+					m_bOK = true;
+					m_bRight = true;
+				}
+				
 				var alert:FirstQuestionDialog = event.currentTarget as FirstQuestionDialog;
+				alert.removeEventListener(MouseEvent.CLICK, onAlertMouseClick);
 				alert.removeSelf();
 			}
 		}
+		
+		private function OK():void
+		{
+			game.ui.hideViolationUI();
+			m_bOK = true;
+		}
+		
 				
 		override public function onUpdate():void
 		{
@@ -73,7 +94,10 @@ package com.loma.game.quest
 			game.gamePause = false;
 			//game.removeObjFormLayer(MotoGame.LAYER_UI, u);
 			
-			game.addScore(5);
+			if(m_bRight)
+				game.addScore(5);
+			else
+				game.addLife(-1);
 			
 			game.stage.focus = game.stage;
 			
@@ -84,6 +108,9 @@ package com.loma.game.quest
 			
 			var qc:QuestOtherCars = new QuestOtherCars();
 			QuestManager.instance.addQuest(qc);
+			
+			var qn:QuestNoTouch = new QuestNoTouch();
+			QuestManager.instance.addQuest(qn);
 		}
 		
 		override public function release():void

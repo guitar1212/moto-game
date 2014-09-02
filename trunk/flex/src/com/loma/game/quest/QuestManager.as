@@ -15,6 +15,8 @@ package com.loma.game.quest
 		
 		private var m_game:MotoGame;
 		
+		private var m_bStart:Boolean = false;
+		
 		public function QuestManager()
 		{
 		}
@@ -101,5 +103,26 @@ package com.loma.game.quest
 				}				
 			}
 		}
+
+		public function get start():Boolean
+		{
+			return m_bStart;
+		}
+
+		public function set start(value:Boolean):void
+		{
+			m_bStart = value;
+		}
+		
+		public function release():void
+		{
+			for(var i:int = 0; i < m_questList.length; i++)
+			{
+				var q:QuestBase = m_questList[i];
+				q.release();
+			}
+			m_questList.length = 0;
+		}
+
 	}
 }

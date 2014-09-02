@@ -44,6 +44,7 @@ package com.loma.game.quest
 		override public function onCompleted():void
 		{
 			game.gamePause = true;
+			QuestManager.instance.start = false;
 			
 			// show ui
 			u = game.ui.createAlertUI("你超速囉~~ 速限 " + m_speedLimit + " 公里", this.end, null);
@@ -56,6 +57,7 @@ package com.loma.game.quest
 		override public function end():void
 		{
 			game.gamePause = false;
+			QuestManager.instance.start = true;
 			
 			game.stage.focus = game.stage;
 			

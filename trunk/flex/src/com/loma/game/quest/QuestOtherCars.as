@@ -1,8 +1,11 @@
 package com.loma.game.quest
 {
+	import com.loma.game.car.Coupe;
 	import com.loma.util.TimerManager;
 	
 	import flash.geom.ColorTransform;
+	
+	import flashx.textLayout.operations.CopyOperation;
 
 	/**
 	 * 
@@ -27,21 +30,6 @@ package com.loma.game.quest
 		override public function start():void
 		{	
 		}
-				
-		private function createCar():void
-		{
-			var car:Car = new Car();
-			
-			if(game.currentSpeed < 5)
-				car.x = -350;
-			else
-				car.x = 1250;
-			car.y = 60 + Math.random()*40;
-			car.transform.colorTransform = new ColorTransform(1, Math.random(), Math.random());
-			game.addObjToLayer(MotoGame.LAYER_SCENE, car);
-			
-			m_carList.push(car);
-		}
 		
 		override public function onUpdate():void
 		{
@@ -55,12 +43,12 @@ package com.loma.game.quest
 			
 			var i:int = 0, len:int = m_carList.length;
 			var curSpeed:Number = game.currentSpeed;			
-			var car:Car;
+			var car:Coupe;
 			
 			for(i; i < len; i++)
 			{
 				car = m_carList[i];
-				car.x = car.x + 30 - curSpeed;
+				car.x = car.x + car.speed - curSpeed;
 				
 				if(car.x < -700 || car.x > 2000)
 				{
@@ -88,6 +76,22 @@ package com.loma.game.quest
 		override public function release():void
 		{
 			
+		}
+		
+		private function createCar():void
+		{
+			var car:Coupe = new Coupe();
+			car.speed = 30;
+			
+			if(game.currentSpeed < 30)
+				car.x = -300;
+			else
+				car.x = 1000;
+			car.y = 60 + Math.random()*40;
+			car.transform.colorTransform = new ColorTransform(1, Math.random(), Math.random());
+			game.addObjToLayer(MotoGame.LAYER_SCENE, car);
+			
+			m_carList.push(car);
 		}
 	}
 }

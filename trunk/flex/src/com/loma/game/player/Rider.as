@@ -22,6 +22,8 @@ package com.loma.game.player
 		public static const MAX_X:int = 270;
 		public static const MIN_X:int = 60;
 		
+		private var m_hitArea:Sprite;
+		
 		private var m_mc:Role;
 		
 		private var m_moveDir:String;
@@ -39,6 +41,18 @@ package com.loma.game.player
 			isBreak = false;
 			
 			//m_mc.transform.colorTransform = new ColorTransform(0, 1, 1, 1, 0.5);
+			m_hitArea = new Sprite();
+			m_hitArea.graphics.beginFill(0x222222, 0.25);
+			m_hitArea.graphics.drawRect(0, 0, 170, 20);
+			m_hitArea.graphics.endFill();
+			m_hitArea.y = 140;
+			
+			this.addChild(m_hitArea);
+		}
+		
+		public function get hitObject():Sprite
+		{
+			return m_hitArea; 
 		}
 		
 		public function set state(_state:int):void

@@ -16,6 +16,7 @@ package com.loma.game.ui
 		
 		private var m_gameUI:UI
 		private var m_menu:Menu;
+		private var m_ViolationUI:ViolationDialog;
 		
 		private var m_btnStartCallback:Function = null;		
 		
@@ -28,6 +29,8 @@ package com.loma.game.ui
 			m_menu.btn_start.addEventListener(MouseEvent.CLICK, onGameStartBtnClick);
 			
 			m_gameUI = new UI();
+			
+			m_ViolationUI = new ViolationDialog();			
 			
 			m_maxLife = m_gameUI.LifeBar_mc.totalFrames - 1;
 			
@@ -149,6 +152,29 @@ package com.loma.game.ui
 			u.addChild(b);
 			
 			return u;
+		}
+		
+		/**
+		 *	顯示違規面板 
+		 * 
+		 */		
+		public function showViolationUI(context:String, callback:Function):void
+		{
+			m_gameUI.addChild(m_ViolationUI);
+			m_ViolationUI.txt_info.text = context;
+			m_ViolationUI.callback = callback;
+		}
+		
+		
+		/**
+		 *	移除違規面板 
+		 * 
+		 */		
+		public function hideViolationUI():void
+		{
+			m_ViolationUI.callback = null;
+			if(m_ViolationUI.parent)
+				m_gameUI.removeChild(m_ViolationUI);
 		}
 		
 	}
