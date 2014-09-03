@@ -1,9 +1,10 @@
 package com.loma.game.quest
 {
+	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.string.StringTable;
+	import com.loma.game.ui.ViolationDialog;
 	
 	import flash.display.Sprite;
-	import com.loma.game.quest.base.QuestBase;
 
 	/**
 	 * 
@@ -28,10 +29,10 @@ package com.loma.game.quest
 		override public function onUpdate():void
 		{			
 			if(game.player.hitObject.hitTestObject(m_upperBound))
-				game.ui.showViolationUI(StringTable.FAST_TRACK, onConfirm);
+				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.FAST_TRACK, onConfirm);
 			
 			if(game.player.hitObject.hitTestObject(m_lowerBound))
-				game.ui.showViolationUI(StringTable.SIDEWALK, onConfirm);
+				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.SIDEWALK, onConfirm);
 		}
 		
 		override public function check():Boolean
@@ -60,7 +61,7 @@ package com.loma.game.quest
 			m_upperBound.graphics.beginFill(0x55dd22, 0.35);
 			m_upperBound.graphics.drawRect(0, 0, 700, 260);
 			m_upperBound.graphics.endFill();
-			//m_upperBound.visible = false;
+			m_upperBound.visible = false;
 			this.game.addObjToLayer(MotoGame.LAYER_SCENE, m_upperBound);
 			
 			m_lowerBound = new Sprite();
@@ -68,6 +69,7 @@ package com.loma.game.quest
 			m_lowerBound.graphics.beginFill(0x1155ff, 0.35);
 			m_lowerBound.graphics.drawRect(0, 0, 700, 250);
 			m_lowerBound.graphics.endFill();
+			m_lowerBound.visible = false;
 			this.game.addObjToLayer(MotoGame.LAYER_SCENE, m_lowerBound);
 		}
 		

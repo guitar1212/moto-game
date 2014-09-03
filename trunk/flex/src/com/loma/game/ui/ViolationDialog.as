@@ -10,6 +10,9 @@ package com.loma.game.ui
 	 */	
 	public class ViolationDialog extends Quest3
 	{
+		public static const TYPE_BAD:int = 1;
+		public static const TYPE_GOOD:int = 2;
+		
 		private var m_cb:Function = null;
 		
 		public function ViolationDialog()
@@ -30,6 +33,10 @@ package com.loma.game.ui
 				if(m_cb != null) m_cb();
 			}
 			
+		}
+		public function set type(t:int):void
+		{
+			txt_title.gotoAndStop(t);
 		}
 	}
 }

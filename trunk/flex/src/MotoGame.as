@@ -5,6 +5,7 @@ package
 	import com.loma.game.quest.QuestFirst;
 	import com.loma.game.quest.QuestManager;
 	import com.loma.game.quest.QuestObstacles;
+	import com.loma.game.quiz.QuizManager;
 	import com.loma.game.randomevent.RandomEventManager;
 	import com.loma.game.ui.GameUI;
 	
@@ -51,8 +52,6 @@ package
 		
 		private var m_bGameStart:Boolean = false;
 		
-		private var m_oppRider:Rider;
-		
 		private var m_debugText:TextField = new TextField();
 			
 		
@@ -74,7 +73,6 @@ package
 			this.addObjToLayer(LAYER_BACKGROUND, m_bg);
 			
 			m_rider = new Rider();
-			m_oppRider = new Rider();
 			
 			m_ui = new GameUI();
 			m_ui.gameStartCallback = gameStart;
@@ -164,7 +162,7 @@ package
 			}
 			else if(event.keyCode == Keyboard.DELETE)
 			{
-				
+				QuizManager.instance.reGeneration();	
 				
 			}	
 			else if(event.keyCode == Keyboard.I)
@@ -302,13 +300,10 @@ package
 			m_ui.hideMenu();
 			m_ui.initialize();
 			
+			m_life = MAX_LIFE;
+			
 			riderStart();
 			this.addObjToLayer(LAYER_SCENE, m_rider);	
-			
-			m_oppRider.state = Rider.STATE_MOVE;
-			m_oppRider.y = 150;						
-			//this.addObjToLayer(LAYER_SCENE, m_oppRider);
-			m_bg.addObject(1, m_oppRider, 0, 0);
 			
 			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
@@ -324,7 +319,6 @@ package
 			m_ui.showMenu();
 			
 			this.removeObjFormLayer(LAYER_SCENE, m_rider);
-			this.removeObjFormLayer(LAYER_SCENE, m_oppRider);
 			
 			this.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			this.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
@@ -338,21 +332,7 @@ package
 			this.gamePause = true;
 			QuestManager.instance.release();		
 			
-			
-			var tf:TextFormat = new TextFormat();
-			tf.size = 36;
-			tf.color = 0xff2233;
-			tf.bold = true;
-			tf.italic = true;
-			
-			var t:TextField = new TextField();
-			t.autoSize = TextFieldAutoSize.CENTER;
-			t.defaultTextFormat = tf;
-			t.text = "Game Over!";
-			t.x = (stage.width - t.width)/2;
-			t.y = (stage.height - t.height)/2;
-			this.addChild(t);
-			 
+			ui.showGameOverUI();			 
 		}
 		
 		public function riderStart():void
@@ -364,6 +344,7 @@ package
 		
 			m_acceleration = 0;
 			m_speed = 0;
+			
 			updateSpeed();
 		}
 		

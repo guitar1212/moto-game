@@ -2,6 +2,7 @@ package com.loma.game.randomevent
 {
 	import com.loma.game.quest.QuestManager;
 	import com.loma.game.quest.QuestObstacles;
+	import com.loma.game.quest.QuestQuiz;
 	import com.loma.game.quest.base.QuestBase;
 	
 	import flash.display.Sprite;
@@ -16,7 +17,7 @@ package com.loma.game.randomevent
 	{
 		private static var m_instance:RandomEventManager = null;
 		
-		private static const TOTAL_EVENTS:int = 1;
+		private static const TOTAL_EVENTS:int = 2;
 		
 		private var m_bStart:Boolean = false;
 		
@@ -87,6 +88,7 @@ package com.loma.game.randomevent
 				
 				// 問答
 				case 1:
+					q = new QuestQuiz();
 					break;
 				
 				// 

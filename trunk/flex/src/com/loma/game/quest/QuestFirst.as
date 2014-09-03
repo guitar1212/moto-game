@@ -1,16 +1,17 @@
 package com.loma.game.quest
 {
 	import com.loma.game.player.Rider;
+	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.quest.define.QuestState;
 	import com.loma.game.randomevent.RandomEventManager;
 	import com.loma.game.string.StringTable;
 	import com.loma.game.ui.FirstQuestionDialog;
+	import com.loma.game.ui.ViolationDialog;
 	
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
-	import com.loma.game.quest.base.QuestBase;
 
 	/**
 	 * 遊戲開始的第一個任務
@@ -53,7 +54,7 @@ package com.loma.game.quest
 				// 取消
 				if(event.target.x == 341.95)
 				{
-					game.ui.showViolationUI(StringTable.HELMET, OK);
+					game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.HELMET, OK);
 					m_bRight = false;
 				}
 				// 確定

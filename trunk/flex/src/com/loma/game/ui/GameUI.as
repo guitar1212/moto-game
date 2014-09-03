@@ -18,6 +18,8 @@ package com.loma.game.ui
 		private var m_gameUI:UI
 		private var m_menu:Menu;
 		private var m_ViolationUI:ViolationDialog;
+		private var m_gameOverUI:GameOverDialog;
+		private var m_quizUI:QuizDialog;
 		
 		private var m_btnStartCallback:Function = null;		
 		
@@ -31,7 +33,11 @@ package com.loma.game.ui
 			
 			m_gameUI = new UI();
 			
-			m_ViolationUI = new ViolationDialog();			
+			m_ViolationUI = new ViolationDialog();
+			
+			m_gameOverUI = new GameOverDialog();
+			
+			m_quizUI = new QuizDialog();
 			
 			m_maxLife = m_gameUI.LifeBar_mc.totalFrames - 1;
 			
@@ -101,6 +107,8 @@ package com.loma.game.ui
 			
 			if(m_gameUI.parent != null)
 				this.removeChild(m_gameUI);
+			
+			hideGameOverUI();
 		}
 		
 		public function hideMenu():void
@@ -159,11 +167,12 @@ package com.loma.game.ui
 		 *	顯示違規面板 
 		 * 
 		 */		
-		public function showViolationUI(context:String, callback:Function):void
+		public function showViolationUI(type:int, context:String, callback:Function):void
 		{
 			m_gameUI.addChild(m_ViolationUI);
 			m_ViolationUI.txt_info.text = context;
 			m_ViolationUI.callback = callback;
+			m_ViolationUI.type = type;
 		}
 		
 		
@@ -178,5 +187,28 @@ package com.loma.game.ui
 				m_gameUI.removeChild(m_ViolationUI);
 		}
 		
+		public function showQuizUI(context:String, callback:Function):void
+		{
+			m_gameUI.addChild(m_quizUI);
+			m_quizUI.txt.text = context;
+			m_quizUI.callback = callback;
+		}
+		
+		public function hideQuizUI():void
+		{
+			if(m_quizUI.parent)
+				m_gameUI.removeChild(m_quizUI);
+		}
+		
+		public function showGameOverUI():void
+		{
+			m_gameUI.addChild(m_gameOverUI);
+		}
+		
+		public function hideGameOverUI():void
+		{
+			if(m_gameOverUI.parent)
+				m_gameUI.removeChild(m_gameOverUI);
+		}
 	}
 }

@@ -46,7 +46,7 @@ package com.loma.game.player
 			m_hitArea.graphics.drawRect(0, 0, 170, 20);
 			m_hitArea.graphics.endFill();
 			m_hitArea.y = 140;
-			
+			m_hitArea.visible = false;
 			this.addChild(m_hitArea);
 		}
 		

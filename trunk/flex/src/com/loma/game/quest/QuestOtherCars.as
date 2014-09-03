@@ -1,12 +1,12 @@
 package com.loma.game.quest
 {
 	import com.loma.game.car.Coupe;
+	import com.loma.game.quest.base.QuestBase;
 	import com.loma.util.TimerManager;
 	
 	import flash.geom.ColorTransform;
 	
 	import flashx.textLayout.operations.CopyOperation;
-	import com.loma.game.quest.base.QuestBase;
 
 	/**
 	 * 
@@ -76,7 +76,14 @@ package com.loma.game.quest
 		
 		override public function release():void
 		{
-			
+			var car:Coupe
+			for(var i:int = 0; i < m_carList.length; i++)
+			{
+				car = m_carList[i];
+				if(car.parent)
+					car.parent.removeChild(car);
+			}
+			m_carList.length = 0;
 		}
 		
 		private function createCar():void
