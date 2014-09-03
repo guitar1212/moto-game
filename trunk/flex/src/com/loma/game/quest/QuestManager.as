@@ -1,7 +1,7 @@
 package com.loma.game.quest
 {
-	import com.loma.game.quest.define.QuestState;
 	import com.loma.game.quest.base.QuestBase;
+	import com.loma.game.quest.define.QuestState;
 
 	/**
 	 * 
@@ -60,6 +60,8 @@ package com.loma.game.quest
 		
 		public function update():void
 		{
+			if(!m_bStart) return;
+			
 			var q:QuestBase;
 			for(var i:int = 0; i < m_questList.length; i++)
 			{

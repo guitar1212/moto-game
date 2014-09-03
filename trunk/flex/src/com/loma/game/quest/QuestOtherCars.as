@@ -95,7 +95,7 @@ package com.loma.game.quest
 				car.x = -300;
 			else
 				car.x = 1000;
-			car.y = 60 + Math.random()*40;
+			car.y = 165 + Math.random()*50;
 			car.transform.colorTransform = new ColorTransform(1, Math.random(), Math.random());
 			game.addObjToLayer(MotoGame.LAYER_SCENE, car);
 			

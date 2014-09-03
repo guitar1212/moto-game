@@ -41,6 +41,8 @@ package com.loma.game.quest
 				this.pause = true;
 				game.gamePause = true;
 				
+				QuestManager.instance.start = false;				
+				
 				if(m_qm.parent)
 					m_qm.parent.removeChild(m_qm);
 				
@@ -67,12 +69,12 @@ package com.loma.game.quest
 			var quiz:Object = QuizManager.instance.getCurrentQuiz();
 			if(answer == quiz.a) // 答對了
 			{
-				game.ui.showViolationUI(ViolationDialog.TYPE_GOOD, quiz.d + "\n\n恭喜你獲得 10 分!" , onClick);
+				game.ui.showViolationUI(ViolationDialog.TYPE_GOOD, quiz.d + "\n\n恭喜你獲得 50 分!" , onClick);
 				game.addScore(50);
 			}
 			else // 答錯了
 			{
-				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, quiz.d + "\n\n很遺憾你被扣 20 分!", onClick);
+				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, quiz.d + "\n\n很遺憾你被扣 30 分!", onClick);
 				game.addScore(-30);
 				game.addLife(-1);
 			}
@@ -84,6 +86,8 @@ package com.loma.game.quest
 			
 			this.pause = false;
 			game.gamePause = false;
+			
+			QuestManager.instance.start = true;
 			
 			game.stage.focus = game.stage;
 			

@@ -30,6 +30,8 @@ package com.loma.game.randomevent
 		
 		private var m_bFinish:Boolean = true;
 		
+		private var m_curQuest:QuestBase;
+		
 		public function RandomEventManager()
 		{
 		}
@@ -48,10 +50,22 @@ package com.loma.game.randomevent
 			m_game.addEventListener("QueseComplete", onQuestComplete);
 		}
 		
+		public function clean():void
+		{
+			m_bFinish = true;
+			
+			if(m_curQuest)
+			{
+				QuestManager.instance.removeQuest(m_curQuest);
+				m_curQuest = null;
+			}
+		}
+		
 		protected function onQuestComplete(event:Event):void
 		{
 			m_bFinish = true;
 			trace("QueseComplete");
+			m_curQuest = null;
 		}
 		
 		public function start():void
@@ -84,17 +98,17 @@ package com.loma.game.randomevent
 			{
 				// 路面障礙物
 				case 0:
-					q = new QuestObstacles();					
+					m_curQuest = new QuestObstacles();					
 					break;
 				
 				// 問答
 				case 1:
-					q = new QuestQuiz();
+					m_curQuest = new QuestQuiz();
 					break;
 				
 				// 救護車任務
 				case 2:
-					q = new QuestEmergency();
+					m_curQuest = new QuestEmergency();
 					break;
 				
 				case 3:
@@ -108,11 +122,11 @@ package com.loma.game.randomevent
 			}
 			
 			// test
-			q = new QuestEmergency();
+			//m_curQuest = new QuestEmergency();
 			
-			if(q)
+			if(m_curQuest)
 			{
-				QuestManager.instance.addQuest(q);
+				QuestManager.instance.addQuest(m_curQuest);
 				m_bFinish = false;
 			}
 		}

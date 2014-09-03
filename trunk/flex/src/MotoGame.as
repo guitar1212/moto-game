@@ -351,7 +351,7 @@ package
 		public function riderStart():void
 		{
 			m_rider.state = Rider.STATE_STOP;
-			m_rider.y = 250;
+			m_rider.y = 400;
 			m_rider.x = Rider.MIN_X;
 			m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
 		

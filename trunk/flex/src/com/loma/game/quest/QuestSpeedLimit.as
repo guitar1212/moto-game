@@ -1,7 +1,10 @@
 package com.loma.game.quest
 {
-	import flash.display.Sprite;
 	import com.loma.game.quest.base.QuestBase;
+	import com.loma.game.randomevent.RandomEventManager;
+	import com.loma.game.ui.ViolationDialog;
+	
+	import flash.display.Sprite;
 
 	/**
 	 * 
@@ -40,19 +43,17 @@ package com.loma.game.quest
 		{			
 			return game.currentSpeed > m_speedLimit;
 		}
-		
-		private var u:Sprite;
+				
 		override public function onCompleted():void
 		{
 			game.gamePause = true;
 			QuestManager.instance.start = false;
 			
 			// show ui
-			u = game.ui.createAlertUI("你超速囉~~ 速限 " + m_speedLimit + " 公里", this.end, null);
-			game.addObjToLayer(MotoGame.LAYER_UI, u);
+			game.ui.showViolationUI(ViolationDialog.TYPE_BAD, "你超速囉~~ 本路段限速 " + m_speedLimit + " 公里", end);
 			
 			// 暫停任務進行
-			this.pause = true;
+			QuestManager.instance.start = false;
 		}
 		
 		override public function end():void
@@ -62,16 +63,18 @@ package com.loma.game.quest
 			
 			game.stage.focus = game.stage;
 			
-			game.removeObjFormLayer(MotoGame.LAYER_UI, u);
+			game.ui.hideViolationUI();
 			
 			// 分數扣 10
-			game.addScore(-10);
+			game.addScore(-30);
 			
 			// 血量減 1
 			game.addLife(-1);
 			
 			// 繼續任務
-			this.pause = false;
+			QuestManager.instance.start = true;
+			
+			RandomEventManager.instance.clean();
 			
 			// 重置騎士位置
 			game.riderStart();

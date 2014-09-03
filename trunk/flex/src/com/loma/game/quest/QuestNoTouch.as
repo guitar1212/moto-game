@@ -1,6 +1,7 @@
 package com.loma.game.quest
 {
 	import com.loma.game.quest.base.QuestBase;
+	import com.loma.game.randomevent.RandomEventManager;
 	import com.loma.game.string.StringTable;
 	import com.loma.game.ui.ViolationDialog;
 	
@@ -28,11 +29,25 @@ package com.loma.game.quest
 		
 		override public function onUpdate():void
 		{			
+			var bTouch:Boolean = false;
 			if(game.player.hitObject.hitTestObject(m_upperBound))
+			{
+				bTouch = true;
 				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.FAST_TRACK, onConfirm);
+			}
 			
 			if(game.player.hitObject.hitTestObject(m_lowerBound))
+			{
+				bTouch = true;
 				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.SIDEWALK, onConfirm);
+			}
+			
+			if(bTouch == true)
+			{
+				game.gamePause = true;
+				QuestManager.instance.start = false;
+				
+			}
 		}
 		
 		override public function check():Boolean
@@ -41,8 +56,7 @@ package com.loma.game.quest
 		}
 		
 		override public function onCompleted():void
-		{
-			
+		{			
 		}
 		
 		override public function end():void
@@ -59,7 +73,7 @@ package com.loma.game.quest
 		{
 			m_upperBound = new Sprite();
 			m_upperBound.graphics.beginFill(0x55dd22, 0.35);
-			m_upperBound.graphics.drawRect(0, 0, 700, 260);
+			m_upperBound.graphics.drawRect(0, 0, 700, 265);
 			m_upperBound.graphics.endFill();
 			m_upperBound.visible = false;
 			this.game.addObjToLayer(MotoGame.LAYER_SCENE, m_upperBound);
@@ -79,7 +93,12 @@ package com.loma.game.quest
 			game.riderStart();
 			
 			game.addLife(-1);
-			game.addScore(-5);
+			game.addScore(-30);
+			
+			game.gamePause = false;
+			QuestManager.instance.start = true;
+			
+			RandomEventManager.instance.clean();
 		}
 	}
 }

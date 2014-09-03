@@ -19,8 +19,8 @@ package com.loma.game.player
 		public static const MOVE_UP:String = "up";
 		public static const MOVE_DOWN:String = "down";
 		
-		public static const MAX_X:int = 200;
-		public static const MIN_X:int = 60;
+		public static const MAX_X:int = 380;
+		public static const MIN_X:int = 230;
 		
 		private var m_hitArea:Sprite;
 		
@@ -43,9 +43,9 @@ package com.loma.game.player
 			//m_mc.transform.colorTransform = new ColorTransform(0, 1, 1, 1, 0.5);
 			m_hitArea = new Sprite();
 			m_hitArea.graphics.beginFill(0x222222, 0.25);
-			m_hitArea.graphics.drawRect(0, 0, 170, 20);
+			m_hitArea.graphics.drawRect(-163, -17, 163, 15);
 			m_hitArea.graphics.endFill();
-			m_hitArea.y = 140;
+			m_hitArea.y = 0;
 			m_hitArea.visible = false;
 			this.addChild(m_hitArea);
 		}

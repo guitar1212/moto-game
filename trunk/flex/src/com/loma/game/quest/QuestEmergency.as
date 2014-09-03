@@ -33,8 +33,8 @@ package com.loma.game.quest
 		
 		override public function start():void
 		{
-			m_ambulance.x = -240;
-			m_ambulance.y = 220;
+			m_ambulance.x = -30;
+			m_ambulance.y = 350;
 			
 			game.addObjToLayer(MotoGame.LAYER_SCENE, m_ambulance);
 		}
@@ -44,13 +44,13 @@ package com.loma.game.quest
 			if(m_state == 0)
 			{
 				m_ambulance.x += 1;
-				if(m_ambulance.x >= -210)
+				if(m_ambulance.x >= 40)
 					m_state = 1;
 			}
 			else if(m_state == 1)
 			{
 				m_waitCount++;
-				if(game.player.y > 250)
+				if(game.player.y > 400)
 					m_state = 2;
 				
 				if(m_waitCount > 150) // 違規
@@ -66,14 +66,13 @@ package com.loma.game.quest
 				if(game.player.hitObject.hitTestObject(m_ambulance))
 					onFailed()
 				
-				if(m_ambulance.x > 650)
+				if(m_ambulance.x > 1100)
 					m_state = 3;
 			}
 			else if(m_state == 3)
 			{
 				
 			}
-			//m_ambulance.x = m_ambulance.x + 80 - game.currentSpeed;
 		}
 		
 		/**
@@ -84,7 +83,7 @@ package com.loma.game.quest
 		{
 			this.pause = true;
 			game.gamePause = true;
-			
+			m_state = 3;
 			game.ui.showViolationUI(ViolationDialog.TYPE_BAD, "你違規囉!\n扣 30 分", confirm);
 		}
 		
