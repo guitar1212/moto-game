@@ -17,6 +17,7 @@ package
 	import flash.geom.Matrix;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
 	
 	/**
@@ -148,11 +149,11 @@ package
 			
 			if(event.keyCode == Keyboard.A || event.keyCode == Keyboard.LEFT)
 			{
-				m_acceleration = -1;				
+				m_acceleration -= 1;				
 			}
 			else if(event.keyCode == Keyboard.D || event.keyCode == Keyboard.RIGHT)
 			{
-				m_acceleration = 1;
+				m_acceleration += 1;
 			}
 			
 			//test
@@ -189,11 +190,11 @@ package
 			
 			if(event.keyCode == Keyboard.A || event.keyCode == Keyboard.LEFT)
 			{
-				m_acceleration = 0; 
+				m_acceleration += 1; 
 			}
 			else if(event.keyCode == Keyboard.D || event.keyCode == Keyboard.RIGHT)
 			{
-				m_acceleration = 0;
+				m_acceleration -= 1;
 			}
 		}
 		
@@ -211,7 +212,7 @@ package
 			
 			RandomEventManager.instance.update();
 			
-			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + "\nacc = " + m_acceleration + 
+			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + ".  acc = " + m_acceleration + 
 							   "\nstageX = " + stage.mouseX + ". stageY = " + stage.mouseY;
 		}
 		
@@ -225,6 +226,8 @@ package
 			else
 				dS = 0.2;
 			
+			m_acceleration = clamp(m_acceleration, -1, 1);
+			
 			if(m_acceleration > 0)
 			{
 				m_speed += dS;
@@ -237,7 +240,6 @@ package
 			{
 				m_speed -= 0.5;
 			}
-			
 			
 			if(m_speed > MAX_SPEED)
 				m_speed = MAX_SPEED;
@@ -289,11 +291,7 @@ package
 				m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
 			}
 			
-			if(m_rider.x > Rider.MAX_X)
-				m_rider.x = Rider.MAX_X;
-			else if(m_rider.x < Rider.MIN_X)
-				m_rider.x = Rider.MIN_X;
-			
+			m_rider.x = clamp(m_rider.x, Rider.MIN_X, Rider.MAX_X);
 		}
 		
 		
@@ -333,6 +331,28 @@ package
 			this.removeEventListener(Event.ENTER_FRAME, onUpdate);
 			
 			QuestManager.instance.release();
+		}
+		
+		private function gameOver():void
+		{
+			this.gamePause = true;
+			QuestManager.instance.release();		
+			
+			
+			var tf:TextFormat = new TextFormat();
+			tf.size = 36;
+			tf.color = 0xff2233;
+			tf.bold = true;
+			tf.italic = true;
+			
+			var t:TextField = new TextField();
+			t.autoSize = TextFieldAutoSize.CENTER;
+			t.defaultTextFormat = tf;
+			t.text = "Game Over!";
+			t.x = (stage.width - t.width)/2;
+			t.y = (stage.height - t.height)/2;
+			this.addChild(t);
+			 
 		}
 		
 		public function riderStart():void
@@ -375,19 +395,28 @@ package
 		}
 
 		public function set life(value:int):void
-		{			
-			m_life = value;
-			if(m_life > MAX_LIFE)
-				m_life = MAX_LIFE;
-			else if(m_life < 0)
-				m_life = 0;
+		{	
+			m_life = clamp(value, 0, MAX_LIFE);
 			
 			ui.life = m_life;
+			
+			if(m_life <= 0)
+				gameOver();
 		}
 		
 		public function addLife(value:int):void
 		{
 			life = (m_life + value);
+		}
+		
+		private function clamp(value:int, min:int, max:int):int
+		{
+			if(value < min)
+				value = min;
+			else if(value > max)
+				value = max;
+			
+			return value;
 		}
 
 	}
