@@ -37,6 +37,7 @@ package com.loma.game.ui
 		public function set type(t:int):void
 		{
 			txt_title.gotoAndStop(t);
+			Icon_police.gotoAndStop(t);
 		}
 	}
 }

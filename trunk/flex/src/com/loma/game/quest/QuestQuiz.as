@@ -7,7 +7,7 @@ package com.loma.game.quest
 	import flash.events.Event;
 	
 	/**
-	 * 
+	 * 問答任務
 	 * @long  Sep 3, 2014
 	 * 
 	 */	
@@ -30,7 +30,7 @@ package com.loma.game.quest
 		private function createQuiz():void
 		{
 			m_qm = new QuestionMark();
-			game.background.addObject(2, m_qm, 350 , 350);
+			game.background.addObject(2, m_qm, 350 , 300 + Math.random()*50 );
 		}
 		
 		override public function onUpdate():void
@@ -67,13 +67,14 @@ package com.loma.game.quest
 			var quiz:Object = QuizManager.instance.getCurrentQuiz();
 			if(answer == quiz.a) // 答對了
 			{
-				game.ui.showViolationUI(ViolationDialog.TYPE_GOOD, quiz.d + "\n 恭喜你獲得 10 分!" , onClick);
-				game.addScore(10);
+				game.ui.showViolationUI(ViolationDialog.TYPE_GOOD, quiz.d + "\n\n恭喜你獲得 10 分!" , onClick);
+				game.addScore(50);
 			}
 			else // 答錯了
 			{
-				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, quiz.d + "\n 很遺憾你被扣 20 分!", onClick);
-				game.addScore(-20);
+				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, quiz.d + "\n\n很遺憾你被扣 20 分!", onClick);
+				game.addScore(-30);
+				game.addLife(-1);
 			}
 		}
 		
@@ -105,7 +106,10 @@ package com.loma.game.quest
 		
 		override public function release():void
 		{
+			if(m_qm.parent)
+				m_qm.parent.removeChild(m_qm);
 			
+			m_qm = null;
 		}
 	}
 }

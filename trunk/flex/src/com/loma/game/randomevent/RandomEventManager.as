@@ -1,5 +1,6 @@
 package com.loma.game.randomevent
 {
+	import com.loma.game.quest.QuestEmergency;
 	import com.loma.game.quest.QuestManager;
 	import com.loma.game.quest.QuestObstacles;
 	import com.loma.game.quest.QuestQuiz;
@@ -17,7 +18,7 @@ package com.loma.game.randomevent
 	{
 		private static var m_instance:RandomEventManager = null;
 		
-		private static const TOTAL_EVENTS:int = 2;
+		private static const TOTAL_EVENTS:int = 3;
 		
 		private var m_bStart:Boolean = false;
 		
@@ -91,8 +92,9 @@ package com.loma.game.randomevent
 					q = new QuestQuiz();
 					break;
 				
-				// 
+				// 救護車任務
 				case 2:
+					q = new QuestEmergency();
 					break;
 				
 				case 3:
@@ -104,6 +106,9 @@ package com.loma.game.randomevent
 				default:
 					break;
 			}
+			
+			// test
+			q = new QuestEmergency();
 			
 			if(q)
 			{

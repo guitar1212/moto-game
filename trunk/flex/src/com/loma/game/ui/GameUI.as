@@ -131,7 +131,7 @@ package com.loma.game.ui
 			speed = 0;
 			oil = 100;
 			score = 0;
-			life = 6;
+			life = 5;
 		}
 		
 		public function createAlertUI(context:String, yesCB:Function, noCB:Function):Sprite

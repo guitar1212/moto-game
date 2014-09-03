@@ -1,6 +1,7 @@
 package
 {
 	import com.loma.game.background.GameBackground;
+	import com.loma.game.oil.OilManager;
 	import com.loma.game.player.Rider;
 	import com.loma.game.quest.QuestFirst;
 	import com.loma.game.quest.QuestManager;
@@ -38,6 +39,8 @@ package
 		public static const LAYER_UI:int = 2;
 		public static const MAX_LAYER:int = 3;
 		
+		public static const UNIT_OIL_FRAMES:int = 300;
+		
 		private var m_rider:Rider;
 		private var m_ui:GameUI;
 		private var m_bg:GameBackground;
@@ -53,7 +56,7 @@ package
 		private var m_bGameStart:Boolean = false;
 		
 		private var m_debugText:TextField = new TextField();
-			
+		
 		
 		public function MotoGame()
 		{
@@ -87,13 +90,15 @@ package
 			QuestManager.instance.start = true;
 			
 			RandomEventManager.instance.initialize(this);
+			
+			OilManager.instance.initialize(this, 3*60); // 設定遊戲時間為3分鐘
 		}
 		
 		private function initLayer():void
 		{
 			// TODO Auto Generated method stub
 			for(var i:int = 0; i < MAX_LAYER; i++)
-				this.addChild(new Sprite());			
+				this.addChild(new Sprite());
 		}
 		
 		public function get ui():GameUI
@@ -208,6 +213,8 @@ package
 			
 			updateRider();
 			
+			updateOil();
+			
 			RandomEventManager.instance.update();
 			
 			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + ".  acc = " + m_acceleration + 
@@ -292,6 +299,12 @@ package
 			m_rider.x = clamp(m_rider.x, Rider.MIN_X, Rider.MAX_X);
 		}
 		
+		private function updateOil():void
+		{
+			OilManager.instance.update();
+		}
+		
+		
 		
 		public function gameStart():void
 		{
@@ -327,7 +340,7 @@ package
 			QuestManager.instance.release();
 		}
 		
-		private function gameOver():void
+		public function gameOver():void
 		{
 			this.gamePause = true;
 			QuestManager.instance.release();		

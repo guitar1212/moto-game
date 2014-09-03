@@ -16,7 +16,7 @@ package com.loma.game.quest
 	/**
 	 * 遊戲開始的第一個任務
 	 * 詢問是否要戴安全帽
-	 * 答錯則無法繼續進行遊戲
+	 * 答錯扣血  答對加分
 	 * 
 	 * @long  Aug 29, 2014
 	 * 
@@ -98,7 +98,7 @@ package com.loma.game.quest
 			//game.removeObjFormLayer(MotoGame.LAYER_UI, u);
 			
 			if(m_bRight)
-				game.addScore(5);
+				game.addScore(50);
 			else
 				game.addLife(-1);
 			
@@ -106,7 +106,7 @@ package com.loma.game.quest
 			
 			// add quest
 			var q:QuestSpeedLimit = new QuestSpeedLimit();
-			q.speedLimit = 70;
+			q.speedLimit = 60;
 			QuestManager.instance.addQuest(q);
 			
 			var qc:QuestOtherCars = new QuestOtherCars();
