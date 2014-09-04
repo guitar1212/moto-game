@@ -1,6 +1,7 @@
 package com.loma.game.ui
 {
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -10,31 +11,37 @@ package com.loma.game.ui
 	 * @long  Sep 3, 2014
 	 * 
 	 */	
-	public class GameOverDialog extends Sprite
+	public class GameOverDialog extends Quest4
 	{
+		private var m_cb:Function = null;
+		
 		public function GameOverDialog()
 		{
 			super();
 			
-			onCreate();
+			this.btn_brack.addEventListener(MouseEvent.CLICK, onClick);
 		}
 		
-		protected function onCreate():void
+		protected function onClick(event:MouseEvent):void
 		{
-			var tf:TextFormat = new TextFormat();
-			tf.size = 48;
-			tf.color = 0xff2233;
-			tf.bold = true;
-			tf.italic = true;
-			
-			var t:TextField = new TextField();
-			t.autoSize = TextFieldAutoSize.CENTER;
-			t.defaultTextFormat = tf;
-			t.text = "Game Over!\nPress 'ESC' to restart";
-			t.x = (700 - t.width)/2;
-			t.y = (500 - t.height)/2;
-			
-			this.addChild(t);
+			// TODO Auto-generated method stub
+			if(m_cb != null)
+				m_cb();
+		}
+		
+		public function set score(value:int):void
+		{
+			this.txt_score.text = value.toString();
+		}
+		
+		public function set life(value:int):void
+		{
+			this.LifeBar_mc.gotoAndStop(5 - value + 1);
+		}
+		
+		public function set callback(cb:Function):void
+		{
+			m_cb = cb;
 		}
 	}
 }

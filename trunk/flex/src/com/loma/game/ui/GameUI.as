@@ -172,8 +172,11 @@ package com.loma.game.ui
 				m_gameUI.removeChild(m_quizUI);
 		}
 		
-		public function showGameOverUI():void
+		public function showGameOverUI(score:int, life:int, callback:Function):void
 		{
+			m_gameOverUI.score = score;
+			m_gameOverUI.life = life;
+			m_gameOverUI.callback = callback;
 			m_gameUI.addChild(m_gameOverUI);
 		}
 		

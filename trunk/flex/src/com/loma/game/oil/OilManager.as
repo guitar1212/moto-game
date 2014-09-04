@@ -35,6 +35,7 @@ package com.loma.game.oil
 		{
 			m_game = g;
 			m_totalPlayFrames = playTime*g.stage.frameRate;
+			m_count = 0;
 		}
 		
 		public function update():void

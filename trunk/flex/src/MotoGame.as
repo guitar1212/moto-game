@@ -176,7 +176,7 @@ package
 			}
 			else if(event.keyCode == Keyboard.ESCAPE)
 			{
-				this.gameMenu();
+				this.gameOver();
 			}
 		}
 		
@@ -342,7 +342,9 @@ package
 			m_ui.hideMenu();
 			m_ui.initialize();
 			
-			m_life = MAX_LIFE;
+			this.life = MAX_LIFE;
+			
+			this.score = 0
 			
 			riderStart();
 			this.addObjToLayer(LAYER_SCENE, m_rider);	
@@ -353,6 +355,8 @@ package
 			
 			// add first quest
 			QuestManager.instance.addQuest(new QuestFirst());
+			
+			OilManager.instance.initialize(this, 3*60);
 		}
 		
 		public function gameMenu():void
@@ -367,6 +371,7 @@ package
 			this.removeEventListener(Event.ENTER_FRAME, onUpdate);
 			
 			QuestManager.instance.release();
+			RandomEventManager.instance.clean();
 		}
 		
 		public function gameOver():void
@@ -374,7 +379,7 @@ package
 			this.gamePause = true;
 			QuestManager.instance.release();		
 			
-			ui.showGameOverUI();			 
+			ui.showGameOverUI(m_score, m_life, gameMenu);			 
 		}
 		
 		public function riderStart():void
