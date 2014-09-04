@@ -219,8 +219,16 @@ package
 			
 			depthSort();
 			
+			checkGameOver();
+			
 			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + ".  acc = " + m_acceleration + 
 							   "\nstageX = " + stage.mouseX + ". stageY = " + stage.mouseY;
+		}
+		
+		private function checkGameOver():void
+		{			
+			if(m_life <= 0)
+				gameOver();
 		}
 		
 		private function depthSort():void
@@ -427,9 +435,6 @@ package
 			m_life = clamp(value, 0, MAX_LIFE);
 			
 			ui.life = m_life;
-			
-			if(m_life <= 0)
-				gameOver();
 		}
 		
 		public function addLife(value:int):void

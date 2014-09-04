@@ -51,7 +51,7 @@ package com.loma.game.quest
 		
 		private function onFailed():void
 		{
-			game.addScore(-50);
+			game.addScore(-30);
 			
 			/*game.gamePause = false;
 			QuestManager.instance.start = true;
