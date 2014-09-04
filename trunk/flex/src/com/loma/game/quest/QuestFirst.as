@@ -41,32 +41,25 @@ package com.loma.game.quest
 			game.player.state = Rider.STATE_START;
 			
 			// show ui
-			var alert:FirstQuestionDialog = new FirstQuestionDialog();
-			alert.addEventListener(MouseEvent.CLICK, onAlertMouseClick);
+			var alert:FirstQuestionDialog = new FirstQuestionDialog();			
+			alert.callback = onAlertMouseClick;
 			
 			game.addObjToLayer(MotoGame.LAYER_UI, alert);
 		}
 		
-		protected function onAlertMouseClick(event:MouseEvent):void
-		{
-			if(event.target is SimpleButton)
+		protected function onAlertMouseClick(value:Boolean):void
+		{			
+			// 取消
+			if(!value)
 			{
-				// 取消
-				if(event.target.x == 341.95)
-				{
-					game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.HELMET, 0, OK);
-					m_bRight = false;
-				}
-				// 確定
-				else if(event.target.x == 442.8)
-				{		
-					m_bOK = true;
-					m_bRight = true;
-				}
-				
-				var alert:FirstQuestionDialog = event.currentTarget as FirstQuestionDialog;
-				alert.removeEventListener(MouseEvent.CLICK, onAlertMouseClick);
-				alert.removeSelf();
+				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.HELMET, 0, OK);
+				m_bRight = false;
+			}
+			// 確定
+			else 
+			{		
+				m_bOK = true;
+				m_bRight = true;
 			}
 		}
 		

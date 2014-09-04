@@ -1,9 +1,14 @@
 package com.loma.game.quest
 {
 	import com.loma.game.quest.base.QuestBase;
+	import com.loma.game.quest.define.QuestState;
+	import com.loma.game.string.StringTable;
+	import com.loma.game.ui.FirstQuestionDialog;
+	import com.loma.game.ui.ViolationDialog;
 	
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
 	
@@ -18,7 +23,7 @@ package com.loma.game.quest
 		private static const TYPE_TIRED:int = 1;
 		private static const TYPE_AMOUNT:int = 2;
 		
-		private var m_eventObj:DisplayObject = null;
+		private var m_eventObj:MovieClip = null;
 		
 		private var m_type:int;
 		
@@ -41,6 +46,9 @@ package com.loma.game.quest
 			
 			m_eventObj.x = 60;
 			m_eventObj.y = -185;
+			m_eventObj.mouseEnabled = true;
+			m_eventObj.useHandCursor = true;
+			m_eventObj.mouseChildren = false;
 							
 			m_eventObj.addEventListener(MouseEvent.CLICK, onEventClick);
 			game.player.addChild(m_eventObj);
@@ -66,12 +74,63 @@ package com.loma.game.quest
 		}
 		
 		override public function onCompleted():void
-		{
-			
+		{	
 		}
 		
 		override public function end():void
 		{			
+			var alert:FirstQuestionDialog = new FirstQuestionDialog();
+			
+			if(m_type == TYPE_CELLPHONE)
+				alert.setText(StringTable.CELLPHONE);
+			else if(m_type == TYPE_TIRED)
+				alert.setText(StringTable.TIRED);
+			
+			alert.callback = alertCallback;
+				
+			game.addObjToLayer(MotoGame.LAYER_UI, alert);
+			
+			this.game.gamePause = true;
+			QuestManager.instance.start = false;
+		}
+		
+		private function alertCallback(value:Boolean):void
+		{
+			var type:int;
+			var context:String;
+			var score:int;
+			if(value)
+			{
+				type = ViolationDialog.TYPE_BAD;
+				score = -30;
+				game.addLife(-1);
+			}
+			else
+			{
+				type = ViolationDialog.TYPE_GOOD;
+				score = 50;
+			}
+			
+			if(m_type == TYPE_CELLPHONE)
+				context = StringTable.CELLPHONE_DESC;
+			else if(m_type == TYPE_TIRED)
+				context = StringTable.TIRED_DESC;
+			
+			game.ui.showViolationUI(type, context, score, resume);
+			
+			game.addScore(score);
+		}
+		
+		private function resume():void
+		{
+			this.game.gamePause = false;
+			QuestManager.instance.start = true;
+			
+			this.state = QuestState.DESTORY;
+			
+			game.ui.hideViolationUI();
+			
+			game.dispatchEvent(new Event("QueseComplete"));
 		}
 		
 		override public function release():void

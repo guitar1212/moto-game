@@ -64,8 +64,7 @@ package com.loma.game.randomevent
 		
 		protected function onQuestComplete(event:Event):void
 		{
-			m_bFinish = true;
-			trace("QueseComplete");
+			m_bFinish = true;			
 			m_curQuest = null;
 		}
 		
@@ -123,7 +122,6 @@ package com.loma.game.randomevent
 					break;
 			}
 			
-			m_curQuest = new QuestPlayerStatus();
 			if(m_curQuest)
 			{
 				QuestManager.instance.addQuest(m_curQuest);

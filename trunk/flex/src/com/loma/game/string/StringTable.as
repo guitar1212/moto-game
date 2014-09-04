@@ -16,6 +16,12 @@ package com.loma.game.string
 		
 		public static const AMBULANCE:String = "要讓救護車先行喔!";
 		
+		public static const CELLPHONE:String = "手機響了, 要在行駛中接聽嗎?";
+		public static const TIRED:String = "精神狀況不佳, 要繼續趕路嗎?";
+		
+		public static const CELLPHONE_DESC:String = "機車行駛中不能使用手機喔!";
+		public static const TIRED_DESC:String = "精神或體力狀況不佳時, 要先停下來休息一下喔!\n等精神或體力恢復後再繼續行駛!";
+		
 		public function StringTable()
 		{
 		}

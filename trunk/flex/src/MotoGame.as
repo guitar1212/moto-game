@@ -317,12 +317,12 @@ package
 			if(m_acceleration > 0 && m_speed > 50)
 			{
 				m_rider.x += 3;
-				m_rider.transform.matrix = new Matrix(1, 0, 0.15, 1, m_rider.x, m_rider.y);				
+				//m_rider.transform.matrix = new Matrix(1, 0, 0.15, 1, m_rider.x, m_rider.y);				
 			}
 			else
 			{
 				m_rider.x -= 3;
-				m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
+				//m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
 			}
 			
 			m_rider.x = clamp(m_rider.x, Rider.MIN_X, Rider.MAX_X);
@@ -382,7 +382,7 @@ package
 			m_rider.state = Rider.STATE_STOP;
 			m_rider.y = 400;
 			m_rider.x = Rider.MIN_X;
-			m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
+			//m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
 		
 			m_acceleration = 0;
 			m_speed = 0;
