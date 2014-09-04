@@ -81,11 +81,11 @@ package com.loma.game.quest
 					{
 						q.onCompleted();
 						q.state = QuestState.COMPLETED;
-						if(q.excuteTimes == 1)
+						/*if(q.excuteTimes == 1)
 						{
 							q.state = QuestState.END;
 							q.end();
-						}
+						}*/
 					}
 				}
 				else if(q.state == QuestState.COMPLETED)
@@ -93,6 +93,11 @@ package com.loma.game.quest
 					if(q.excuteTimes == -1)
 					{
 						q.state = QuestState.DOING; // repeat quest
+					}
+					else if(q.excuteTimes == 1)
+					{
+						q.state = QuestState.END;
+						q.end();
 					}
 				}
 				else if(q.state == QuestState.END)

@@ -217,8 +217,37 @@ package
 			
 			RandomEventManager.instance.update();
 			
+			depthSort();
+			
 			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + ".  acc = " + m_acceleration + 
 							   "\nstageX = " + stage.mouseX + ". stageY = " + stage.mouseY;
+		}
+		
+		private function depthSort():void
+		{
+			var scene:Sprite = getLayer(MotoGame.LAYER_SCENE);
+			var i:int = 0, j:int = 0, len:int = scene.numChildren;
+			
+			// bubble sort
+			for(i = 0; i < len; i++)
+			{
+				var bSwapped:Boolean = false;
+				for(j = 0; j < len - i - 1; j++)
+				{
+					var c1:DisplayObject = scene.getChildAt(j);
+					var c2:DisplayObject = scene.getChildAt(j + 1);
+					
+					if(c1.y > c2.y)
+					{
+						scene.swapChildren(c1, c2);
+						bSwapped = true;
+					}
+				}
+				if(!bSwapped)
+					break;
+			}
+			
+			
 		}
 		
 		private function updateSpeed():void

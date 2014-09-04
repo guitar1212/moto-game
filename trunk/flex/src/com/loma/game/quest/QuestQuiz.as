@@ -30,7 +30,7 @@ package com.loma.game.quest
 		private function createQuiz():void
 		{
 			m_qm = new QuestionMark();
-			game.background.addObject(2, m_qm, 350 , 300 + Math.random()*50 );
+			game.background.addObject(2, m_qm, 350 , 300 + Math.random()*100 );
 		}
 		
 		override public function onUpdate():void
@@ -69,12 +69,12 @@ package com.loma.game.quest
 			var quiz:Object = QuizManager.instance.getCurrentQuiz();
 			if(answer == quiz.a) // 答對了
 			{
-				game.ui.showViolationUI(ViolationDialog.TYPE_GOOD, quiz.d + "\n\n恭喜你獲得 50 分!" , onClick);
+				game.ui.showViolationUI(ViolationDialog.TYPE_GOOD, quiz.d, 50, onClick);
 				game.addScore(50);
 			}
 			else // 答錯了
 			{
-				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, quiz.d + "\n\n很遺憾你被扣 30 分!", onClick);
+				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, quiz.d, -30, onClick);
 				game.addScore(-30);
 				game.addLife(-1);
 			}

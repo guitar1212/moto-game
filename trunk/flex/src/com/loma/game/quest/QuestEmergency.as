@@ -3,6 +3,7 @@ package com.loma.game.quest
 	import com.loma.game.car.Ambulance;
 	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.quest.define.QuestState;
+	import com.loma.game.string.StringTable;
 	import com.loma.game.ui.ViolationDialog;
 	
 	import flash.events.Event;
@@ -84,7 +85,7 @@ package com.loma.game.quest
 			this.pause = true;
 			game.gamePause = true;
 			m_state = 3;
-			game.ui.showViolationUI(ViolationDialog.TYPE_BAD, "你違規囉!\n扣 30 分", confirm);
+			game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.AMBULANCE, -30, confirm);
 		}
 		
 		private function confirm():void

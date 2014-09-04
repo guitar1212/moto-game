@@ -12,6 +12,10 @@ package com.loma.game.string
 		public static const FAST_TRACK:String = "快車道禁行機車";
 		public static const SIDEWALK:String = "人行道禁行機車";
 		
+		public static const OBSTACLES:String = "看到障礙物要閃避喔!";
+		
+		public static const AMBULANCE:String = "要讓救護車先行喔!";
+		
 		public function StringTable()
 		{
 		}

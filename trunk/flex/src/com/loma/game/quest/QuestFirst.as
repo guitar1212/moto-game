@@ -54,7 +54,7 @@ package com.loma.game.quest
 				// 取消
 				if(event.target.x == 341.95)
 				{
-					game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.HELMET, OK);
+					game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.HELMET, 0, OK);
 					m_bRight = false;
 				}
 				// 確定

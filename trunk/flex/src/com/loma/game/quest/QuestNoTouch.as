@@ -33,13 +33,13 @@ package com.loma.game.quest
 			if(game.player.hitObject.hitTestObject(m_upperBound))
 			{
 				bTouch = true;
-				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.FAST_TRACK, onConfirm);
+				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.FAST_TRACK, -30, onConfirm);
 			}
 			
 			if(game.player.hitObject.hitTestObject(m_lowerBound))
 			{
 				bTouch = true;
-				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.SIDEWALK, onConfirm);
+				game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.SIDEWALK, -30, onConfirm);
 			}
 			
 			if(bTouch == true)

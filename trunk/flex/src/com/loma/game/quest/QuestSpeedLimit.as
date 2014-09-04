@@ -50,7 +50,7 @@ package com.loma.game.quest
 			QuestManager.instance.start = false;
 			
 			// show ui
-			game.ui.showViolationUI(ViolationDialog.TYPE_BAD, "你超速囉~~ 本路段限速 " + m_speedLimit + " 公里", end);
+			game.ui.showViolationUI(ViolationDialog.TYPE_BAD, "你超速囉~~ 本路段限速 " + m_speedLimit + " 公里", -30, end);
 			
 			// 暫停任務進行
 			QuestManager.instance.start = false;

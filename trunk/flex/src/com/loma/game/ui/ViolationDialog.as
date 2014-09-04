@@ -39,5 +39,28 @@ package com.loma.game.ui
 			txt_title.gotoAndStop(t);
 			Icon_police.gotoAndStop(t);
 		}
+		
+		public function set score(value:int):void
+		{
+			var color:uint;
+			if(value > 0)
+			{
+				color = 0x542B01;
+				txt_score.text = "+" + value.toString();
+			}
+			else 
+			{
+				color = 0x990000;
+				txt_score.text = value.toString();
+			}
+			
+			if(value == 0)
+				txt_score.visible = false;
+			else
+				txt_score.visible = true;
+			
+			txt_score.textColor = color;
+			
+		}
 	}
 }
