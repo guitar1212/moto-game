@@ -112,7 +112,13 @@ package com.loma.game.randomevent
 					break;
 				
 				case 3:
-					m_curQuest = new QuestPlayerStatus();
+					if(m_game.currentSpeed < 1)
+					{
+						randomQuest()
+						return;
+					}
+					else
+						m_curQuest = new QuestPlayerStatus();
 					break;
 				
 				case 4:

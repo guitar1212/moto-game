@@ -13,11 +13,7 @@
  * switchMusic();						//開始播放
  * */
  package com.loma.game.audio
-{
-	import com.xpec.game.def.UrlAddress;
-	import com.xpec.game.settings.MusicSetting;
-	import com.xpec.game.settings.SoundSetting;
-	
+{	
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
@@ -69,82 +65,6 @@
 		
 		public function Init():void
 		{						
-		}
-		
-		//從xml檔取得音樂檔檔名
-		public function getMusicFile(track:int):String
-		{
-			var musicFileName:String;
-			var musicArr:Array = [];
-			
-			musicArr = MusicSetting.instance.getAllMusicFile(); 
-			//getAllMusicFile();
-			if(track < musicArr.length)
-			{
-				musicFileName = musicArr[track].file;
-			}			
-			
-			if(musicFileName != null)
-				return musicFileName;
-			else
-				return null;
-		}
-		
-		//從xml檔取得音效檔檔名
-		public function getSoundFile(track:int):String
-		{
-			var soundFileName:String;
-			var soundArr:Array = [];
-			
-			soundArr = SoundSetting.instance.getAllSoundFile(); 
-			//getAllMusicFile();
-			if(track < soundArr.length)
-			{
-				soundFileName = soundArr[track].file;
-			}			
-			
-			if(soundFileName != null)
-				return soundFileName;
-			else
-				return null;
-		}
-		
-		//依音樂檔編號尋找音樂檔
-		public function getMusicFileLabel(track:int):String
-		{
-			var musicFileLabel:String;
-			var musicArr:Array = [];
-			
-			musicArr = MusicSetting.instance.getAllMusicFile(); 
-			//getAllMusicFile();
-			if(track < musicArr.length)
-			{
-				musicFileLabel = musicArr[track].label;
-			}			
-			
-			if(musicFileLabel != null)
-				return musicFileLabel;
-			else
-				return null;
-		}
-		
-		//依音效檔編號尋找音效檔
-		public function getSoundFileLabel(track:int):String
-		{
-			var soundFileLabel:String;
-			var soundArr:Array = [];
-			
-			soundArr = SoundSetting.instance.getAllSoundFile(); 
-			//getAllMusicFile();
-			if(track < soundArr.length)
-			{
-				soundFileLabel = soundArr[track].label;
-			}			
-			
-			if(soundFileLabel != null)
-				return soundFileLabel;
-			else
-				return null;
 		}
 		
 		//設定下載音效檔 (目前未使用此方法  所以用 PUBLISH::DEBUG!)

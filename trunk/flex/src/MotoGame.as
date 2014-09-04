@@ -8,6 +8,7 @@ package
 	import com.loma.game.quest.QuestObstacles;
 	import com.loma.game.quiz.QuizManager;
 	import com.loma.game.randomevent.RandomEventManager;
+	import com.loma.game.sound.SoundManager;
 	import com.loma.game.ui.GameUI;
 	
 	import flash.display.DisplayObject;
@@ -365,6 +366,8 @@ package
 			QuestManager.instance.addQuest(new QuestFirst());
 			
 			OilManager.instance.initialize(this, 3*60);
+			
+			SoundManager.instance.playBGM();
 		}
 		
 		public function gameMenu():void
@@ -380,6 +383,8 @@ package
 			
 			QuestManager.instance.release();
 			RandomEventManager.instance.clean();
+			
+			SoundManager.instance.stopBGM();
 		}
 		
 		public function gameOver():void

@@ -3,10 +3,13 @@ package com.loma.game.quest
 	import com.loma.game.car.Ambulance;
 	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.quest.define.QuestState;
+	import com.loma.game.sound.SoundManager;
 	import com.loma.game.string.StringTable;
 	import com.loma.game.ui.ViolationDialog;
 	
 	import flash.events.Event;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
 	
 	/**
 	 * 救護車任務
@@ -38,6 +41,8 @@ package com.loma.game.quest
 			m_ambulance.y = 350;
 			
 			game.addObjToLayer(MotoGame.LAYER_SCENE, m_ambulance);
+			
+			SoundManager.instance.playAmbulanceSound();			
 		}
 		
 		override public function onUpdate():void
@@ -65,7 +70,10 @@ package com.loma.game.quest
 				m_ambulance.x = m_ambulance.x + 12;
 				
 				if(game.player.hitObject.hitTestObject(m_ambulance))
-					onFailed()
+				{
+					SoundManager.instance.playCrashSound();
+					onFailed();
+				}
 				
 				if(m_ambulance.x > 1100)
 					m_state = 3;
@@ -108,7 +116,8 @@ package com.loma.game.quest
 		
 		override public function onCompleted():void
 		{
-			game.dispatchEvent(new Event("QueseComplete"));	
+			game.dispatchEvent(new Event("QueseComplete"));
+			SoundManager.instance.stopAmbulanceSound();
 		}
 		
 		override public function end():void
