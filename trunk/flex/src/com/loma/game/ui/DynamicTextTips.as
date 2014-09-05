@@ -1,7 +1,6 @@
-package com.xpec.c4.tips
-{
-	import com.xpec.jade.util.TimerManager;
-	import com.xpec.uitools.UIUtility;
+package com.loma.game.ui
+{	
+	import com.loma.util.TimerManager;
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -94,7 +93,7 @@ package com.xpec.c4.tips
 			text.autoSize = TextFieldAutoSize.LEFT;
 			text.selectable = false;
 			text.mouseEnabled = false;
-			text.filters = UIUtility.instance.textBlackFilters;
+			//text.filters = UIUtility.instance.textBlackFilters;
 			text.htmlText = "<font color='#" + color + "' size='" + size + "'><b>" + content + "</b></font>";			
 			dyObj.addChild(text);
 			
@@ -239,6 +238,6 @@ internal class DynamicTipObject extends Sprite
 	
 	public function release():void
 	{
-		this.removeChildren();
+		this.removeChildAt(0);
 	}
 }

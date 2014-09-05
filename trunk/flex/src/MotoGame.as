@@ -9,6 +9,7 @@ package
 	import com.loma.game.quiz.QuizManager;
 	import com.loma.game.randomevent.RandomEventManager;
 	import com.loma.game.sound.SoundManager;
+	import com.loma.game.ui.DynamicTextTips;
 	import com.loma.game.ui.GameUI;
 	
 	import flash.display.DisplayObject;
@@ -18,6 +19,7 @@ package
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -172,7 +174,7 @@ package
 			}
 			else if(event.keyCode == Keyboard.DELETE)
 			{
-				QuizManager.instance.reGeneration();	
+				DynamicTextTips.instance.create("-30", "0xFF0000", new Point(player.x, player.y), 32);
 				
 			}
 			else if(event.keyCode == Keyboard.ESCAPE)
