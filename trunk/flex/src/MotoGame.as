@@ -174,10 +174,6 @@ package
 			{
 				QuizManager.instance.reGeneration();	
 				
-			}	
-			else if(event.keyCode == Keyboard.I)
-			{
-				m_bg.addObject(0, new Rider(), 400, 150);
 			}
 			else if(event.keyCode == Keyboard.ESCAPE)
 			{
@@ -272,8 +268,10 @@ package
 				dS = 0.4;
 			else if(m_speed < 50)
 				dS = 0.35;
-			else
+			else if(m_speed < 55)
 				dS = 0.2;
+			else 
+				dS = 0.1;
 						
 			if(isForward())
 			{
@@ -283,13 +281,12 @@ package
 			{
 				m_speed -= 2;
 			}
-			else if(!m_bForward && !m_bBackward)
+			else if(isFreeSlide())
 			{
 				m_speed -= 0.5;
 			}
 			else
-			{
-				
+			{				
 			}
 			
 			if(m_speed > MAX_SPEED)
@@ -336,10 +333,14 @@ package
 				m_rider.x += 3;
 				//m_rider.transform.matrix = new Matrix(1, 0, 0.15, 1, m_rider.x, m_rider.y);				
 			}
-			else
+			else if(isBackward())
+			{
+				m_rider.x -= 6;
+				//m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
+			}
+			else if(isFreeSlide())
 			{
 				m_rider.x -= 3;
-				//m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
 			}
 			
 			m_rider.x = clamp(m_rider.x, Rider.MIN_X, Rider.MAX_X);
@@ -477,6 +478,11 @@ package
 		private function isBackward():Boolean
 		{
 			return (!m_bForward && m_bBackward);
+		}
+		
+		private function isFreeSlide():Boolean
+		{
+			return !(m_bForward || m_bBackward);
 		}
 
 	}

@@ -107,6 +107,7 @@ package com.loma.game.quest
 			game.addLife(-1);
 			
 			game.stage.focus = game.stage;
+			SoundManager.instance.stopAmbulanceSound();
 		}
 		
 		override public function check():Boolean

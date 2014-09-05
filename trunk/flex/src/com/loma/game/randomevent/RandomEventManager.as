@@ -92,7 +92,7 @@ package com.loma.game.randomevent
 		
 		private function randomQuest():void
 		{
-			var randomIdx:int = ~~(Math.random()*(TOTAL_EVENTS - 1) + 0.5);
+			var randomIdx:int = ~~(Math.random()*(TOTAL_EVENTS) - 0.001);
 			
 			switch(randomIdx)
 			{

@@ -87,14 +87,14 @@ package com.loma.game.quest
 		private function createCar():void
 		{
 			var car:Coupe = new Coupe();
-			car.speed = 30;
+			car.speed = 28 + Math.random()*30;
 			
 			if(game.currentSpeed < 30)
 				car.x = -300;
 			else
 				car.x = 1000;
-			car.y = 165 + Math.random()*50;
-			car.transform.colorTransform = new ColorTransform(1, Math.random(), Math.random());
+			car.y = 165 + Math.random()*100;
+			car.transform.colorTransform = new ColorTransform(Math.random(), Math.random(), 1);
 			game.addObjToLayer(MotoGame.LAYER_SCENE, car);
 			
 			m_carList.push(car);

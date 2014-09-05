@@ -7,10 +7,13 @@ package com.loma.game.sound
 	public class SoundManager
 	{
 		private static var m_instance:SoundManager = null;
-		public static const MENU_BACKGROUND_MUSIC:String = "";
+		public static const MENU_BACKGROUND_MUSIC:String = "Sound_menu";
 		public static const BACKGROUND_MUSIC:String = "Sound_Bg";
 		public static const AMBULANCE:String = "Sound_ambulance";
 		public static const CRASH:String = "";
+		public static const CELLPHONE:String = "Sound_phone";
+		
+		public static const RIDER_MOVE:String = "Sound_motoMove";
 		
 		private var m_soundDict:Dictionary = new Dictionary();
 		private var m_soundChannelDict:Dictionary = new Dictionary();
@@ -25,6 +28,8 @@ package com.loma.game.sound
 			m_soundDict[MENU_BACKGROUND_MUSIC] = new Sound_menu();
 			m_soundDict[BACKGROUND_MUSIC] = new Sound_Bg();
 			m_soundDict[AMBULANCE] = new Sound_ambulance();
+			m_soundDict[CELLPHONE] = new Sound_phone();
+			m_soundDict[RIDER_MOVE] = new Sound_motoMove();
 		}
 		
 		public static function get instance():SoundManager
@@ -55,7 +60,7 @@ package com.loma.game.sound
 		
 		public function playMenuBGM():void
 		{
-			playSound(MENU_BACKGROUND_MUSIC, 1);
+			playSound(MENU_BACKGROUND_MUSIC, 0);
 		}
 		
 		public function stopMenuBGM():void
@@ -65,7 +70,7 @@ package com.loma.game.sound
 		
 		public function playBGM():void
 		{
-			playSound(BACKGROUND_MUSIC, 10);
+			playSound(BACKGROUND_MUSIC, 0);
 		}
 		
 		public function stopBGM():void
@@ -79,7 +84,7 @@ package com.loma.game.sound
 		 */		
 		public function playAmbulanceSound():void
 		{
-			playSound(AMBULANCE, 999);
+			playSound(AMBULANCE, 0);
 		}
 		
 		public function stopAmbulanceSound():void
@@ -87,6 +92,26 @@ package com.loma.game.sound
 			stopSound(AMBULANCE);
 		}
 		
+		
+		public function playCellphoneSound():void
+		{
+			playSound(CELLPHONE, 0);
+		}
+		
+		public function stopCellphoneSound():void
+		{
+			stopSound(CELLPHONE);
+		}
+		
+		public function playMoveSound():void
+		{
+			playSound(RIDER_MOVE, 0);
+		}
+		
+		public function stopMoveSound():void
+		{
+			stopSound(RIDER_MOVE);
+		}
 		
 		/**
 		 *	播放車禍音效 

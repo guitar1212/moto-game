@@ -2,6 +2,7 @@ package com.loma.game.quest
 {
 	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.quest.define.QuestState;
+	import com.loma.game.sound.SoundManager;
 	import com.loma.game.string.StringTable;
 	import com.loma.game.ui.FirstQuestionDialog;
 	import com.loma.game.ui.ViolationDialog;
@@ -40,7 +41,10 @@ package com.loma.game.quest
 		{			
 			m_type = getTimer()%TYPE_AMOUNT;
 			if(m_type == TYPE_CELLPHONE)
+			{
 				m_eventObj = new EventObject1();
+				SoundManager.instance.playCellphoneSound();
+			}
 			else if(m_type == TYPE_TIRED)
 				m_eventObj = new EventObject2();
 			
@@ -82,7 +86,10 @@ package com.loma.game.quest
 			var alert:FirstQuestionDialog = new FirstQuestionDialog();
 			
 			if(m_type == TYPE_CELLPHONE)
+			{
 				alert.setText(StringTable.CELLPHONE);
+				SoundManager.instance.stopCellphoneSound();
+			}
 			else if(m_type == TYPE_TIRED)
 				alert.setText(StringTable.TIRED);
 			

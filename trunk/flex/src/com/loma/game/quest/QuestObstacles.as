@@ -81,7 +81,6 @@ package com.loma.game.quest
 		{
 			if(m_obs.parent)
 				m_obs.parent.removeChild(m_obs);
-			//m_obs.removeEventListener(Event.REMOVED, onRemoveObstacle);
 			m_obs = null;
 		}
 		
@@ -89,17 +88,8 @@ package com.loma.game.quest
 		private function createObstacle():void
 		{
 			m_obs = new EventObject();
-			m_obs.gotoAndStop(1 + ~~(Math.random()*2 + 0.5));
-			game.background.addObject(2, m_obs, 0, 0);
-			
-			/*m_obs.addEventListener(Event.REMOVED, onRemoveObstacle);
-			m_obs.addEventListener(Event.REMOVED_FROM_STAGE, onRemoveObstacle);*/
-		}
-		
-		/*protected function onRemoveObstacle(event:Event):void
-		{
-			// TODO Auto-generated method stub
-			m_bOK = true;
-		}*/
+			m_obs.gotoAndStop(1 + ~~(Math.random()*3 - 0.001));
+			game.background.addObject(2, m_obs, 0, 0);			
+		}		
 	}
 }
