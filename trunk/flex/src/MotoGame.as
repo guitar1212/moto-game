@@ -49,8 +49,6 @@ package
 		private var m_life:int = MAX_LIFE;
 		
 		private var m_speed:Number = 0;
-		private var m_speedDamping:int = 5;
-		private var m_acceleration:int = 0;
 		
 		private var m_score:int = 0;
 		
@@ -58,14 +56,18 @@ package
 		
 		private var m_debugText:TextField = new TextField();
 		
+		private var m_bBackward:Boolean;
+		private var m_bForward:Boolean;
+		
 		
 		public function MotoGame()
 		{
 			this.stage.align = StageAlign.TOP_LEFT;
 			this.stage.scaleMode = StageScaleMode.SHOW_ALL;
 			
-			this.addEventListener(Event.ADDED_TO_STAGE, initialize);
+			this.addEventListener(Event.ADDED_TO_STAGE, initialize);			
 		}
+		
 		
 		protected function initialize(event:Event):void
 		{
@@ -93,6 +95,8 @@ package
 			RandomEventManager.instance.initialize(this);
 			
 			OilManager.instance.initialize(this, 3*60); // 設定遊戲時間為3分鐘
+			
+			SoundManager.instance.playMenuBGM();
 		}
 		
 		private function initLayer():void
@@ -153,11 +157,11 @@ package
 			
 			if(event.keyCode == Keyboard.A || event.keyCode == Keyboard.LEFT)
 			{
-				m_acceleration -= 1;				
+				m_bBackward = true;				
 			}
 			else if(event.keyCode == Keyboard.D || event.keyCode == Keyboard.RIGHT)
 			{
-				m_acceleration += 1;
+				m_bForward = true;
 			}
 			
 			//test
@@ -194,11 +198,11 @@ package
 			
 			if(event.keyCode == Keyboard.A || event.keyCode == Keyboard.LEFT)
 			{
-				m_acceleration += 1; 
+				m_bBackward = false;
 			}
 			else if(event.keyCode == Keyboard.D || event.keyCode == Keyboard.RIGHT)
 			{
-				m_acceleration -= 1;
+				m_bForward = false;
 			}
 		}
 		
@@ -222,7 +226,7 @@ package
 			
 			checkGameOver();
 			
-			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + ".  acc = " + m_acceleration + 
+			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + 
 							   "\nstageX = " + stage.mouseX + ". stageY = " + stage.mouseY;
 		}
 		
@@ -264,24 +268,28 @@ package
 			var dS:Number;
 			if(m_speed < 30)
 				dS = 0.45;
+			else if(m_speed < 40)
+				dS = 0.4;
 			else if(m_speed < 50)
 				dS = 0.35;
 			else
 				dS = 0.2;
-			
-			m_acceleration = clamp(m_acceleration, -1, 1);
-			
-			if(m_acceleration > 0)
+						
+			if(isForward())
 			{
 				m_speed += dS;
 			}
-			else if(m_acceleration < 0)
+			else if(isBackward())
 			{
 				m_speed -= 2;
 			}
-			else if(m_acceleration == 0)
+			else if(!m_bForward && !m_bBackward)
 			{
 				m_speed -= 0.5;
+			}
+			else
+			{
+				
 			}
 			
 			if(m_speed > MAX_SPEED)
@@ -310,7 +318,7 @@ package
 				m_rider.state = Rider.STATE_MOVE;
 			
 			// 控制煞車燈
-			if(m_acceleration == -1)
+			if(isBackward())
 				m_rider.isBreak = true;
 			else
 				m_rider.isBreak = false;
@@ -323,7 +331,7 @@ package
 			else if(m_rider.moveDirection == Rider.MOVE_DOWN)
 				m_rider.y += 5;
 			
-			if(m_acceleration > 0 && m_speed > 50)
+			if(isForward() && m_speed > 50)
 			{
 				m_rider.x += 3;
 				//m_rider.transform.matrix = new Matrix(1, 0, 0.15, 1, m_rider.x, m_rider.y);				
@@ -368,6 +376,7 @@ package
 			OilManager.instance.initialize(this, 3*60);
 			
 			SoundManager.instance.playBGM();
+			SoundManager.instance.stopMenuBGM();
 		}
 		
 		public function gameMenu():void
@@ -385,6 +394,7 @@ package
 			RandomEventManager.instance.clean();
 			
 			SoundManager.instance.stopBGM();
+			SoundManager.instance.playMenuBGM();
 		}
 		
 		public function gameOver():void
@@ -401,9 +411,11 @@ package
 			m_rider.y = 400;
 			m_rider.x = Rider.MIN_X;
 			//m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
-		
-			m_acceleration = 0;
+			
 			m_speed = 0;
+			
+			/*m_bForward = false;
+			m_bBackward = false;*/
 			
 			updateSpeed();
 		}
@@ -455,6 +467,16 @@ package
 				value = max;
 			
 			return value;
+		}
+		
+		private function isForward():Boolean
+		{
+			return (m_bForward && !m_bBackward);
+		}
+		
+		private function isBackward():Boolean
+		{
+			return (!m_bForward && m_bBackward);
 		}
 
 	}

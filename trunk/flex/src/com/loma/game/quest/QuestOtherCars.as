@@ -14,9 +14,7 @@ package com.loma.game.quest
 	 * 
 	 */	
 	public class QuestOtherCars extends QuestBase
-	{
-		private var m_timerIdx:int = -1;
-		
+	{		
 		private var m_carList:Array = [];
 		
 		private var m_target:int = 100;

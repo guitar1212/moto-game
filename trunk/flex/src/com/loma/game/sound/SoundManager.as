@@ -7,10 +7,10 @@ package com.loma.game.sound
 	public class SoundManager
 	{
 		private static var m_instance:SoundManager = null;
-		
+		public static const MENU_BACKGROUND_MUSIC:String = "";
 		public static const BACKGROUND_MUSIC:String = "Sound_Bg";
 		public static const AMBULANCE:String = "Sound_ambulance";
-		public static const CRASH:int = 1;
+		public static const CRASH:String = "";
 		
 		private var m_soundDict:Dictionary = new Dictionary();
 		private var m_soundChannelDict:Dictionary = new Dictionary();
@@ -22,6 +22,7 @@ package com.loma.game.sound
 		
 		private function createSound():void
 		{
+			m_soundDict[MENU_BACKGROUND_MUSIC] = new Sound_menu();
 			m_soundDict[BACKGROUND_MUSIC] = new Sound_Bg();
 			m_soundDict[AMBULANCE] = new Sound_ambulance();
 		}
@@ -50,6 +51,16 @@ package com.loma.game.sound
 				ch = null;
 				m_soundChannelDict[sName] = null;
 			}
+		}
+		
+		public function playMenuBGM():void
+		{
+			playSound(MENU_BACKGROUND_MUSIC, 1);
+		}
+		
+		public function stopMenuBGM():void
+		{
+			stopSound(MENU_BACKGROUND_MUSIC);
 		}
 		
 		public function playBGM():void

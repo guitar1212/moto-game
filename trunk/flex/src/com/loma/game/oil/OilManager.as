@@ -13,9 +13,7 @@ package com.loma.game.oil
 		
 		// in second
 		private var m_totalPlayFrames:int;
-		
-		//
-		private var m_curFran:Number = 0;
+	
 		
 		private var m_count:int = 0;
 		

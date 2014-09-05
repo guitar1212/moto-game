@@ -93,7 +93,7 @@ package com.loma.game.randomevent
 		private function randomQuest():void
 		{
 			var randomIdx:int = ~~(Math.random()*(TOTAL_EVENTS - 1) + 0.5);
-			var q:QuestBase = null;
+			
 			switch(randomIdx)
 			{
 				// 路面障礙物
