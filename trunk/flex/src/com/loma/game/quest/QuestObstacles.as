@@ -4,9 +4,11 @@ package com.loma.game.quest
 	import com.loma.game.quest.define.QuestState;
 	import com.loma.game.randomevent.RandomEventManager;
 	import com.loma.game.string.StringTable;
+	import com.loma.game.ui.DynamicTextTips;
 	import com.loma.game.ui.ViolationDialog;
 	
 	import flash.events.Event;
+	import flash.geom.Point;
 	import flash.net.drm.VoucherAccessInfo;
 
 	/**
@@ -52,6 +54,8 @@ package com.loma.game.quest
 		private function onFailed():void
 		{
 			game.addScore(-30);
+			
+			DynamicTextTips.instance.create("-30", "ff0000", new Point(game.player.x - game.player.width*0.5, game.player.y - game.player.height), 38);
 			
 			/*game.gamePause = false;
 			QuestManager.instance.start = true;

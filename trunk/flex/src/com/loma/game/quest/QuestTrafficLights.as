@@ -2,6 +2,8 @@ package com.loma.game.quest
 {
 	import com.loma.game.quest.base.QuestBase;
 	
+	import flash.events.Event;
+	
 	/**
 	 * 救護車任務
 	 * @long  Sep 3, 2014
@@ -9,6 +11,8 @@ package com.loma.game.quest
 	 */	
 	public class QuestTrafficLights extends QuestBase
 	{
+		private var m_trafficLight:RoadEvent;
+		
 		public function QuestTrafficLights()
 		{
 			super();
@@ -16,6 +20,8 @@ package com.loma.game.quest
 		
 		override public function start():void
 		{
+			m_trafficLight = new RoadEvent();
+			game.background.addObject(2, m_trafficLight, 0, 0);
 		}
 		
 		override public function onUpdate():void
@@ -24,12 +30,12 @@ package com.loma.game.quest
 		
 		override public function check():Boolean
 		{			
-			return false;
+			return (m_trafficLight.parent == null);
 		}
 		
 		override public function onCompleted():void
 		{
-			
+			game.dispatchEvent(new Event("QueseComplete"));
 		}
 		
 		override public function end():void

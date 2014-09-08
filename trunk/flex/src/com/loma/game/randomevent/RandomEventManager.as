@@ -5,6 +5,7 @@ package com.loma.game.randomevent
 	import com.loma.game.quest.QuestObstacles;
 	import com.loma.game.quest.QuestPlayerStatus;
 	import com.loma.game.quest.QuestQuiz;
+	import com.loma.game.quest.QuestTrafficLights;
 	import com.loma.game.quest.base.QuestBase;
 	
 	import flash.display.Sprite;
@@ -19,7 +20,7 @@ package com.loma.game.randomevent
 	{
 		private static var m_instance:RandomEventManager = null;
 		
-		private static const TOTAL_EVENTS:int = 4;
+		private static const TOTAL_EVENTS:int = 5;
 		
 		private var m_bStart:Boolean = false;
 		
@@ -122,11 +123,14 @@ package com.loma.game.randomevent
 					break;
 				
 				case 4:
+					m_curQuest = new QuestTrafficLights();
 					break;
 				
 				default:
 					break;
 			}
+			
+			m_curQuest = new QuestObstacles();
 			
 			if(m_curQuest)
 			{

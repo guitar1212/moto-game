@@ -99,6 +99,8 @@ package
 			OilManager.instance.initialize(this, 3*60); // 設定遊戲時間為3分鐘
 			
 			SoundManager.instance.playMenuBGM();
+			
+			DynamicTextTips.instance.container = this;
 		}
 		
 		private function initLayer():void
@@ -174,7 +176,7 @@ package
 			}
 			else if(event.keyCode == Keyboard.DELETE)
 			{
-				DynamicTextTips.instance.create("-30", "0xFF0000", new Point(player.x, player.y), 32);
+				//DynamicTextTips.instance.create("-30", "ff0000", new Point(player.x - player.width*0.5, player.y - player.height), 32);
 				
 			}
 			else if(event.keyCode == Keyboard.ESCAPE)
