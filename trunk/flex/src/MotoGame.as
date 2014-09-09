@@ -72,7 +72,7 @@ package
 		
 		
 		protected function initialize(event:Event):void
-		{
+		{	
 			this.removeEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 			initLayer();
@@ -101,6 +101,12 @@ package
 			SoundManager.instance.playMenuBGM();
 			
 			DynamicTextTips.instance.container = this;
+			
+			//test
+			for(var i:int = 0; i < 100; i++)
+			{
+				ui.oil = 100 - i;
+			}
 		}
 		
 		private function initLayer():void
@@ -438,6 +444,11 @@ package
 		
 		public function addScore(value:int):void
 		{
+			if(value > 0)
+				DynamicTextTips.instance.create("+" + value.toString(), "0000ff", new Point(player.x - player.width*0.5, player.y - player.height), 38);
+			else
+				DynamicTextTips.instance.create(value.toString(), "ff0000", new Point(player.x - player.width*0.5, player.y - player.height), 38);
+			
 			m_score += value;
 			this.ui.score = m_score;
 		}

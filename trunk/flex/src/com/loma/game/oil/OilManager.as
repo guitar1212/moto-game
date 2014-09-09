@@ -45,7 +45,8 @@ package com.loma.game.oil
 			}
 			else
 			{
-				m_game.ui.oil = 100 - ~~(m_count*100/m_totalPlayFrames);
+				var useOil:int = ~~(m_count*100/m_totalPlayFrames);
+				m_game.ui.oil = 100 - useOil;
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 package com.loma.game.player
 {
+	import com.loma.util.TimerManager;
+	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.geom.ColorTransform;
@@ -27,6 +29,8 @@ package com.loma.game.player
 		private var m_mc:Role;
 		
 		private var m_moveDir:String;
+		
+		private var m_effectTimerIdx:int = -1;
 		
 		public function Rider()
 		{
@@ -84,6 +88,32 @@ package com.loma.game.player
 			else
 			{
 				m_mc.light_mc.gotoAndStop(2);
+			}
+		}
+		
+		public function playEffect():void
+		{
+			if(m_effectTimerIdx == -1)
+			{
+				m_effectTimerIdx = TimerManager.instance.register(onEffectTimeUp, 100, 10, TimerManager.RETURN_INVOKE_TIMES);
+			}
+			else
+			{
+				
+			}
+		}
+		
+		private function onEffectTimeUp(times:int):void
+		{
+			if(this.alpha == 1)
+				this.alpha = 0.3;
+			else
+				this.alpha = 1;
+			
+			if(times == 10)
+			{
+				this.alpha = 1;
+				m_effectTimerIdx = -1;
 			}
 		}
 		

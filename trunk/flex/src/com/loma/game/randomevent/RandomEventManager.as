@@ -33,6 +33,7 @@ package com.loma.game.randomevent
 		private var m_bFinish:Boolean = true;
 		
 		private var m_curQuest:QuestBase;
+		private var m_lastIdx:int = -1;
 		
 		public function RandomEventManager()
 		{
@@ -94,7 +95,12 @@ package com.loma.game.randomevent
 		private function randomQuest():void
 		{
 			var randomIdx:int = ~~(Math.random()*(TOTAL_EVENTS) - 0.001);
-			
+			if(m_lastIdx == randomIdx)
+			{
+				randomQuest();
+				return;
+			}
+			m_lastIdx = randomIdx;
 			switch(randomIdx)
 			{
 				// 路面障礙物
