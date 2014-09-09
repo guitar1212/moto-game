@@ -49,7 +49,7 @@ package com.loma.game.quest
 		{
 			game.addScore(-30);
 			
-			game.player.playEffect();
+			game.player.playEffect(1);
 			
 			/*game.gamePause = false;
 			QuestManager.instance.start = true;

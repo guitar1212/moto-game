@@ -5,8 +5,6 @@ package
 	import com.loma.game.player.Rider;
 	import com.loma.game.quest.QuestFirst;
 	import com.loma.game.quest.QuestManager;
-	import com.loma.game.quest.QuestObstacles;
-	import com.loma.game.quiz.QuizManager;
 	import com.loma.game.randomevent.RandomEventManager;
 	import com.loma.game.sound.SoundManager;
 	import com.loma.game.ui.DynamicTextTips;
@@ -18,11 +16,9 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
-	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
 	
 	/**
@@ -171,12 +167,9 @@ package
 			//test
 			if(event.keyCode == Keyboard.INSERT)
 			{
-				var q:QuestObstacles = new QuestObstacles();
-				QuestManager.instance.addQuest(q);
 			}
 			else if(event.keyCode == Keyboard.DELETE)
 			{
-				//DynamicTextTips.instance.create("-30", "ff0000", new Point(player.x - player.width*0.5, player.y - player.height), 32);
 				
 			}
 			else if(event.keyCode == Keyboard.ESCAPE)

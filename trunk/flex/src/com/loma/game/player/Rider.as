@@ -91,11 +91,14 @@ package com.loma.game.player
 			}
 		}
 		
-		public function playEffect():void
+		public function playEffect(effectType:int = 0):void
 		{
 			if(m_effectTimerIdx == -1)
 			{
-				m_effectTimerIdx = TimerManager.instance.register(onEffectTimeUp, 100, 10, TimerManager.RETURN_INVOKE_TIMES);
+				if(effectType == 0)
+					m_effectTimerIdx = TimerManager.instance.register(onEffectTimeUp, 100, 10, TimerManager.RETURN_INVOKE_TIMES);
+				else if(effectType == 1)
+					m_effectTimerIdx = TimerManager.instance.register(onEffectTimeUp1, 100, 10, TimerManager.RETURN_INVOKE_TIMES);
 			}
 			else
 			{
@@ -114,6 +117,25 @@ package com.loma.game.player
 			{
 				this.alpha = 1;
 				m_effectTimerIdx = -1;
+			}
+		}
+		
+		private function onEffectTimeUp1(times:int):void
+		{
+			this.transform.colorTransform = new ColorTransform(1, 1, 1, 1);
+			if(this.alpha == 1)
+				this.alpha = 0.3;
+			else
+				this.alpha = 1;
+			
+			
+			
+			if(times == 10)
+			{
+				this.alpha = 1;
+				m_effectTimerIdx = -1;
+				
+				this.transform.colorTransform = new ColorTransform(1, 1, 1);
 			}
 		}
 		
