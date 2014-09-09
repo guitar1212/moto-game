@@ -101,12 +101,6 @@ package
 			SoundManager.instance.playMenuBGM();
 			
 			DynamicTextTips.instance.container = this;
-			
-			//test
-			for(var i:int = 0; i < 100; i++)
-			{
-				ui.oil = 100 - i;
-			}
 		}
 		
 		private function initLayer():void

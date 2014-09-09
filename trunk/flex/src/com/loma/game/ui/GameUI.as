@@ -71,7 +71,7 @@ package com.loma.game.ui
 			trace("oil input value = " + value);
 			value = 100 - value;
 			var maxFram:int = m_gameUI.oil_num.totalFrames;
-			var frame:int = value/100*(maxFram - 1) + 1;
+			var frame:int = value/100*(maxFram) + 1;
 			trace("oil frame = " + frame);
 			m_gameUI.oil_num.gotoAndStop(frame);
 		}
