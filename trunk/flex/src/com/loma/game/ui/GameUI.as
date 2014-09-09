@@ -158,6 +158,11 @@ package com.loma.game.ui
 				m_gameUI.removeChild(m_ViolationUI);
 		}
 		
+		public function get violationUITyp():int
+		{
+			return m_ViolationUI.type;
+		}
+		
 		public function showQuizUI(context:String, callback:Function):void
 		{
 			m_gameUI.addChild(m_quizUI);

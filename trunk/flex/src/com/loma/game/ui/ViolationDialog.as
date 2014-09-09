@@ -40,6 +40,11 @@ package com.loma.game.ui
 			Icon_police.gotoAndStop(t);
 		}
 		
+		public function get type():int
+		{
+			return txt_title.currentFrame;
+		}
+		
 		public function set score(value:int):void
 		{
 			var color:uint;

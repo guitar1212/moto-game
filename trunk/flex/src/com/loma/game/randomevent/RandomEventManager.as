@@ -136,7 +136,7 @@ package com.loma.game.randomevent
 					break;
 			}
 			
-			m_curQuest = new QuestObstacles();
+//			m_curQuest = new QuestObstacles();
 			
 			if(m_curQuest)
 			{

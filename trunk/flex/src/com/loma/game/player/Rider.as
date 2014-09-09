@@ -122,11 +122,11 @@ package com.loma.game.player
 		
 		private function onEffectTimeUp1(times:int):void
 		{
-			this.transform.colorTransform = new ColorTransform(1, 1, 1, 1);
-			if(this.alpha == 1)
+			this.transform.colorTransform = new ColorTransform(times%2 + 0.5, 1, 1, times%2 + 0.5);
+			/*if(this.alpha == 1)
 				this.alpha = 0.3;
 			else
-				this.alpha = 1;
+				this.alpha = 1;*/
 			
 			
 			

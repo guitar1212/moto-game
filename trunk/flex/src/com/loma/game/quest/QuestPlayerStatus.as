@@ -138,6 +138,9 @@ package com.loma.game.quest
 			game.ui.hideViolationUI();
 			
 			game.dispatchEvent(new Event("QueseComplete"));
+			
+			if(game.ui.violationUITyp == ViolationDialog.TYPE_BAD)
+				game.riderStart();
 		}
 		
 		override public function release():void
