@@ -132,6 +132,7 @@ package com.loma.game.quest
 				m_ambulance.parent.removeChild(m_ambulance);
 				
 			m_ambulance = null;
+			SoundManager.instance.stopAmbulanceSound();
 		}
 	}
 }

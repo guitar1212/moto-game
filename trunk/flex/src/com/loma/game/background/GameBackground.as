@@ -22,6 +22,8 @@ package com.loma.game.background
 		
 		private var m_roadArr:Array = [];
 		
+		private var m_appendArr:Array = [];
+		
 		public function GameBackground()
 		{
 			super();
@@ -61,6 +63,14 @@ package com.loma.game.background
 			for(var i:int = 0; i < m_roadArr.length; i++)
 			{
 				m_roadArr[i].x -= m_moveSpeed*0.35;
+			}
+			
+			for(var j:int = 0; j < m_appendArr.length; j++)
+			{
+				var d:Object = m_appendArr[j];
+				var o:Object = d.o;
+				o.x = d.p.x + d.x;
+				o.y = d.p.y + d.y; 
 			}
 		}
 		
@@ -113,6 +123,32 @@ package com.loma.game.background
 				r.addChild(obj);
 				obj.x = x;
 				obj.y = y;
+			}
+		}
+		
+		/**
+		 *	 
+		 * @param index
+		 * @param obj
+		 * @param x
+		 * @param y
+		 * 
+		 */		
+		public function append(index:int, obj:DisplayObject, x:int, y:int):void
+		{
+			var r:RoadNormal = m_roadArr[index];
+			m_appendArr.push({p:r, o:obj, x:x, y:y});
+		}
+		
+		public function removeApped(obj:DisplayObject):void
+		{
+			for(var i:int = 0; i < m_appendArr.length; i++)
+			{
+				if(obj == m_appendArr[i].o)
+				{
+					m_appendArr.splice(i, 1);
+					return;
+				}
 			}
 		}
 

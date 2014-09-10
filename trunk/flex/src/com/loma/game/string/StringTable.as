@@ -22,6 +22,8 @@ package com.loma.game.string
 		public static const CELLPHONE_DESC:String = "機車行駛中不能使用手機喔!";
 		public static const TIRED_DESC:String = "精神或體力狀況不佳時, 要先停下來休息一下喔!\n等精神或體力恢復後再繼續行駛!";
 		
+		public static const TRAFFIC_LIGHT:String = "請遵守交通號誌，紅燈停駛，綠燈通行。";
+		
 		public function StringTable()
 		{
 		}
