@@ -24,6 +24,8 @@ package com.loma.game.background
 		
 		private var m_appendArr:Array = [];
 		
+		private var m_count:int = 0;
+		
 		public function GameBackground()
 		{
 			super();
@@ -86,6 +88,12 @@ package com.loma.game.background
 				
 				removeAllChild(r);
 				
+				m_count++;
+				
+				if(m_count%3 == 0)
+				{
+					this.addObject(2, new Warning1(), 300, 220);
+				}
 			}
 		}
 		
