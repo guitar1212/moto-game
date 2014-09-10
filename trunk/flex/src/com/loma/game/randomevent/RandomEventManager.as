@@ -136,7 +136,7 @@ package com.loma.game.randomevent
 					break;
 			}
 			
-			m_curQuest = new QuestTrafficLights();
+			//m_curQuest = new QuestTrafficLights();
 			
 			if(m_curQuest)
 			{
