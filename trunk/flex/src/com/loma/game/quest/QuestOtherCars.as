@@ -36,7 +36,7 @@ package com.loma.game.quest
 			if(m_curCount >= m_target)
 			{
 				m_curCount = 0;
-				m_target = 80 + Math.random()*70;
+				m_target = 140 + Math.random()*80;
 				createCar();
 			}
 			
@@ -47,9 +47,10 @@ package com.loma.game.quest
 			for(i; i < len; i++)
 			{
 				car = m_carList[i];
-				car.x = car.x + car.speed - curSpeed;
+				car.update();
+				car.x -= curSpeed;
 				
-				if(car.x < -700 || car.x > 2000)
+				if(car.x < -500 || car.x > 1500)
 				{
 					m_carList.splice(i, 1);
 					car = null;
@@ -87,14 +88,14 @@ package com.loma.game.quest
 		private function createCar():void
 		{
 			var car:Coupe = new Coupe();
-			car.speed = 28 + Math.random()*30;
+			car.speed = 40 + Math.random()*15;
 			
 			if(game.currentSpeed < 30)
 				car.x = -300;
 			else
 				car.x = 1000;
 			car.y = 165 + Math.random()*100;
-			car.transform.colorTransform = new ColorTransform(Math.random(), Math.random(), 1);
+			//car.transform.colorTransform = new ColorTransform(Math.random(), Math.random(), 1);
 			game.addObjToLayer(MotoGame.LAYER_SCENE, car);
 			
 			m_carList.push(car);

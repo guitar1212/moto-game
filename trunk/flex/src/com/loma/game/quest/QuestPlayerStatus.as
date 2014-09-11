@@ -46,7 +46,10 @@ package com.loma.game.quest
 				SoundManager.instance.playCellphoneSound();
 			}
 			else if(m_type == TYPE_TIRED)
+			{
 				m_eventObj = new EventObject2();
+				SoundManager.instance.playTiredSound();
+			}
 			
 			m_eventObj.x = 60;
 			m_eventObj.y = -185;
@@ -91,7 +94,10 @@ package com.loma.game.quest
 				SoundManager.instance.stopCellphoneSound();
 			}
 			else if(m_type == TYPE_TIRED)
+			{
 				alert.setText(StringTable.TIRED);
+				SoundManager.instance.stopTiredSound();
+			}
 			
 			alert.callback = alertCallback;
 				

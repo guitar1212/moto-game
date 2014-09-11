@@ -15,6 +15,7 @@ package com.loma.game.string
 		public static const OBSTACLES:String = "看到障礙物要閃避喔!";
 		
 		public static const AMBULANCE:String = "要讓救護車先行喔!";
+		public static const AMBULANCE_PASS:String = "禮讓救護車先行，表現不錯喔！";
 		
 		public static const CELLPHONE:String = "手機響了, 要在行駛中接聽嗎?";
 		public static const TIRED:String = "精神狀況不佳, 要繼續趕路嗎?";

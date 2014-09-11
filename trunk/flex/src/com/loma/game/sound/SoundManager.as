@@ -12,6 +12,7 @@ package com.loma.game.sound
 		public static const AMBULANCE:String = "Sound_ambulance";
 		public static const CRASH:String = "";
 		public static const CELLPHONE:String = "Sound_phone";
+		public static const TIRED:String = "Sound_obake";
 		
 		public static const RIDER_MOVE:String = "Sound_motoMove";
 		public static const RIDER_BREAK:String = "Sound_slow";
@@ -39,6 +40,7 @@ package com.loma.game.sound
 			m_soundDict[BACKGROUND_MUSIC] = new Sound_Bg();
 			m_soundDict[AMBULANCE] = new Sound_ambulance();
 			m_soundDict[CELLPHONE] = new Sound_phone();
+			m_soundDict[TIRED] = new Sound_obake();
 			m_soundDict[RIDER_MOVE] = new Sound_motoMove();
 			m_soundDict[RIDER_BREAK] = new Sound_slow();
 			m_soundDict[SUCCESS] = new Sound_success();
@@ -77,7 +79,7 @@ package com.loma.game.sound
 		
 		public function playMenuBGM():void
 		{
-			playSound(MENU_BACKGROUND_MUSIC, 0);
+			playSound(MENU_BACKGROUND_MUSIC, 999);
 		}
 		
 		public function stopMenuBGM():void
@@ -87,7 +89,7 @@ package com.loma.game.sound
 		
 		public function playBGM():void
 		{
-			playSound(BACKGROUND_MUSIC, 30);
+			playSound(BACKGROUND_MUSIC, 999);
 		}
 		
 		public function stopBGM():void
@@ -101,7 +103,7 @@ package com.loma.game.sound
 		 */		
 		public function playAmbulanceSound():void
 		{
-			playSound(AMBULANCE, 0);
+			playSound(AMBULANCE, 10);
 		}
 		
 		public function stopAmbulanceSound():void
@@ -118,6 +120,16 @@ package com.loma.game.sound
 		public function stopCellphoneSound():void
 		{
 			stopSound(CELLPHONE);
+		}
+		
+		public function playTiredSound():void
+		{
+			playSound(TIRED, 0);
+		}
+		
+		public function stopTiredSound():void
+		{
+			stopSound(TIRED);
 		}
 		
 		public function playMoveSound():void

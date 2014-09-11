@@ -75,13 +75,27 @@ package com.loma.game.quest
 					onFailed();
 				}
 				
-				if(m_ambulance.x > 1100)
+				if(m_ambulance.x > 1000)
 					m_state = 3;
 			}
 			else if(m_state == 3)
 			{
-				
+				game.gamePause = true;
+				QuestManager.instance.start = false;
+				game.ui.showViolationUI(ViolationDialog.TYPE_GOOD, StringTable.AMBULANCE_PASS, 50, resume);
 			}
+		}
+		
+		private function resume():void
+		{
+			game.ui.hideViolationUI();
+			game.gamePause = false;
+			QuestManager.instance.start = true;
+			
+			game.stage.focus = game.stage;
+			SoundManager.instance.stopAmbulanceSound();
+			
+			m_state = 4;
 		}
 		
 		/**
@@ -92,7 +106,7 @@ package com.loma.game.quest
 		{
 			this.pause = true;
 			game.gamePause = true;
-			m_state = 3;
+			m_state = 4;
 			game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.AMBULANCE, -30, confirm);
 		}
 		
@@ -108,11 +122,13 @@ package com.loma.game.quest
 			
 			game.stage.focus = game.stage;
 			SoundManager.instance.stopAmbulanceSound();
+			
+			game.riderStart();
 		}
 		
 		override public function check():Boolean
 		{			
-			return m_state == 3;
+			return m_state == 4;
 		}
 		
 		override public function onCompleted():void

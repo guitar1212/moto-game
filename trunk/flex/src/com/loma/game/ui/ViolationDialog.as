@@ -1,7 +1,10 @@
 package com.loma.game.ui
 {
 	import flash.display.SimpleButton;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.ui.Keyboard;
 
 	/**
 	 * 
@@ -19,6 +22,25 @@ package com.loma.game.ui
 		{
 			super();
 			this.addEventListener(MouseEvent.CLICK, onMouseClick);
+			
+			this.addEventListener(Event.ADDED_TO_STAGE, onAdd);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+		}
+		
+		protected function onRemove(event:Event):void
+		{
+			this.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyboardDown);
+		}
+		
+		protected function onAdd(event:Event):void
+		{
+			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyboardDown);
+		}
+		
+		protected function onKeyboardDown(event:KeyboardEvent):void
+		{
+			if(event.keyCode == Keyboard.A)
+				if(m_cb != null) m_cb();
 		}
 		
 		public function set callback(cb:Function):void

@@ -40,6 +40,10 @@ package
 		
 		public static const UNIT_OIL_FRAMES:int = 300;
 		
+		public static const STATUS_MENU:int = 0;
+		public static const STATUS_PLAY:int = 1;
+		public static const STATUS_END:int = 2;
+		
 		private var m_rider:Rider;
 		private var m_ui:GameUI;
 		private var m_bg:GameBackground;
@@ -57,6 +61,8 @@ package
 		private var m_bBackward:Boolean;
 		private var m_bForward:Boolean;
 		
+		private var m_status:int = STATUS_MENU;
+		
 		
 		public function MotoGame()
 		{
@@ -70,6 +76,8 @@ package
 		protected function initialize(event:Event):void
 		{	
 			this.removeEventListener(Event.ADDED_TO_STAGE, initialize);
+			
+			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			
 			initLayer();
 			
@@ -101,7 +109,6 @@ package
 		
 		private function initLayer():void
 		{
-			// TODO Auto Generated method stub
 			for(var i:int = 0; i < MAX_LAYER; i++)
 				this.addChild(new Sprite());
 		}
@@ -146,22 +153,28 @@ package
 		
 		protected function onKeyDown(event:KeyboardEvent):void
 		{
-			if(event.keyCode == Keyboard.W || event.keyCode == Keyboard.UP)
+			if(/*event.keyCode == Keyboard.W || */event.keyCode == Keyboard.UP)
 			{
 				m_rider.moveDirection = Rider.MOVE_UP;
 			}
-			else if(event.keyCode == Keyboard.S || event.keyCode == Keyboard.DOWN)
+			else if(/*event.keyCode == Keyboard.S || */event.keyCode == Keyboard.DOWN)
 			{
 				m_rider.moveDirection = Rider.MOVE_DOWN;
 			}
 			
-			if(event.keyCode == Keyboard.A || event.keyCode == Keyboard.LEFT)
+			if(/*event.keyCode == Keyboard.A || */event.keyCode == Keyboard.LEFT)
 			{
 				m_bBackward = true;				
 			}
-			else if(event.keyCode == Keyboard.D || event.keyCode == Keyboard.RIGHT)
+			else if(/*event.keyCode == Keyboard.D || */event.keyCode == Keyboard.RIGHT)
 			{
 				m_bForward = true;
+			}
+			
+			if(m_status == STATUS_MENU)
+			{
+				if(event.keyCode == Keyboard.ENTER)
+					gameStart();
 			}
 			
 			//test
@@ -172,7 +185,7 @@ package
 			{
 				
 			}
-			else if(event.keyCode == Keyboard.ESCAPE)
+			else if(event.keyCode == Keyboard.ESCAPE || event.keyCode == Keyboard.F5)
 			{
 				this.gameOver();
 			}
@@ -180,20 +193,20 @@ package
 		
 		protected function onKeyUp(event:KeyboardEvent):void
 		{
-			if(event.keyCode == Keyboard.W || event.keyCode == Keyboard.UP)
+			if(/*event.keyCode == Keyboard.W || */event.keyCode == Keyboard.UP)
 			{
 				m_rider.moveDirection = Rider.MOVE_NONE;
 			}
-			else if(event.keyCode == Keyboard.S || event.keyCode == Keyboard.DOWN)
+			else if(/*event.keyCode == Keyboard.S || */event.keyCode == Keyboard.DOWN)
 			{
 				m_rider.moveDirection = Rider.MOVE_NONE;
 			}			
 			
-			if(event.keyCode == Keyboard.A || event.keyCode == Keyboard.LEFT)
+			if(/*event.keyCode == Keyboard.A || */event.keyCode == Keyboard.LEFT)
 			{
 				m_bBackward = false;
 			}
-			else if(event.keyCode == Keyboard.D || event.keyCode == Keyboard.RIGHT)
+			else if(/*event.keyCode == Keyboard.D || */event.keyCode == Keyboard.RIGHT)
 			{
 				m_bForward = false;
 			}
@@ -364,7 +377,7 @@ package
 			riderStart();
 			this.addObjToLayer(LAYER_SCENE, m_rider);	
 			
-			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			
 			this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			this.addEventListener(Event.ENTER_FRAME, onUpdate);
 			
@@ -377,6 +390,8 @@ package
 			SoundManager.instance.stopMenuBGM();
 			
 			this.background.addObject(1, new Warning2(), 280, 380);
+			
+			m_status = STATUS_PLAY;
 		}
 		
 		public function gameMenu():void
@@ -385,8 +400,7 @@ package
 			m_ui.showMenu();
 			
 			this.removeObjFormLayer(LAYER_SCENE, m_rider);
-			
-			this.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+						
 			this.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			this.removeEventListener(Event.ENTER_FRAME, onUpdate);
 			
@@ -395,6 +409,8 @@ package
 			
 			SoundManager.instance.stopBGM();
 			SoundManager.instance.playMenuBGM();
+			
+			m_status = STATUS_MENU;
 		}
 		
 		public function gameOver():void
@@ -402,7 +418,9 @@ package
 			this.gamePause = true;
 			QuestManager.instance.release();		
 			
-			ui.showGameOverUI(m_score, m_life, gameMenu);			 
+			ui.showGameOverUI(m_score, m_life, gameMenu);	
+			
+			m_status = STATUS_END;
 		}
 		
 		public function riderStart():void

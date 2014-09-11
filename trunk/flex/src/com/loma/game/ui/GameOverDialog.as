@@ -1,10 +1,13 @@
 package com.loma.game.ui
 {
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.ui.Keyboard;
 	
 	/**
 	 * 
@@ -20,6 +23,25 @@ package com.loma.game.ui
 			super();
 			
 			this.btn_brack.addEventListener(MouseEvent.CLICK, onClick);
+			
+			this.addEventListener(Event.ADDED_TO_STAGE, onAdd);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+		}
+		
+		protected function onRemove(event:Event):void
+		{
+			this.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyboardDown);
+		}
+		
+		protected function onAdd(event:Event):void
+		{
+			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyboardDown);
+		}
+		
+		protected function onKeyboardDown(event:KeyboardEvent):void
+		{			
+			if(event.keyCode == Keyboard.A)					
+				onClick(null);				
 		}
 		
 		protected function onClick(event:MouseEvent):void
