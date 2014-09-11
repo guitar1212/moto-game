@@ -44,7 +44,7 @@ package com.loma.game.quest
 			
 			m_trafficLight = new TrafficLight();
 			m_trafficLight.light = "red";
-			m_trafficLight.start();
+			//m_trafficLight.start();
 			m_trafficLight.x = 0;
 			m_trafficLight.y = 0;
 			game.background.append(2, m_trafficLight, 480, 500);
@@ -81,6 +81,8 @@ package com.loma.game.quest
 			}
 			
 			m_people.y += 3;
+			if(m_people.y >= 450)
+				m_trafficLight.light = "green";
 		}
 		
 		private function comfirm():void
@@ -96,7 +98,7 @@ package com.loma.game.quest
 		
 		override public function check():Boolean
 		{			
-			return (m_road.parent == null);
+			return (m_road.parent == null);aa
 		}
 		
 		override public function onCompleted():void

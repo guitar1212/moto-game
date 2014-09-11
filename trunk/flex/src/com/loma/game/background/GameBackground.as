@@ -50,7 +50,7 @@ package com.loma.game.background
 			b.x += m_unitWidth;
 			c.x += m_unitWidth*2;
 			
-			m_leftBound = -m_unitWidth*1.5;
+			m_leftBound = -m_unitWidth*1.1;
 		}
 		
 		public function update():void
@@ -92,7 +92,7 @@ package com.loma.game.background
 				
 				if(m_count%3 == 0)
 				{
-					this.addObject(2, new Warning1(), 300, 220);
+					this.addObject(2, new Warning1(), 330, 220);
 				}
 			}
 		}

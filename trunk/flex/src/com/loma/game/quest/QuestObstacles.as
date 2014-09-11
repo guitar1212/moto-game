@@ -2,6 +2,7 @@ package com.loma.game.quest
 {
 	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.quest.define.QuestState;
+	import com.loma.game.sound.SoundManager;
 	
 	import flash.events.Event;
 
@@ -58,6 +59,8 @@ package com.loma.game.quest
 			
 			m_bOK = true;
 			//RandomEventManager.instance.clean();
+			
+			SoundManager.instance.playObstaclesSound();
 		}
 		
 		override public function check():Boolean

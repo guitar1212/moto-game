@@ -1,5 +1,7 @@
 package com.loma.game.ui
 {
+	import com.loma.game.sound.SoundManager;
+	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.ColorTransform;
@@ -144,6 +146,11 @@ package com.loma.game.ui
 			m_ViolationUI.callback = callback;
 			m_ViolationUI.score = score;
 			m_ViolationUI.type = type;
+			
+			if(type == ViolationDialog.TYPE_GOOD)
+				SoundManager.instance.playSuccessSound();
+			else
+				SoundManager.instance.playFailedSound();
 		}
 		
 		

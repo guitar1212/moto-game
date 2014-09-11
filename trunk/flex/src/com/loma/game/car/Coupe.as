@@ -1,5 +1,7 @@
 package com.loma.game.car
 {
+	import flash.display.Sprite;
+
 	/**
 	 * 
 	 * @long  Sep 2, 2014
@@ -8,6 +10,7 @@ package com.loma.game.car
 	public class Coupe extends Car
 	{
 		private var m_speed:Number = 0;
+		private var m_probe:Sprite = new Sprite();
 		public function Coupe()
 		{
 			super();

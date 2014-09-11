@@ -85,14 +85,14 @@ package
 			m_debugText.x = 10;
 			m_debugText.y = 10;
 			m_debugText.autoSize = TextFieldAutoSize.LEFT;
-			this.addObjToLayer(LAYER_UI, m_debugText);
+			//this.addObjToLayer(LAYER_UI, m_debugText);
 			
 			QuestManager.instance.ininialize(this);
 			QuestManager.instance.start = true;
 			
 			RandomEventManager.instance.initialize(this);
 			
-			OilManager.instance.initialize(this, 3*60); // 設定遊戲時間為3分鐘
+			OilManager.instance.initialize(this, 2*60); // 設定遊戲時間為2分鐘
 			
 			SoundManager.instance.playMenuBGM();
 			
@@ -375,6 +375,8 @@ package
 			
 			SoundManager.instance.playBGM();
 			SoundManager.instance.stopMenuBGM();
+			
+			this.background.addObject(1, new Warning2(), 280, 380);
 		}
 		
 		public function gameMenu():void

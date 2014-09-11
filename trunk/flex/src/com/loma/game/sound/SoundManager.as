@@ -14,9 +14,19 @@ package com.loma.game.sound
 		public static const CELLPHONE:String = "Sound_phone";
 		
 		public static const RIDER_MOVE:String = "Sound_motoMove";
+		public static const RIDER_BREAK:String = "Sound_slow";
+		
+		public static const SUCCESS:String = "Sound_success";
+		public static const FAILED:String = "Sound_fail";
+		
+		public static const OBSTACLES:String = "Sound_deductions";
+		public static const ADD_SCORE:String = "Sound_up";
+		
 		
 		private var m_soundDict:Dictionary = new Dictionary();
 		private var m_soundChannelDict:Dictionary = new Dictionary();
+		
+		private var m_bMute:Boolean = false;
 		
 		public function SoundManager()
 		{
@@ -30,6 +40,10 @@ package com.loma.game.sound
 			m_soundDict[AMBULANCE] = new Sound_ambulance();
 			m_soundDict[CELLPHONE] = new Sound_phone();
 			m_soundDict[RIDER_MOVE] = new Sound_motoMove();
+			m_soundDict[RIDER_BREAK] = new Sound_slow();
+			m_soundDict[SUCCESS] = new Sound_success();
+			m_soundDict[FAILED] = new Sound_fail();
+			m_soundDict[OBSTACLES] = new Sound_deductions();
 		}
 		
 		public static function get instance():SoundManager
@@ -42,9 +56,12 @@ package com.loma.game.sound
 		
 		private function playSound(sName:String, loops:int):void
 		{
+			if(m_bMute) return;
+			
 			stopSound(sName);
 			
-			m_soundChannelDict[sName] = (m_soundDict[sName] as Sound).play(0, loops);
+			if(m_soundDict[sName])
+				m_soundChannelDict[sName] = (m_soundDict[sName] as Sound).play(0, loops);
 		}
 		
 		private function stopSound(sName:String):void
@@ -70,7 +87,7 @@ package com.loma.game.sound
 		
 		public function playBGM():void
 		{
-			playSound(BACKGROUND_MUSIC, 0);
+			playSound(BACKGROUND_MUSIC, 30);
 		}
 		
 		public function stopBGM():void
@@ -121,5 +138,45 @@ package com.loma.game.sound
 		{
 			
 		}
+		
+		public function playSuccessSound():void
+		{
+			playSound(SUCCESS, 0);
+		}
+		
+		public function playFailedSound():void
+		{
+			playSound(FAILED, 0);
+		}
+		
+		public function playObstaclesSound():void
+		{
+			playSound(OBSTACLES, 0);
+		}
+
+		public function get mute():Boolean
+		{
+			return m_bMute;
+		}
+
+		public function set mute(value:Boolean):void
+		{
+			m_bMute = value;
+			if(m_bMute)
+				stopAll();
+			else
+				playAll();
+		}
+		
+		private function playAll():void
+		{
+			
+		}
+		
+		private function stopAll():void
+		{
+				
+		}
+		
 	}
 }
