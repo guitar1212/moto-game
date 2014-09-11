@@ -89,7 +89,7 @@ package com.loma.game.quest
 		{
 			var car:Coupe = new Coupe();
 			car.speed = 40 + Math.random()*15;
-			
+			car.gotoAndStop(1 + ~~(Math.random()*5 - 0.001));
 			if(game.currentSpeed < 30)
 				car.x = -300;
 			else
