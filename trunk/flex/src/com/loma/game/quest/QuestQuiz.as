@@ -2,6 +2,7 @@ package com.loma.game.quest
 {
 	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.quiz.QuizManager;
+	import com.loma.game.sound.SoundManager;
 	import com.loma.game.ui.ViolationDialog;
 	
 	import flash.events.Event;
@@ -60,6 +61,8 @@ package com.loma.game.quest
 			var quiz:Object = QuizManager.instance.getNewQuiz();
 			
 			game.ui.showQuizUI(quiz.q, answerCallback);
+			
+			SoundManager.instance.playQuizSound();
 		}
 		
 		private function answerCallback(answer:Boolean):void

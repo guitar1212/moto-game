@@ -22,7 +22,7 @@ package com.loma.game.quest
 			// 重覆任務
 			this.excuteTimes = -1;
 			
-			speedLimit = 50;
+			speedLimit = 60;
 		}
 		
 		public function set speedLimit(value:int):void

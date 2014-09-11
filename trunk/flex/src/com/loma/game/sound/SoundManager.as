@@ -9,6 +9,8 @@ package com.loma.game.sound
 		private static var m_instance:SoundManager = null;
 		public static const MENU_BACKGROUND_MUSIC:String = "Sound_menu";
 		public static const BACKGROUND_MUSIC:String = "Sound_Bg";
+		public static const BACKGROUND_OVER:String = "Sound_over";
+		
 		public static const AMBULANCE:String = "Sound_ambulance";
 		public static const CRASH:String = "";
 		public static const CELLPHONE:String = "Sound_phone";
@@ -22,6 +24,8 @@ package com.loma.game.sound
 		
 		public static const OBSTACLES:String = "Sound_deductions";
 		public static const ADD_SCORE:String = "Sound_up";
+		
+		public static const QUIZ:String = "Sound_quest";
 		
 		
 		private var m_soundDict:Dictionary = new Dictionary();
@@ -38,6 +42,8 @@ package com.loma.game.sound
 		{
 			m_soundDict[MENU_BACKGROUND_MUSIC] = new Sound_menu();
 			m_soundDict[BACKGROUND_MUSIC] = new Sound_Bg();
+			m_soundDict[BACKGROUND_OVER] = new Sound_over;
+			
 			m_soundDict[AMBULANCE] = new Sound_ambulance();
 			m_soundDict[CELLPHONE] = new Sound_phone();
 			m_soundDict[TIRED] = new Sound_obake();
@@ -46,6 +52,8 @@ package com.loma.game.sound
 			m_soundDict[SUCCESS] = new Sound_success();
 			m_soundDict[FAILED] = new Sound_fail();
 			m_soundDict[OBSTACLES] = new Sound_deductions();
+			m_soundDict[ADD_SCORE] = new Sound_up();
+			m_soundDict[QUIZ] = new Sound_quest();
 		}
 		
 		public static function get instance():SoundManager
@@ -95,6 +103,16 @@ package com.loma.game.sound
 		public function stopBGM():void
 		{
 			stopSound(BACKGROUND_MUSIC);
+		}
+		
+		public function playOverBGM():void
+		{
+			playSound(BACKGROUND_OVER, 999);
+		}
+		
+		public function stopOverBGM():void
+		{
+			stopSound(BACKGROUND_OVER);
 		}
 		
 		/**
@@ -164,6 +182,16 @@ package com.loma.game.sound
 		public function playObstaclesSound():void
 		{
 			playSound(OBSTACLES, 0);
+		}
+		
+		public function playQuizSound():void
+		{
+			playSound(QUIZ, 0);
+		}
+		
+		public function playAddScoreSound():void
+		{
+			playSound(ADD_SCORE, 0);
 		}
 
 		public function get mute():Boolean

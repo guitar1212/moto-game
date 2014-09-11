@@ -4,6 +4,7 @@ package com.loma.game.quest
 	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.quest.define.QuestState;
 	import com.loma.game.randomevent.RandomEventManager;
+	import com.loma.game.sound.SoundManager;
 	import com.loma.game.string.StringTable;
 	import com.loma.game.ui.FirstQuestionDialog;
 	import com.loma.game.ui.ViolationDialog;
@@ -91,7 +92,10 @@ package com.loma.game.quest
 			//game.removeObjFormLayer(MotoGame.LAYER_UI, u);
 			
 			if(m_bRight)
+			{
 				game.addScore(50);
+				SoundManager.instance.playAddScoreSound();
+			}
 			else
 				game.addLife(-1);
 			

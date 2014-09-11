@@ -281,7 +281,7 @@ package
 			else if(m_speed < 55)
 				dS = 0.2;
 			else 
-				dS = 0.1;
+				dS = 0.05;
 						
 			if(isForward())
 			{
@@ -392,6 +392,8 @@ package
 			this.background.addObject(1, new Warning2(), 280, 380);
 			
 			m_status = STATUS_PLAY;
+			
+			stage.focus = stage;
 		}
 		
 		public function gameMenu():void
@@ -408,6 +410,7 @@ package
 			RandomEventManager.instance.clean();
 			
 			SoundManager.instance.stopBGM();
+			SoundManager.instance.stopOverBGM();
 			SoundManager.instance.playMenuBGM();
 			
 			m_status = STATUS_MENU;
@@ -421,6 +424,9 @@ package
 			ui.showGameOverUI(m_score, m_life, gameMenu);	
 			
 			m_status = STATUS_END;
+			
+			SoundManager.instance.stopBGM();
+			SoundManager.instance.playOverBGM();
 		}
 		
 		public function riderStart():void
