@@ -79,7 +79,7 @@ package com.loma.game.quest
 					QuestManager.instance.start = false;
 					
 					game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.TRAFFIC_LIGHT, -30, comfirm);
-					
+					game.addScore(-30);
 					game.addLife(-1);
 				}
 			}

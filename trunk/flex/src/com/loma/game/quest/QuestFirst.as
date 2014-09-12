@@ -63,7 +63,7 @@ package com.loma.game.quest
 			// 確定
 			else 
 			{		
-				m_bOK = true;
+				//m_bOK = true;
 				m_bRight = true;
 				
 				m_hatAni = new HatAmi();
