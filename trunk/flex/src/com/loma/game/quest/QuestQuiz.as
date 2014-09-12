@@ -26,12 +26,23 @@ package com.loma.game.quest
 		override public function start():void
 		{
 			createQuiz();
+			
+			game.stage.addEventListener("QuestComplete", onQuizAniComplete);
 		}
 		
 		private function createQuiz():void
 		{
 			m_qm = new QuestionMark();
+			m_qm.gotoAndStop(1);
 			game.background.addObject(2, m_qm, 350 , 300 + Math.random()*100 );
+		}
+		
+		protected function onQuizAniComplete(event:Event):void
+		{
+			if(m_qm.parent)
+				m_qm.parent.removeChild(m_qm);
+			
+			showQuiz();			
 		}
 		
 		override public function onUpdate():void
@@ -44,10 +55,7 @@ package com.loma.game.quest
 				
 				QuestManager.instance.start = false;				
 				
-				if(m_qm.parent)
-					m_qm.parent.removeChild(m_qm);
-				
-				showQuiz();
+				m_qm.gotoAndStop(2);	
 			}
 			
 			// 物件被咦除

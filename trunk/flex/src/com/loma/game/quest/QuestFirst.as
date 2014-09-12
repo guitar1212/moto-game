@@ -11,6 +11,7 @@ package com.loma.game.quest
 	
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 
@@ -28,6 +29,8 @@ package com.loma.game.quest
 		private var m_bOK:Boolean = false;
 		private var m_bRight:Boolean = false;
 		
+		private var m_hatAni:HatAmi;
+		
 		public function QuestFirst()
 		{
 			excuteTimes = 1; 
@@ -38,7 +41,7 @@ package com.loma.game.quest
 			// 暫停遊戲進行
 			game.gamePause = true;
 			
-			// 設置騎士為位配戴安全帽狀態
+			// 設置騎士為NO戴安全帽狀態
 			game.player.state = Rider.STATE_START;
 			
 			// show ui
@@ -62,6 +65,10 @@ package com.loma.game.quest
 			{		
 				m_bOK = true;
 				m_bRight = true;
+				
+				m_hatAni = new HatAmi();
+				m_hatAni.gotoAndPlay(1);				
+				game.addObjToLayer(MotoGame.LAYER_UI, m_hatAni);				
 			}
 		}
 		
@@ -74,6 +81,16 @@ package com.loma.game.quest
 				
 		override public function onUpdate():void
 		{
+			if(m_hatAni)
+			{
+				if(m_hatAni.currentFrame == m_hatAni.totalFrames)
+				{
+					m_hatAni.stop();
+					game.removeObjFormLayer(MotoGame.LAYER_UI, m_hatAni);
+					m_hatAni = null;
+					m_bOK = true;
+				}
+			}
 		}
 		
 		override public function check():Boolean
@@ -114,6 +131,12 @@ package com.loma.game.quest
 			QuestManager.instance.addQuest(qn);
 			
 			RandomEventManager.instance.start();
+		}
+		
+		protected function onHatAniComplete(event:Event):void
+		{
+			game.removeObjFormLayer(MotoGame.LAYER_UI, event.target as HatAmi);
+			//game.gamePause = false;
 		}
 		
 		override public function release():void

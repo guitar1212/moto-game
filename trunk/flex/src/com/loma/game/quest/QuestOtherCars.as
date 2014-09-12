@@ -1,9 +1,12 @@
 package com.loma.game.quest
 {
 	import com.loma.game.car.Coupe;
+	import com.loma.game.event.TrafficLightEvent;
 	import com.loma.game.quest.base.QuestBase;
 	import com.loma.util.TimerManager;
 	
+	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.geom.ColorTransform;
 	
 	import flashx.textLayout.operations.CopyOperation;
@@ -21,23 +24,44 @@ package com.loma.game.quest
 		
 		private var m_curCount:int = 0;
 		
+		private var m_bCount:Boolean = true;
+		
+		private var m_hitArea:Sprite;
+		
 		public function QuestOtherCars()
 		{
 			super();
 		}
 		
 		override public function start():void
-		{	
+		{
+			this.game.addEventListener(TrafficLightEvent.RED, onRedLight);
+			this.game.addEventListener(TrafficLightEvent.GREEN, onGreenLight);
+		}
+		
+		protected function onRedLight(event:TrafficLightEvent):void
+		{
+			m_bCount = false;
+			m_hitArea = event.hitArea;
+		}
+		
+		protected function onGreenLight(event:TrafficLightEvent):void
+		{
+			m_bCount = true;
+			m_hitArea = null;
 		}
 		
 		override public function onUpdate():void
 		{
-			m_curCount++;
-			if(m_curCount >= m_target)
+			if(m_bCount)
 			{
-				m_curCount = 0;
-				m_target = 140 + Math.random()*80;
-				createCar();
+				m_curCount++;
+				if(m_curCount >= m_target)
+				{
+					m_curCount = 0;
+					m_target = 150 + Math.random()*80;
+					createCar();
+				}
 			}
 			
 			var i:int = 0, len:int = m_carList.length;
@@ -47,6 +71,15 @@ package com.loma.game.quest
 			for(i; i < len; i++)
 			{
 				car = m_carList[i];
+				
+				if(m_hitArea)
+				{
+					if(m_hitArea.hitTestObject(car.probe))
+					{
+						continue;
+					}
+				}				
+				
 				car.update();
 				car.x -= curSpeed;
 				
@@ -83,6 +116,11 @@ package com.loma.game.quest
 					car.parent.removeChild(car);
 			}
 			m_carList.length = 0;
+			
+			m_hitArea = null;
+			
+			this.game.removeEventListener(TrafficLightEvent.RED, onRedLight);
+			this.game.removeEventListener(TrafficLightEvent.GREEN, onGreenLight);
 		}
 		
 		private function createCar():void

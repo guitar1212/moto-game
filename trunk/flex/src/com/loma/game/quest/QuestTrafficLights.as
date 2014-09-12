@@ -1,6 +1,7 @@
 package com.loma.game.quest
 {
 	import com.loma.game.TrafficLight;
+	import com.loma.game.event.TrafficLightEvent;
 	import com.loma.game.quest.base.QuestBase;
 	import com.loma.game.quest.define.QuestState;
 	import com.loma.game.randomevent.RandomEventManager;
@@ -47,22 +48,25 @@ package com.loma.game.quest
 			//m_trafficLight.start();
 			m_trafficLight.x = 0;
 			m_trafficLight.y = 0;
-			game.background.append(2, m_trafficLight, 480, 500);
-			
+			game.background.append(2, m_trafficLight, 480, 500);			
 			game.addObjToLayer(MotoGame.LAYER_UI, m_trafficLight);
 			
 			// hit area
 			m_hitArea = new Sprite();
 			m_hitArea.graphics.beginFill(0x523612, 0.45);
-			m_hitArea.graphics.drawRect(0, 0, 30, 500);
+			m_hitArea.graphics.drawRect(0, 0, 60, 500);
 			m_hitArea.graphics.endFill();
-			m_hitArea.visible = false;
+			//m_hitArea.visible = false;
 			m_hitArea.x = 430;
 			m_road.addChild(m_hitArea);
 			
 			// 
 			m_people = new Peoples();
 			game.background.addObject(2, m_people, 680, 40);
+			
+			var te:TrafficLightEvent = new TrafficLightEvent(TrafficLightEvent.RED);
+			te.hitArea = m_hitArea;
+			game.dispatchEvent(te);
 		}
 		
 		override public function onUpdate():void
@@ -81,8 +85,12 @@ package com.loma.game.quest
 			}
 			
 			m_people.y += 3;
-			if(m_people.y >= 450)
+
+			if(m_people.y >= 450 && m_trafficLight.light == "red")
+			{
 				m_trafficLight.light = "green";
+				game.dispatchEvent(new TrafficLightEvent(TrafficLightEvent.GREEN));
+			}
 		}
 		
 		private function comfirm():void
@@ -98,7 +106,7 @@ package com.loma.game.quest
 		
 		override public function check():Boolean
 		{			
-			return (m_road.parent == null);aa
+			return (m_road.parent == null);
 		}
 		
 		override public function onCompleted():void

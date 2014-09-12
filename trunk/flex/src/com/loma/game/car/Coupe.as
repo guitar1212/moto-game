@@ -12,15 +12,17 @@ package com.loma.game.car
 		private var m_speed:Number = 0;
 		private var m_probe:Sprite = new Sprite();
 		
+		private var m_curSpeed:Number = 0;
+		
 		public function Coupe()
 		{
 			super();
 			
 			m_probe.graphics.beginFill(0x111111);
-			m_probe.graphics.drawRect(0, 0, 10, 10);
+			m_probe.graphics.drawRect(0, 0, 150, 10);
 			m_probe.graphics.endFill();
-			m_probe.x = 100;
-			m_probe.visible = false;
+			m_probe.x = 0;
+			//m_probe.visible = false;
 			this.addChild(m_probe);
 		}
 
@@ -32,11 +34,22 @@ package com.loma.game.car
 		public function set speed(value:Number):void
 		{
 			m_speed = value;
+			//if(m_curSpeed > m_speed)
+				m_curSpeed = m_speed;
 		}
 		
 		public function update():void
 		{
-			this.x += this.speed;
+			var ds:Number = this.speed - m_curSpeed;
+			if(ds > 1.5)
+				ds = 1.5;
+			m_curSpeed = m_curSpeed + ds;
+			this.x += m_curSpeed;
+		}
+		
+		public function get probe():Sprite
+		{
+			return m_probe;
 		}
 
 	}
