@@ -76,6 +76,7 @@ package com.loma.game.quest
 				{
 					if(m_hitArea.hitTestObject(car.probe))
 					{
+						car.speed = 0;
 						continue;
 					}
 				}				
