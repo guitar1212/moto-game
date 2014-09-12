@@ -89,6 +89,8 @@ package com.loma.game.quest
 					game.removeObjFormLayer(MotoGame.LAYER_UI, m_hatAni);
 					m_hatAni = null;
 					m_bOK = true;
+					
+					game.player.state = Rider.STATE_STOP;
 				}
 			}
 		}

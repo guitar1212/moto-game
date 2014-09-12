@@ -39,7 +39,7 @@ package com.loma.game.quest
 		
 		protected function onQuizAniComplete(event:Event):void
 		{
-			if(m_qm.parent)
+			if(m_qm && m_qm.parent)
 				m_qm.parent.removeChild(m_qm);
 			
 			showQuiz();			
@@ -121,7 +121,7 @@ package com.loma.game.quest
 		
 		override public function release():void
 		{
-			if(m_qm.parent)
+			if(m_qm && m_qm.parent)
 				m_qm.parent.removeChild(m_qm);
 			
 			m_qm = null;

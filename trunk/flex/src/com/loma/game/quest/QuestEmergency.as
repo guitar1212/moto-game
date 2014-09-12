@@ -101,7 +101,7 @@ package com.loma.game.quest
 		/**
 		 *	失敗處理 
 		 * 
-		 */		
+		 */
 		private function onFailed():void
 		{
 			this.pause = true;
