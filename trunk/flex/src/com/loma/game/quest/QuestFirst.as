@@ -44,7 +44,8 @@ package com.loma.game.quest
 			// show ui
 			var alert:FirstQuestionDialog = new FirstQuestionDialog();			
 			alert.callback = onAlertMouseClick;
-			
+			alert.setYesButtonText(StringTable.HELMET_YES);
+			alert.setNoButtonText(StringTable.HELMET_NO);
 			game.addObjToLayer(MotoGame.LAYER_UI, alert);
 		}
 		

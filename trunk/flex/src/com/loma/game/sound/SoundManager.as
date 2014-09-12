@@ -47,7 +47,7 @@ package com.loma.game.sound
 			m_soundDict[AMBULANCE] = new Sound_ambulance();
 			m_soundDict[CELLPHONE] = new Sound_phone();
 			m_soundDict[TIRED] = new Sound_obake();
-			m_soundDict[RIDER_MOVE] = new Sound_motoMove();
+			//m_soundDict[RIDER_MOVE] = new Sound_motoMove();
 			m_soundDict[RIDER_BREAK] = new Sound_slow();
 			m_soundDict[SUCCESS] = new Sound_success();
 			m_soundDict[FAILED] = new Sound_fail();
@@ -191,7 +191,7 @@ package com.loma.game.sound
 		
 		public function playAddScoreSound():void
 		{
-			playSound(ADD_SCORE, 0);
+			playSound(SUCCESS, 0);
 		}
 
 		public function get mute():Boolean

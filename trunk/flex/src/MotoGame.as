@@ -26,7 +26,7 @@ package
 	 * @long  Aug 26, 2014
 	 * 
 	 */	
-	[SWF(backgroundColor="#1355ff", frameRate="30", width="700", height="500")]
+	[SWF(backgroundColor="#C0EBFF", frameRate="30", width="700", height="500")]
 	public class MotoGame extends Sprite
 	{
 		public static const MAX_LIFE:int = 5;
@@ -63,7 +63,6 @@ package
 		
 		private var m_status:int = STATUS_MENU;
 		
-		
 		public function MotoGame()
 		{
 			this.stage.align = StageAlign.TOP_LEFT;
@@ -71,7 +70,6 @@ package
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, initialize);			
 		}
-		
 		
 		protected function initialize(event:Event):void
 		{	
@@ -375,8 +373,7 @@ package
 			this.score = 0
 			
 			riderStart();
-			this.addObjToLayer(LAYER_SCENE, m_rider);	
-			
+			this.addObjToLayer(LAYER_SCENE, m_rider);			
 			
 			this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			this.addEventListener(Event.ENTER_FRAME, onUpdate);
@@ -434,13 +431,8 @@ package
 			m_rider.state = Rider.STATE_STOP;
 			m_rider.y = 400;
 			m_rider.x = Rider.MIN_X;
-			//m_rider.transform.matrix = new Matrix(1, 0, 0, 1, m_rider.x, m_rider.y);
 			
 			m_speed = 0;
-			
-			/*m_bForward = false;
-			m_bBackward = false;*/
-			
 			updateSpeed();
 		}
 		

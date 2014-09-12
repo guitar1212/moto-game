@@ -91,11 +91,15 @@ package com.loma.game.quest
 			if(m_type == TYPE_CELLPHONE)
 			{
 				alert.setText(StringTable.CELLPHONE);
+				alert.setYesButtonText(StringTable.CELLPHONE_YES);
+				alert.setNoButtonText(StringTable.CELLPHONE_NO);
 				SoundManager.instance.stopCellphoneSound();
 			}
 			else if(m_type == TYPE_TIRED)
 			{
 				alert.setText(StringTable.TIRED);
+				alert.setYesButtonText(StringTable.TIRED_YES);
+				alert.setNoButtonText(StringTable.TIRED_NO);
 				SoundManager.instance.stopTiredSound();
 			}
 			

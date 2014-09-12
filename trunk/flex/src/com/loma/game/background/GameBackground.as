@@ -1,6 +1,7 @@
 package com.loma.game.background
 {
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	
 	/**
@@ -22,6 +23,8 @@ package com.loma.game.background
 		
 		private var m_roadArr:Array = [];
 		
+		private var m_skyArr:Array = [];
+		
 		private var m_appendArr:Array = [];
 		
 		private var m_count:int = 0;
@@ -32,11 +35,23 @@ package com.loma.game.background
 			
 			this.addChild(m_platform);
 			
+			var s:House = new House();
+			var s1:House = new House();
+			var s2:House = new House();
+			m_skyArr.push(s);
+			m_skyArr.push(s1);
+			m_skyArr.push(s2);
+			
+			m_platform.addChild(s);
+			m_platform.addChild(s1);
+			m_platform.addChild(s2);
+			
+			s1.x += m_unitWidth;
+			s2.x += m_unitWidth*2;
 			
 			var a:RoadNormal = new RoadNormal();
 			var b:RoadNormal = new RoadNormal(); 
 			var c:RoadNormal = new RoadNormal();
-			
 			m_roadOriNumChildern = a.numChildren;
 			
 			m_roadArr.push(a);
@@ -55,16 +70,26 @@ package com.loma.game.background
 		
 		public function update():void
 		{
-			moveingRoad(m_moveSpeed);
+			moveingRoad(m_moveSpeed*0.35);
+			
+			moveingSky(m_moveSpeed*0.1);
 			
 			checkBackground();
 		}
 		
-		private function moveingRoad(m_moveSpeed:Number):void
+		private function moveingSky(moveSpeed:Number):void
+		{
+			for(var i:int = 0; i < m_skyArr.length; i++)
+			{
+				m_skyArr[i].x -= moveSpeed;
+			}
+		}
+		
+		private function moveingRoad(moveSpeed:Number):void
 		{
 			for(var i:int = 0; i < m_roadArr.length; i++)
 			{
-				m_roadArr[i].x -= m_moveSpeed*0.35;
+				m_roadArr[i].x -= moveSpeed;
 			}
 			
 			for(var j:int = 0; j < m_appendArr.length; j++)
@@ -95,9 +120,19 @@ package com.loma.game.background
 					this.addObject(2, new Warning1(), 330, 220);
 				}
 			}
+			
+			var s:House = m_skyArr[0];
+			if(s.x < m_leftBound)
+			{
+				m_skyArr.shift();
+				m_skyArr.push(s);
+				s.x = m_skyArr[1].x + m_unitWidth;
+				
+				removeAllChild(s);
+			}
 		}
 		
-		private function removeAllChild(r:RoadNormal):void
+		private function removeAllChild(r:DisplayObjectContainer):void
 		{			
 			for(var i:int = r.numChildren - 1; i >= m_roadOriNumChildern; i--)
 			{

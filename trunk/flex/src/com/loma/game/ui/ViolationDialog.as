@@ -1,9 +1,14 @@
 package com.loma.game.ui
 {
+	import com.loma.game.string.StringTable;
+	import com.loma.util.SimpleButtonSetter;
+	
 	import flash.display.SimpleButton;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.text.TextField;
 	import flash.ui.Keyboard;
 
 	/**
@@ -25,6 +30,8 @@ package com.loma.game.ui
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAdd);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, onRemove);
+			
+			SimpleButtonSetter(this.btn_yes, StringTable.BTN_VIOLATION);
 		}
 		
 		protected function onRemove(event:Event):void

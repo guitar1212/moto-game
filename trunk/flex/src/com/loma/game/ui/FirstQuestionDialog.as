@@ -1,5 +1,7 @@
 package com.loma.game.ui
 {
+	import com.loma.util.SimpleButtonSetter;
+	
 	import flash.display.SimpleButton;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -81,6 +83,16 @@ package com.loma.game.ui
 		public function setText(text:String):void
 		{
 			this.txt_info.text = text;
+		}
+		
+		public function setYesButtonText(text:String):void
+		{
+			SimpleButtonSetter(this.btn_yes, text);
+		}
+		
+		public function setNoButtonText(text:String):void
+		{
+			SimpleButtonSetter(this.btn_no, text);
 		}
 			
 	}
