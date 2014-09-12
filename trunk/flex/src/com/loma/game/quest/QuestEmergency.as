@@ -94,7 +94,7 @@ package com.loma.game.quest
 			
 			game.stage.focus = game.stage;
 			SoundManager.instance.stopAmbulanceSound();
-			
+			game.addScore(50);
 			m_state = 4;
 		}
 		
