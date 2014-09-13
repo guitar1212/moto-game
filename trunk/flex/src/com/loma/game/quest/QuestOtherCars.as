@@ -71,7 +71,7 @@ package com.loma.game.quest
 			for(i; i < len; i++)
 			{
 				car = m_carList[i];
-				
+				car.x -= curSpeed;
 				if(m_hitArea)
 				{
 					if(m_hitArea.hitTestObject(car.probe))
@@ -81,8 +81,7 @@ package com.loma.game.quest
 					}
 				}				
 				
-				car.update();
-				car.x -= curSpeed;
+				car.update();				
 				
 				if(car.x < -500 || car.x > 1500)
 				{
@@ -127,7 +126,7 @@ package com.loma.game.quest
 		private function createCar():void
 		{
 			var car:Coupe = new Coupe();
-			car.speed = 10 + Math.random()*15;
+			car.speed = 40 + Math.random()*15;
 			car.gotoAndStop(1 + ~~(Math.random()*5 - 0.001));
 			if(game.currentSpeed < 30)
 				car.x = -300;
