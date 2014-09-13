@@ -33,9 +33,7 @@ package com.loma.game.car
 
 		public function set speed(value:Number):void
 		{
-			m_speed = value;
-			//if(m_curSpeed > m_speed)
-				m_curSpeed = m_speed;
+			m_speed = value;			
 		}
 		
 		public function update():void
@@ -45,6 +43,11 @@ package com.loma.game.car
 				ds = 1.5;
 			m_curSpeed = m_curSpeed + ds;
 			this.x += m_curSpeed;
+		}
+		
+		public function stopMove():void
+		{
+			m_curSpeed = 0;
 		}
 		
 		public function get probe():Sprite

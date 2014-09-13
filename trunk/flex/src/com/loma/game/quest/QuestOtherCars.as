@@ -76,7 +76,7 @@ package com.loma.game.quest
 				{
 					if(m_hitArea.hitTestObject(car.probe))
 					{
-						car.speed = 0;
+						car.stopMove();
 						continue;
 					}
 				}				
@@ -127,13 +127,14 @@ package com.loma.game.quest
 		private function createCar():void
 		{
 			var car:Coupe = new Coupe();
-			car.speed = 40 + Math.random()*15;
+			car.speed = 10 + Math.random()*15;
 			car.gotoAndStop(1 + ~~(Math.random()*5 - 0.001));
 			if(game.currentSpeed < 30)
 				car.x = -300;
 			else
 				car.x = 1000;
 			car.y = 165 + Math.random()*100;
+			trace("Car x = " + car.x + ".  y = " + car.y);
 			//car.transform.colorTransform = new ColorTransform(Math.random(), Math.random(), 1);
 			game.addObjToLayer(MotoGame.LAYER_SCENE, car);
 			

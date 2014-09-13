@@ -12,6 +12,8 @@ package com.loma.game.quest
 	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
 	
 	/**
 	 * 救護車任務
@@ -33,9 +35,28 @@ package com.loma.game.quest
 			super();
 		}
 		
+		protected function onKeyDown(event:KeyboardEvent):void
+		{
+			// TODO Auto-generated method stub
+			if(event.keyCode == Keyboard.R)
+			{
+				m_trafficLight.light = "red";
+				var te:TrafficLightEvent = new TrafficLightEvent(TrafficLightEvent.RED);
+				te.hitArea = m_hitArea;
+				game.dispatchEvent(te);
+			}
+			else if(event.keyCode == Keyboard.G)
+			{
+				m_trafficLight.light = "green";
+				game.dispatchEvent(new TrafficLightEvent(TrafficLightEvent.GREEN));
+			}
+		}
+		
 		override public function start():void
 		{
-			createTrafficLight();			
+			createTrafficLight();
+			//test
+			game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 		
 		private function createTrafficLight():void
@@ -54,10 +75,10 @@ package com.loma.game.quest
 			// hit area
 			m_hitArea = new Sprite();
 			m_hitArea.graphics.beginFill(0x523612, 0.45);
-			m_hitArea.graphics.drawRect(0, 0, 60, 500);
+			m_hitArea.graphics.drawRect(0, 0, 200, 500);
 			m_hitArea.graphics.endFill();
 			//m_hitArea.visible = false;
-			m_hitArea.x = 430;
+			m_hitArea.x = 440;
 			m_road.addChild(m_hitArea);
 			
 			// 
@@ -86,7 +107,7 @@ package com.loma.game.quest
 			
 			m_people.y += 3;
 
-			if(m_people.y >= 450 && m_trafficLight.light == "red")
+			if(m_people.y >= 450 &&  m_people.y <= 455 && m_trafficLight.light == "red")
 			{
 				m_trafficLight.light = "green";
 				game.dispatchEvent(new TrafficLightEvent(TrafficLightEvent.GREEN));
@@ -140,6 +161,9 @@ package com.loma.game.quest
 				m_people.parent.removeChild(m_people);
 			
 			m_people = null;
+			
+			//test
+			game.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 	}
 }
