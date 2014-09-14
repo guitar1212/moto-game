@@ -84,6 +84,8 @@ package com.loma.game.quest
 			// 
 			m_people = new Peoples();
 			game.background.addObject(2, m_people, 680, 40);
+			/*game.background.append(2, m_people, 680, 40);
+			game.addObjToLayer(MotoGame.LAYER_UI, m_people);*/
 			
 			var te:TrafficLightEvent = new TrafficLightEvent(TrafficLightEvent.RED);
 			te.hitArea = m_hitArea;
@@ -105,9 +107,9 @@ package com.loma.game.quest
 				}
 			}
 			
-			m_people.y += 3;
+			m_people.y += 3.5;
 
-			if(m_people.y >= 450 &&  m_people.y <= 455 && m_trafficLight.light == "red")
+			if(m_people.y >= 480 &&  m_people.y <= 485 && m_trafficLight.light == "red")
 			{
 				m_trafficLight.light = "green";
 				game.dispatchEvent(new TrafficLightEvent(TrafficLightEvent.GREEN));

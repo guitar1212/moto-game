@@ -44,6 +44,11 @@ package
 		public static const STATUS_PLAY:int = 1;
 		public static const STATUS_END:int = 2;
 		
+		/**
+		 *	總遊戲時間(秒數) 
+		 */		
+		public static const TOTAL_GAME_TIME:int = 2*60;
+		
 		private var m_rider:Rider;
 		private var m_ui:GameUI;
 		private var m_bg:GameBackground;
@@ -98,7 +103,7 @@ package
 			
 			RandomEventManager.instance.initialize(this);
 			
-			OilManager.instance.initialize(this, 2*60); // 設定遊戲時間為2分鐘
+			//OilManager.instance.initialize(this, 1*60); // 設定遊戲時間為2分鐘
 			
 			SoundManager.instance.playMenuBGM();
 			
@@ -237,6 +242,8 @@ package
 		private function checkGameOver():void
 		{			
 			if(m_life <= 0)
+				gameOver();			
+			else if(OilManager.instance.isOilEmpty())
 				gameOver();
 		}
 		
@@ -381,7 +388,7 @@ package
 			// add first quest
 			QuestManager.instance.addQuest(new QuestFirst());
 			
-			OilManager.instance.initialize(this, 3*60);
+			OilManager.instance.initialize(this, TOTAL_GAME_TIME);
 			
 			SoundManager.instance.playBGM();
 			SoundManager.instance.stopMenuBGM();

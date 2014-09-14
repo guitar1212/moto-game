@@ -39,15 +39,21 @@ package com.loma.game.oil
 		public function update():void
 		{
 			m_count++;
-			if(m_count >= m_totalPlayFrames) // game over
+			/*if(m_count >= m_totalPlayFrames) // game over
 			{
 				m_game.gameOver();
 			}
-			else
+			else*/
 			{
 				var useOil:int = ~~(m_count*100/m_totalPlayFrames);
 				m_game.ui.oil = 100 - useOil;
 			}
 		}
+		
+		public function isOilEmpty():Boolean
+		{
+			return m_count >= m_totalPlayFrames; 
+		}
+			
 	}
 }

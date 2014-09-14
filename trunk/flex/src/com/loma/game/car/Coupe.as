@@ -33,7 +33,8 @@ package com.loma.game.car
 
 		public function set speed(value:Number):void
 		{
-			m_speed = value;			
+			m_speed = value;
+			m_curSpeed = value;
 		}
 		
 		public function update():void
@@ -41,7 +42,12 @@ package com.loma.game.car
 			var ds:Number = this.speed - m_curSpeed;
 			if(ds > 1.5)
 				ds = 1.5;
+			
 			m_curSpeed = m_curSpeed + ds;
+			
+			if(m_curSpeed > speed)
+				m_curSpeed = speed;
+			
 			this.x += m_curSpeed;
 		}
 		

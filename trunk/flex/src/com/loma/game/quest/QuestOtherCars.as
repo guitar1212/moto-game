@@ -48,7 +48,7 @@ package com.loma.game.quest
 		protected function onGreenLight(event:TrafficLightEvent):void
 		{
 			m_bCount = true;
-			m_hitArea = null;
+			//m_hitArea = null;
 		}
 		
 		override public function onUpdate():void
@@ -71,18 +71,26 @@ package com.loma.game.quest
 			for(i; i < len; i++)
 			{
 				car = m_carList[i];
-				car.x -= curSpeed;
+				
 				if(m_hitArea)
 				{
 					if(m_hitArea.hitTestObject(car.probe))
 					{
-						car.stopMove();
-						continue;
+						if(!m_bCount)//紅燈時
+						{
+							car.stopMove();
+							car.x -= (curSpeed*0.35);
+							continue;
+						}
+						else // 綠燈時
+						{
+							car.x -= 10;
+						}
 					}
 				}				
 				
 				car.update();				
-				
+				car.x -= curSpeed;
 				if(car.x < -500 || car.x > 1500)
 				{
 					m_carList.splice(i, 1);

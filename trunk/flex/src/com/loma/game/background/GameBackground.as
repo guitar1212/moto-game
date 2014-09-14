@@ -115,9 +115,11 @@ package com.loma.game.background
 				
 				m_count++;
 				
+				m_platform.addChild(m_roadArr[0]);
+				
 				if(m_count%3 == 0)
 				{
-					this.addObject(2, new Warning1(), 330, 220);
+					this.addObject(2, new Warning1(), 390, 220);
 				}
 			}
 			
