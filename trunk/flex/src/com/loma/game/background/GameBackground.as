@@ -3,6 +3,7 @@ package com.loma.game.background
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
+	import flash.filters.GlowFilter;
 	
 	/**
 	 * 
@@ -28,6 +29,8 @@ package com.loma.game.background
 		private var m_appendArr:Array = [];
 		
 		private var m_count:int = 0;
+		
+		private var m_backSpeed:Number = 0;
 		
 		public function GameBackground()
 		{
@@ -70,7 +73,8 @@ package com.loma.game.background
 		
 		public function update():void
 		{
-			moveingRoad(m_moveSpeed*0.35);
+			m_backSpeed = m_moveSpeed*0.35;
+			moveingRoad(m_backSpeed);
 			
 			moveingSky(m_moveSpeed*0.1);
 			
@@ -119,7 +123,7 @@ package com.loma.game.background
 				
 				if(m_count%3 == 0)
 				{
-					this.addObject(2, new Warning1(), 390, 220);
+					this.addObject(2, new Warning1(), 600, 220);
 				}
 			}
 			
@@ -160,7 +164,7 @@ package com.loma.game.background
 		 * @param y
 		 * 
 		 */		
-		public function addObject(index:int, obj:DisplayObject, x:int, y:int):void
+		public function addObject(index:int, obj:DisplayObject, x:int, y:int, first:Boolean = false):void
 		{
 			var r:RoadNormal = m_roadArr[index];
 			if(r)
@@ -195,6 +199,11 @@ package com.loma.game.background
 					return;
 				}
 			}
+		}
+		
+		public function get backSpeed():Number
+		{
+			return m_backSpeed;
 		}
 
 	}

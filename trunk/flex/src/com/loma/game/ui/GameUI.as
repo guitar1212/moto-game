@@ -25,6 +25,8 @@ package com.loma.game.ui
 		
 		private var m_btnStartCallback:Function = null;		
 		
+		private var m_oriW:Number;
+		
 		public function GameUI()
 		{
 			super();
@@ -44,6 +46,8 @@ package com.loma.game.ui
 			m_maxLife = m_gameUI.LifeBar_mc.totalFrames - 1;
 			
 			life = m_maxLife;
+			
+			m_oriW = m_gameUI.oil_num.life.width;
 		}
 		
 		protected function onGameStartBtnClick(event:MouseEvent):void
@@ -73,10 +77,9 @@ package com.loma.game.ui
 			var maxOil:int = 100;
 			if(value > maxOil) value = maxOil;
 			
-			value = 100 - value;
-			var maxFram:int = m_gameUI.oil_num.totalFrames;
-			var frame:int = value/100*(maxFram) + 1;
-			m_gameUI.oil_num.gotoAndStop(frame);
+			var p:Number = value/100;			
+			var newW:Number = p*m_oriW;
+			m_gameUI.oil_num.life.scaleX = p;
 		}
 		
 		public function set score(value:int):void

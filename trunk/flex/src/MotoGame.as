@@ -1,6 +1,7 @@
 package
 {
 	import com.loma.game.background.GameBackground;
+	import com.loma.game.car.Coupe;
 	import com.loma.game.oil.OilManager;
 	import com.loma.game.player.Rider;
 	import com.loma.game.quest.QuestFirst;
@@ -67,6 +68,7 @@ package
 		private var m_bForward:Boolean;
 		
 		private var m_status:int = STATUS_MENU;
+		
 		
 		public function MotoGame()
 		{
@@ -214,7 +216,7 @@ package
 				m_bForward = false;
 			}
 		}
-		
+				
 		protected function onUpdate(event:Event):void
 		{
 			QuestManager.instance.update();
@@ -234,6 +236,8 @@ package
 			depthSort();
 			
 			checkGameOver();
+			
+			QuestManager.instance.afterUpdate();
 			
 			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + 
 							   "\nstageX = " + stage.mouseX + ". stageY = " + stage.mouseY;
@@ -315,15 +319,19 @@ package
 		private function updateBackground():void
 		{
 			if(m_speed <= 0)
+			{
+				m_speed = 0;
 				m_rider.state = Rider.STATE_STOP;
+			}	
 			
-			if(m_rider.state != Rider.STATE_MOVE)
-				return;
+			//m_bg.moveSpeed = m_speed;
+			
+			/*if(m_rider.state != Rider.STATE_MOVE)
+				return;*/
 			
 			m_bg.moveSpeed = m_speed;
 			m_bg.update();
 		}
-		
 		private function updateRider():void
 		{
 			if(m_speed > 0)

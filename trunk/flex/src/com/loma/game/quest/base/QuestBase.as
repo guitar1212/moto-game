@@ -76,6 +76,11 @@ package com.loma.game.quest.base
 		{
 		}
 		
+		public function afterUpdate():void
+		{
+			
+		}
+		
 		public function check():Boolean
 		{
 			return false;

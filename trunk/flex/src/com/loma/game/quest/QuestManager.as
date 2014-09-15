@@ -111,6 +111,16 @@ package com.loma.game.quest
 				}				
 			}
 		}
+		
+		public function afterUpdate():void
+		{
+			var q:QuestBase;
+			for(var i:int = 0; i < m_questList.length; i++)
+			{
+				q = m_questList[i] as QuestBase;
+				q.afterUpdate();
+			}
+		}
 
 		public function get start():Boolean
 		{

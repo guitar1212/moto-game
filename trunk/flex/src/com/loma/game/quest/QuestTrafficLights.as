@@ -77,7 +77,7 @@ package com.loma.game.quest
 			m_hitArea.graphics.beginFill(0x523612, 0.45);
 			m_hitArea.graphics.drawRect(0, 0, 200, 500);
 			m_hitArea.graphics.endFill();
-			//m_hitArea.visible = false;
+			m_hitArea.visible = false;
 			m_hitArea.x = 440;
 			m_road.addChild(m_hitArea);
 			

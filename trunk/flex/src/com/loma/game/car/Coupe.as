@@ -22,7 +22,7 @@ package com.loma.game.car
 			m_probe.graphics.drawRect(0, 0, 150, 10);
 			m_probe.graphics.endFill();
 			m_probe.x = 0;
-			//m_probe.visible = false;
+			m_probe.visible = false;
 			this.addChild(m_probe);
 		}
 
@@ -40,8 +40,8 @@ package com.loma.game.car
 		public function update():void
 		{
 			var ds:Number = this.speed - m_curSpeed;
-			if(ds > 1.5)
-				ds = 1.5;
+			if(ds > 3)
+				ds = 3;
 			
 			m_curSpeed = m_curSpeed + ds;
 			
@@ -61,5 +61,11 @@ package com.loma.game.car
 			return m_probe;
 		}
 
+		public function slowDown(value:int):void
+		{
+			m_curSpeed -= value;
+			if(m_curSpeed < 0)
+				m_curSpeed = 0;
+		}
 	}
 }
