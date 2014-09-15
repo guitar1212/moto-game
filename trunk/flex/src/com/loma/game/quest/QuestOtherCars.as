@@ -80,11 +80,12 @@ package com.loma.game.quest
 						{
 							car.stopMove();
 							car.x -= (curSpeed*0.35);
+							//trace("car curSpeed = " + curSpeed + "(" + curSpeed*0.35 + ")");
 							continue;
 						}
 						else // 綠燈時
 						{
-							car.x -= 10;
+							car.x -= 15;
 						}
 					}
 				}				
