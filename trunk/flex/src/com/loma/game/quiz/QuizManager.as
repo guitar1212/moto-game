@@ -35,17 +35,7 @@ package com.loma.game.quiz
 		public function reGeneration():void
 		{
 			m_quizIdxList.length = 0;
-			m_quizIdxList = RandomNumberListGenerator(TOTAL_QUESTIONS);
-			
-			/*var tempArr:Array = [];
-			for(var i:int = 0; i < TOTAL_QUESTIONS; i++)
-				tempArr.push(i);
-				
-			for(i = 0; i < TOTAL_QUESTIONS; i++)
-			{
-				var ri:int = ~~(Math.random()*(tempArr.length - 1) + 0.5);
-				m_quizIdxList.push(tempArr.splice(ri, 1));
-			}	*/		
+			m_quizIdxList = RandomNumberListGenerator(TOTAL_QUESTIONS);					
 		}
 		
 		public function getNewQuiz():Object

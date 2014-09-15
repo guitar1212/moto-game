@@ -89,7 +89,6 @@ package com.loma.game.randomevent
 				
 				randomQuest();
 			}
-			
 		}
 		
 		private function randomQuest():void

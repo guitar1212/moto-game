@@ -1,7 +1,6 @@
 package
 {
 	import com.loma.game.background.GameBackground;
-	import com.loma.game.car.Coupe;
 	import com.loma.game.oil.OilManager;
 	import com.loma.game.player.Rider;
 	import com.loma.game.quest.QuestFirst;
@@ -18,8 +17,6 @@ package
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.geom.Point;
-	import flash.text.TextField;
-	import flash.text.TextFieldAutoSize;
 	import flash.ui.Keyboard;
 	
 	/**
@@ -62,8 +59,6 @@ package
 		
 		private var m_bGameStart:Boolean = false;
 		
-		private var m_debugText:TextField = new TextField();
-		
 		private var m_bBackward:Boolean;
 		private var m_bForward:Boolean;
 		
@@ -95,17 +90,10 @@ package
 			m_ui.gameStartCallback = gameStart;
 			this.addObjToLayer(LAYER_UI, m_ui);
 			
-			m_debugText.x = 10;
-			m_debugText.y = 10;
-			m_debugText.autoSize = TextFieldAutoSize.LEFT;
-			//this.addObjToLayer(LAYER_UI, m_debugText);
-			
 			QuestManager.instance.ininialize(this);
 			QuestManager.instance.start = true;
 			
 			RandomEventManager.instance.initialize(this);
-			
-			//OilManager.instance.initialize(this, 1*60); // 設定遊戲時間為2分鐘
 			
 			SoundManager.instance.playMenuBGM();
 			
@@ -238,9 +226,6 @@ package
 			checkGameOver();
 			
 			QuestManager.instance.afterUpdate();
-			
-			m_debugText.text = "Rider x = " + m_rider.x + ", y = " + m_rider.y + 
-							   "\nstageX = " + stage.mouseX + ". stageY = " + stage.mouseY;
 		}
 		
 		private function checkGameOver():void
