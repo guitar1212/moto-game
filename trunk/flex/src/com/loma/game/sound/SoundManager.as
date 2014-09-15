@@ -2,6 +2,7 @@ package com.loma.game.sound
 {
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
+	import flash.media.SoundTransform;
 	import flash.utils.Dictionary;
 
 	public class SoundManager
@@ -64,14 +65,18 @@ package com.loma.game.sound
 			return m_instance;
 		}
 		
-		private function playSound(sName:String, loops:int):void
+		private function playSound(sName:String, loops:int, vol:Number = 1.0):void
 		{
 			if(m_bMute) return;
 			
 			stopSound(sName);
 			
 			if(m_soundDict[sName])
-				m_soundChannelDict[sName] = (m_soundDict[sName] as Sound).play(0, loops);
+			{
+				var st:SoundTransform = new SoundTransform(vol);
+				var sc:SoundChannel = (m_soundDict[sName] as Sound).play(0, loops, st);
+				m_soundChannelDict[sName] = sc;
+			}
 		}
 		
 		private function stopSound(sName:String):void
@@ -87,7 +92,7 @@ package com.loma.game.sound
 		
 		public function playMenuBGM():void
 		{
-			playSound(MENU_BACKGROUND_MUSIC, 999);
+			playSound(MENU_BACKGROUND_MUSIC, 999, 1);
 		}
 		
 		public function stopMenuBGM():void
