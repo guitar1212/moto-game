@@ -9,11 +9,7 @@ package com.loma.game.quest
 	import com.loma.game.ui.FirstQuestionDialog;
 	import com.loma.game.ui.ViolationDialog;
 	
-	import flash.display.SimpleButton;
-	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.text.TextField;
 
 	/**
 	 * 遊戲開始的第一個任務
@@ -109,7 +105,6 @@ package com.loma.game.quest
 			this.state = QuestState.DESTORY;
 			
 			game.gamePause = false;
-			//game.removeObjFormLayer(MotoGame.LAYER_UI, u);
 			
 			if(m_bRight)
 			{

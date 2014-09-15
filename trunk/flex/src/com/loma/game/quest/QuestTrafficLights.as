@@ -8,12 +8,8 @@ package com.loma.game.quest
 	import com.loma.game.string.StringTable;
 	import com.loma.game.ui.ViolationDialog;
 	
-	import flash.display.MovieClip;
-	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.ui.Keyboard;
 	
 	/**
 	 * 救護車任務
@@ -35,28 +31,9 @@ package com.loma.game.quest
 			super();
 		}
 		
-		protected function onKeyDown(event:KeyboardEvent):void
-		{
-			// TODO Auto-generated method stub
-			if(event.keyCode == Keyboard.R)
-			{
-				m_trafficLight.light = "red";
-				var te:TrafficLightEvent = new TrafficLightEvent(TrafficLightEvent.RED);
-				te.hitArea = m_hitArea;
-				game.dispatchEvent(te);
-			}
-			else if(event.keyCode == Keyboard.G)
-			{
-				m_trafficLight.light = "green";
-				game.dispatchEvent(new TrafficLightEvent(TrafficLightEvent.GREEN));
-			}
-		}
-		
 		override public function start():void
 		{
-			createTrafficLight();
-			//test
-			game.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			createTrafficLight();			
 		}
 		
 		private function createTrafficLight():void
@@ -66,7 +43,6 @@ package com.loma.game.quest
 			
 			m_trafficLight = new TrafficLight();
 			m_trafficLight.light = "red";
-			//m_trafficLight.start();
 			m_trafficLight.x = 0;
 			m_trafficLight.y = 0;
 			game.background.append(2, m_trafficLight, 480, 500);			
@@ -84,8 +60,6 @@ package com.loma.game.quest
 			// 
 			m_people = new Peoples();
 			game.background.addObject(2, m_people, 680, 40);
-			/*game.background.append(2, m_people, 680, 40);
-			game.addObjToLayer(MotoGame.LAYER_UI, m_people);*/
 			
 			var te:TrafficLightEvent = new TrafficLightEvent(TrafficLightEvent.RED);
 			te.hitArea = m_hitArea;
@@ -163,9 +137,6 @@ package com.loma.game.quest
 				m_people.parent.removeChild(m_people);
 			
 			m_people = null;
-			
-			//test
-			game.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 	}
 }

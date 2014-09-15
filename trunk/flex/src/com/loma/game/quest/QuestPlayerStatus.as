@@ -7,7 +7,6 @@ package com.loma.game.quest
 	import com.loma.game.ui.FirstQuestionDialog;
 	import com.loma.game.ui.ViolationDialog;
 	
-	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;

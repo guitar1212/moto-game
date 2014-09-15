@@ -34,9 +34,6 @@ package com.loma.game.quest
 			
 			if(!m_bTouched && game.player.hitObject.hitTestObject(m_obs))
 			{
-				/*game.ui.showViolationUI(ViolationDialog.TYPE_BAD, StringTable.OBSTACLES, -50, onConfirm);
-				QuestManager.instance.start = false;
-				game.gamePause = true;*/
 				m_obs.alpha = 0.25;
 				onFailed();
 				m_bTouched = true;
@@ -52,13 +49,7 @@ package com.loma.game.quest
 			
 			game.player.playEffect(1);
 			
-			/*game.gamePause = false;
-			QuestManager.instance.start = true;
-			
-			game.ui.hideViolationUI();*/
-			
 			m_bOK = true;
-			//RandomEventManager.instance.clean();
 			
 			SoundManager.instance.playObstaclesSound();
 		}

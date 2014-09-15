@@ -8,7 +8,6 @@ package com.loma.game.randomevent
 	import com.loma.game.quest.QuestTrafficLights;
 	import com.loma.game.quest.base.QuestBase;
 	
-	import flash.display.Sprite;
 	import flash.events.Event;
 
 	/**

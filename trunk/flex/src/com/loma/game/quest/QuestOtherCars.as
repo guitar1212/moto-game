@@ -3,13 +3,8 @@ package com.loma.game.quest
 	import com.loma.game.car.Coupe;
 	import com.loma.game.event.TrafficLightEvent;
 	import com.loma.game.quest.base.QuestBase;
-	import com.loma.util.TimerManager;
 	
 	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.geom.ColorTransform;
-	
-	import flashx.textLayout.operations.CopyOperation;
 
 	/**
 	 * 
@@ -63,43 +58,6 @@ package com.loma.game.quest
 					createCar();
 				}
 			}
-			
-			/*var i:int = 0, len:int = m_carList.length;
-			var curSpeed:Number = game.currentSpeed;			
-			var car:Coupe;
-			
-			for(i; i < len; i++)
-			{
-				car = m_carList[i];
-				
-				if(m_hitArea)
-				{
-					if(m_hitArea.hitTestObject(car.probe))
-					{
-						if(!m_bCount)//紅燈時
-						{
-							car.stopMove();
-							car.x -= (curSpeed*0.35);
-							//trace("car curSpeed = " + curSpeed + "(" + curSpeed*0.35 + ")");
-							continue;
-						}
-						else // 綠燈時
-						{
-							//car.x -= 15;
-						}
-					}
-				}				
-				
-				car.update();				
-				car.x -= curSpeed;
-				trace("car x = " + car.x + ".   curSpeed = " + curSpeed);
-				if(car.x < -500 || car.x > 1500)
-				{
-					m_carList.splice(i, 1);
-					car = null;
-					len--;
-				}	
-			}	*/
 		}
 		
 		override public function afterUpdate():void
@@ -121,7 +79,6 @@ package com.loma.game.quest
 							car.stopMove();
 							//car.x -= (curSpeed*0.35);
 							car.x -= game.background.backSpeed;
-							//trace("car curSpeed = " + curSpeed + "(" + curSpeed*0.35 + ")");
 							continue;
 						}
 						else // 綠燈時
@@ -134,7 +91,6 @@ package com.loma.game.quest
 				
 				car.update();				
 				car.x -= curSpeed;
-				trace("car x = " + car.x + ".   curSpeed = " + curSpeed);
 				if(car.x < -500 || car.x > 1500)
 				{
 					m_carList.splice(i, 1);
@@ -185,8 +141,6 @@ package com.loma.game.quest
 			else
 				car.x = 1000;
 			car.y = 165 + Math.random()*100;
-			trace("Create Car x = " + car.x + ".  y = " + car.y);
-			//car.transform.colorTransform = new ColorTransform(Math.random(), Math.random(), 1);
 			game.addObjToLayer(MotoGame.LAYER_SCENE, car);
 			
 			m_carList.push(car);

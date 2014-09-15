@@ -2,7 +2,6 @@ package com.loma.game.player
 {
 	import com.loma.util.TimerManager;
 	
-	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.geom.ColorTransform;
 	
@@ -100,10 +99,6 @@ package com.loma.game.player
 				else if(effectType == 1)
 					m_effectTimerIdx = TimerManager.instance.register(onEffectTimeUp1, 100, 10, TimerManager.RETURN_INVOKE_TIMES);
 			}
-			else
-			{
-				
-			}
 		}
 		
 		private function onEffectTimeUp(times:int):void
@@ -123,12 +118,6 @@ package com.loma.game.player
 		private function onEffectTimeUp1(times:int):void
 		{
 			this.transform.colorTransform = new ColorTransform(times%2 + 0.5, 1, 1, times%2 + 0.5);
-			/*if(this.alpha == 1)
-				this.alpha = 0.3;
-			else
-				this.alpha = 1;*/
-			
-			
 			
 			if(times == 10)
 			{
