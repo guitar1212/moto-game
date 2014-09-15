@@ -1,5 +1,7 @@
 package com.loma.game.quiz
 {
+	import com.loma.util.RandomNumberListGenerator;
+
 	/**
 	 * 
 	 * @long  Sep 3, 2014
@@ -33,8 +35,9 @@ package com.loma.game.quiz
 		public function reGeneration():void
 		{
 			m_quizIdxList.length = 0;
+			m_quizIdxList = RandomNumberListGenerator(TOTAL_QUESTIONS);
 			
-			var tempArr:Array = [];
+			/*var tempArr:Array = [];
 			for(var i:int = 0; i < TOTAL_QUESTIONS; i++)
 				tempArr.push(i);
 				
@@ -42,7 +45,7 @@ package com.loma.game.quiz
 			{
 				var ri:int = ~~(Math.random()*(tempArr.length - 1) + 0.5);
 				m_quizIdxList.push(tempArr.splice(ri, 1));
-			}			
+			}	*/		
 		}
 		
 		public function getNewQuiz():Object
