@@ -40,8 +40,8 @@ package com.loma.game.car
 		public function update():void
 		{
 			var ds:Number = this.speed - m_curSpeed;
-			if(ds > 3)
-				ds = 3;
+			if(ds > 1)
+				ds = 1;
 			
 			m_curSpeed = m_curSpeed + ds;
 			
