@@ -1,0 +1,1266 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link id="css" href="style1.css" rel="stylesheet"/>
+<title>車牌辨識</title>
+</head>
+
+<body>
+<script type='text/javascript'></script>
+<script language="javascript">
+//var IMG_URL = getParameter('image');
+var IMG_URL = 'moto.jpg';
+	SPACE = 10,
+	SRC_WIDTH = 300,
+	SRC_HEIGHT = 239,
+	DST_WIDTH = 300,//465 - SRC_WIDTH - SPACE * 3,
+	DST_HEIGHT = 100;// - SRC_HEIGHT - SPACE * 3;
+	FinalDST_WIDTH = 300,//465 - SRC_WIDTH - SPACE * 3,
+	FinalDST_HEIGHT = 100;// - SRC_HEIGHT - SPACE * 3;
+	
+
+var img,
+	canvas,
+	//new canvas add
+	canvas_store,
+	context_store,
+		
+	//
+	context,
+	points,
+	srcImageData,
+	draggingPoint = null,
+	draggingDstPoint = null,
+	draggingFinalDstPoint = null,
+	
+	selectedDraggingDstPoint,
+	scaleLeftTopPoint = null,
+	scaleRightBottomPoint = null,
+	wheelEvent = "false", wheelCnt=0;
+	
+	var ltPoint;		//left-top point
+	var	rbPoint;		//right-bottom point
+	var isScale;		//boolean whether scale larger 
+	var scaleValue;		//percent value of scale
+	//var ctx,dst,ctx_store,finalDst;
+	var xAxisOfFinalDstLine;
+	var yAxisOfFinalDstLine;
+	var numLineOfFinalDst;
+	
+	
+window.addEventListener('DOMContentLoaded', function() {
+
+	canvas = document.getElementById('c');
+	context = canvas.getContext('2d');
+	//***** add ****//	
+	canvas_store = document.getElementById('new');
+	context_store = canvas_store.getContext('2d');
+	//**************//
+	
+	/****************Mandy add*******************************/
+	srcBounds = new Rect(SPACE + 50, SPACE / 2 | 0 + 200, SRC_WIDTH, SRC_HEIGHT);
+	dstBounds = new Rect(srcBounds.right() + 65 + SPACE, srcBounds.y , DST_WIDTH, DST_HEIGHT);
+	//finalDstBounds = new Rect(srcBounds.right() + SPACE, dstBounds.y + DST_HEIGHT + 3*SPACE, FinalDST_WIDTH, FinalDST_HEIGHT);
+	finalDstBounds = new Rect(SPACE + 50, dstBounds.y + DST_HEIGHT + 3*SPACE  + 200 , FinalDST_WIDTH, FinalDST_HEIGHT);
+	/****************Mandy end*******************************/
+	
+	//scaleBasePoint = new Point(0,0);
+	
+	ltPoint = new Point(0,0);
+	rbPoint = new Point(srcBounds.width, srcBounds.height);
+	isScale = false;
+	scaleValue = 0.02;
+
+
+	var bounds = new Rect(0, 0, SRC_WIDTH, SRC_HEIGHT).inflate(-60, -60);
+	var dstBountsPoint = new Rect(0, 0, DST_WIDTH, DST_HEIGHT).inflate(-60, -60);
+	
+	points = [
+		bounds.topLeft(),
+		bounds.topRight(),
+		bounds.bottomRight(),
+		bounds.bottomLeft()
+	];
+
+  dstPoints = [
+  	dstBountsPoint.topLeft(),
+		dstBountsPoint.topRight(),
+		dstBountsPoint.bottomRight(),
+		dstBountsPoint.bottomLeft()
+  ];
+  
+	img = new Image();
+	img.addEventListener('load', onImageLoad, false);
+	img.src = IMG_URL;
+
+  	//hcf
+  	numLineOfFinalDst = 5;	//5 line for 6 areas
+	xAxisOfLine = [0,0,0,0,0,0,0,0];	//leftest and rightest are bounds
+	var xLen = Math.abs(dstPoints[1].x-dstPoints[0].x);
+	var yLen = Math.abs(dstPoints[2].y-dstPoints[1].y); 
+	var temp = xLen/(numLineOfFinalDst+1);	
+	for (i=1; i<=numLineOfFinalDst+1; i++) {
+		xAxisOfLine[i] = temp*i;
+	}
+	//--  	
+	
+	canvas.addEventListener('mousemove', onCanvasMouseMove, false);
+	canvas.addEventListener('mousedown', onCanvasMouseDown, false);
+	canvas.addEventListener('mouseup', onCanvasMouseUp, false);
+	canvas.addEventListener('mouseout', onCanvasMouseUp, false);
+	//canvas.addEventListener('DOMMouseScroll', MouseWheelHandler, false);
+	if (canvas.addEventListener) {
+			// IE9, Chrome, Safari, Opera
+			canvas.addEventListener("mousewheel", MouseWheelHandler, false);
+			// Firefox
+			canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+	}
+	// IE 6/7/8
+	else canvas.attachEvent("onmousewheel", MouseWheelHandler);
+	
+}, false);
+
+function onImageLoad(e) {
+	
+	
+	//canvas.width = 700;
+	//canvas.height = 250;
+	/************Mandy edit***********/
+	canvas.width = 800;
+	canvas.height = 700;
+	/*********************************/
+	context.drawImage(img, srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+	context.fillStyle = context.strokeStyle = 'yellow';//'cyan';
+	context.lineWidth = 1;
+	context.font = '10px sans-serif';
+	context.textBaseline = 'top';
+	//alert("srcBounds.x:"+srcBounds.x+",srcBounds.y:"+srcBounds.y+",srcBounds.width:"+srcBounds.width+",srcBounds.height:"+srcBounds.height);
+	srcImageData = context.getImageData(srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);	
+	hideAllCharListBox();
+	//預設選擇車牌長度6碼=>2-4
+	//lengthListBoxOnChange("1");
+	//setCharListBox("1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21");
+	update();	
+}
+
+function MouseWheelHandler(e){
+		var e = window.event || e; // old IE support
+		var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+		//alert(delta);
+		
+		if(delta > 0){
+				//scaleX /= 1.05;
+				//scaleY /= 1.05;										
+				wheelEvent = "add";
+				wheelCnt++;
+				update();
+		}else{
+				//scaleLeftTopPoint = new Point(0.05*srcBounds.width, 0.05*srcBounds.height);
+				//scaleRightBottomPoint = new Point(0.95*srcBounds.width, 0.95*srcBounds.height);
+			
+				//var x = scaleBasePoint.x-(scaleX*1.1)*0.05*srcBounds.width;
+				//var y = scaleBasePoint.y-(scaleY*1.1)*0.05*srcBounds.height;
+				
+				//if(scaleBasePoint.x<=0 || scaleBasePoint.y<=0){
+				if (isScale == false){
+				
+					
+				}else{
+					//scaleX *= 1.05;
+					//scaleY *= 1.05;					
+					wheelEvent = "reduce";
+					wheelCnt--;
+					update();
+				}
+				
+		}
+
+		//if(scaleX < 1) scaleX = 1;
+		//if(scaleY < 1) scaleY = 1;
+		//prevent to scroll the browser window
+		e.returnValue = false;
+	    if (e.preventDefault) e.preventDefault();
+	        return false;
+		
+}
+
+function onCanvasMouseMove(e) {
+	if (draggingPoint) {
+		var p = draggingPoint;
+
+		p.x = e.clientX - srcBounds.x;
+		p.y = e.clientY - srcBounds.y;
+
+		if (p.x < 0) p.x = 0;
+		else if (p.x > srcBounds.width) p.x = srcBounds.width;
+		if (p.y < 0) p.y = 0;
+		else if (p.y > srcBounds.height) p.y = srcBounds.height;
+		update();
+	}
+	if (draggingDstPoint) {
+		var p = draggingDstPoint;
+
+		p.x = e.clientX - dstBounds.x;
+		p.y = e.clientY - dstBounds.y;
+
+		if (p.x < 0) 
+			p.x = 0;
+		else if (p.x > dstBounds.width) 
+			p.x = dstBounds.width;
+		
+		if (p.y < 0) 
+			p.y = 0;
+		else if (p.y > dstBounds.height) 
+			p.y = dstBounds.height;
+		
+		var x,y,p1;
+		if(selectedDraggingDstPoint==0){
+				x = draggingDstPoint.x;
+				y = draggingDstPoint.y;
+				p1 = dstPoints[2];	
+		}else if(selectedDraggingDstPoint==1){
+				x = dstPoints[3].x;
+				y = draggingDstPoint.y;
+				p1 = dstPoints[3];	
+		}else if(selectedDraggingDstPoint==2){
+				x = dstPoints[0].x;
+				y = dstPoints[0].y;
+				p1 = dstPoints[0];
+				
+		}else if(selectedDraggingDstPoint==3){
+				x = draggingDstPoint.x;
+				y = dstPoints[0].y;
+				p1 = dstPoints[1];
+				
+		}
+		/*var p1;	
+		if(selectedDraggingDstPoint!=2)
+			p1 = dstPoints[(selectedDraggingDstPoint+2)%4];
+		else
+			p1 = dstPoints[2];
+		
+		var x = dstPoints[0].x;
+		var y = dstPoints[0].y;*/
+			
+		var tmp = new Rect(x, y, Math.abs(p.x-p1.x), Math.abs(p.y-p1.y));
+		
+		//alert(tmp.topLeft().x+","+tmp.topLeft().y);
+		
+		dstPoints[0] = tmp.topLeft();
+		dstPoints[1] = tmp.topRight();
+		dstPoints[2] = tmp.bottomRight();
+		dstPoints[3] = tmp.bottomLeft();
+		
+		//hcf
+		///*
+		var originLen = xAxisOfLine[numLineOfFinalDst+1];
+		var xLen = Math.abs(dstPoints[1].x-dstPoints[0].x);
+		
+		if (xLen < 50){		//too small
+			var item = xLen/(numLineOfFinalDst+1);	
+			for (i=1; i<=numLineOfFinalDst+1; i++)
+				xAxisOfLine[i] = item*i;
+		}
+		else {
+			for (i=1; i<=numLineOfFinalDst; i++) {
+					xAxisOfLine[i] = xAxisOfLine[i]*xLen/originLen;
+			}
+			xAxisOfLine[numLineOfFinalDst+1] = xLen;
+		}	
+		//*/		
+		
+		update();
+	}
+	
+	//hcf
+	///*
+	if (draggingFinalDstPoint>=0){	
+		xAxisOfLine[draggingFinalDstPoint] = e.clientX - finalDstBounds.x;
+		if (xAxisOfLine[draggingFinalDstPoint] < xAxisOfLine[draggingFinalDstPoint-1]+5) 	//not a good way when value is fixed to 5
+			xAxisOfLine[draggingFinalDstPoint] = xAxisOfLine[draggingFinalDstPoint-1]+5;
+		if (xAxisOfLine[draggingFinalDstPoint] > xAxisOfLine[draggingFinalDstPoint+1]-5) 
+			xAxisOfLine[draggingFinalDstPoint] = xAxisOfLine[draggingFinalDstPoint+1]-5;		
+		update();
+	}
+	//*/
+	
+	if(scaleLeftTopPoint!=null && scaleRightBottomPoint==null && e.clientX >=srcBounds.x && e.clientX <= (srcBounds.x+srcBounds.width) && e.clientY>=srcBounds.y &&e.clientY <= (srcBounds.y+srcBounds.height)){
+			var movePoint = new Point(e.clientX - srcBounds.x, e.clientY - srcBounds.y);
+			update(movePoint);
+	}
+	
+}
+
+function onCanvasMouseUp(e) {
+	if(draggingPoint==null && draggingDstPoint==null && scaleLeftTopPoint!=null){
+			if(e.clientX >=srcBounds.x && e.clientX <= (srcBounds.x+srcBounds.width) && e.clientY>=srcBounds.y &&e.clientY <= (srcBounds.y+srcBounds.height)){
+					scaleRightBottomPoint = new Point(e.clientX - srcBounds.x, e.clientY - srcBounds.y);
+					if(Math.abs(scaleRightBottomPoint.x-scaleLeftTopPoint.x)>10 && Math.abs(scaleRightBottomPoint.y-scaleLeftTopPoint.y)>10)
+							update();
+			}
+	}
+	
+	
+	draggingPoint = null;
+	draggingDstPoint = null;
+	draggingFinalDstPoint = -1;
+}
+
+function onCanvasMouseDown(e) {
+	var i, len, p, dx, dy;
+
+	for (i = 0, len = points.length; i < len; i++) {
+		p = points[i];
+
+		dx = p.x - e.clientX + srcBounds.x;
+		dy = p.y - e.clientY + srcBounds.y;
+
+		if (dx * dx + dy * dy < 100) {
+			draggingPoint = p;
+			p.x = e.clientX - srcBounds.x;
+			p.y = e.clientY - srcBounds.y;
+			break;
+		}
+	}
+	
+	for (i = 0, len = dstPoints.length; i < len; i++) {
+		p = dstPoints[i];
+
+		dx = p.x - e.clientX + dstBounds.x;
+		dy = p.y - e.clientY + dstBounds.y;
+
+		if (dx * dx + dy * dy < 100) {
+			draggingDstPoint = p;
+			selectedDraggingDstPoint = i;
+			p.x = e.clientX - dstBounds.x;
+			p.y = e.clientY - dstBounds.y;
+			break;
+		}
+	}
+	
+	//hcf
+	///*
+	var xLen, yLen;
+	for (i=1; i<=numLineOfFinalDst; i++) {
+		xLen = Math.abs(dstPoints[1].x-dstPoints[0].x);
+		yLen = Math.abs(dstPoints[2].y-dstPoints[1].y);
+		
+		if ((e.clientX-finalDstBounds.x > xLen) || (e.clientY-finalDstBounds.y > yLen))
+			continue;
+		
+		dx = Math.abs(e.clientX - finalDstBounds.x - xAxisOfLine[i]);
+		if (dx<5) {
+			draggingFinalDstPoint = i;
+			break;
+		}
+	}	
+	//*/
+	
+	scaleLeftTopPoint = null;
+	scaleRightBottomPoint = null;
+	if(draggingPoint==null && draggingDstPoint==null){
+		  if(e.clientX >=srcBounds.x && e.clientX <= (srcBounds.x+srcBounds.width) && e.clientY >=srcBounds.y && e.clientY <= (srcBounds.y+srcBounds.height))
+					scaleLeftTopPoint = new Point(e.clientX - srcBounds.x, e.clientY - srcBounds.y);
+	}
+}
+
+function getCharPosition(){
+	var position = "";
+	for (var i=1; i<numLineOfFinalDst; i++) {
+		position += xAxisOfLine[i]+",";
+		//ctx.moveTo(xAxisOfLine[i] + finalDstBounds.x, finalDstBounds.y);
+		//ctx.lineTo(xAxisOfLine[i] + finalDstBounds.x, finalDstBounds.y + Math.abs(dstPoints[2].y-dstPoints[1].y));
+	}
+	position += xAxisOfLine[numLineOfFinalDst];
+	return position;
+}
+//selectedChars: A,C,E,W,7,5,2,.....
+//目前3個為一個車號字元的可能集合
+function setCharListBox(selectedChars){
+	var candidateCntEachChar = 7;
+	//selectedCharsArray: 7,4,2,...,E,A,
+	//selectedCharsArray.length: 7*candidateCntEachChar+1
+	//selectedCharsArray最後一個元素為空字串
+	var selectedCharsArray = selectedChars.split(",");
+	//listBoxCnt["1Char"]
+	for(var i=1;i<=7;i++)
+			deleteAllListBoxValue(i+"Char");
+	
+	//由於selectedCharsArray最後一個元素為空字串，所以只讀到i<selectedCharsArray.length-1
+	for(var i=0;i<selectedCharsArray.length-1;i++){
+			var AddOpt = new Option(selectedCharsArray[i], selectedCharsArray[i]);
+			var id = Math.floor(i/candidateCntEachChar+1)+"Char";
+			//alert(id);
+			document.getElementById(id).options[listBoxCnt[id]++] = AddOpt;
+	}
+	
+}
+
+function update(movePoint) {
+	var ctx = context;
+	var i, len, p, dx, dy;
+	//******add*****//
+	var ctx_store=context_store;
+	//**************//
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	//ctx.drawImage(img, 100, 100, 100, 100, srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+	if(wheelEvent=="add"){					
+			
+			if (rbPoint.x - ltPoint.x > 2*scaleValue*srcBounds.width){
+				ltPoint.x += scaleValue*srcBounds.width;
+				rbPoint.x -= scaleValue*srcBounds.width;				
+			}
+			
+			if (rbPoint.y - ltPoint.y > 2*scaleValue*srcBounds.height){	
+				ltPoint.y += scaleValue*srcBounds.height;
+				rbPoint.y -= scaleValue*srcBounds.height;
+			}			
+			
+			ctx.drawImage(img, ltPoint.x, ltPoint.y, (rbPoint.x-ltPoint.x), (rbPoint.y-ltPoint.y), srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);			
+			//ctx.drawImage(img, x, y, scaleX*(scaleRightBottomPoint.x-scaleLeftTopPoint.x), scaleY*(scaleRightBottomPoint.y-scaleLeftTopPoint.y), srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+			srcImageData = ctx.getImageData(srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+			
+					
+			isScale = true;
+			wheelEvent = "false";
+	}else if(wheelEvent=="reduce"){
+				
+				ltPoint.x -= scaleValue*srcBounds.width;
+				ltPoint.y -= scaleValue*srcBounds.height;
+				rbPoint.x += scaleValue*srcBounds.width;
+				rbPoint.y += scaleValue*srcBounds.height;			
+				if (ltPoint.x < 0)
+					ltPoint.x = 0;
+				if (ltPoint.y < 0)
+					ltPoint.y = 0;
+				if (rbPoint.x > srcBounds.width)
+					rbPoint.x = srcBounds.width;
+				if (rbPoint.y > srcBounds.height)
+					rbPoint.y = srcBounds.height;				
+				if (ltPoint.x==0 && ltPoint.y==0 && rbPoint.x==srcBounds.width && rbPoint.y==srcBounds.height)
+					isScale = false; 
+				 
+				ctx.drawImage(img, ltPoint.x, ltPoint.y, (rbPoint.x-ltPoint.x), (rbPoint.y-ltPoint.y), srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height); 
+				//ctx.drawImage(img, x, y, scaleX*(rbPoint.x-ltPoint.x), scaleY*(rbPoint.y-ltPoint.y), srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+				srcImageData = ctx.getImageData(srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+				
+				wheelEvent = "false";
+	}else if((scaleLeftTopPoint!=null && scaleRightBottomPoint!=null)){
+			var smallX, smallY, bigX, bigY;
+			
+			if (scaleLeftTopPoint.x > scaleRightBottomPoint.x){
+				smallX = scaleRightBottomPoint.x;
+				bigX = scaleLeftTopPoint.x;
+			}else{
+				smallX = scaleLeftTopPoint.x;			
+				bigX = scaleRightBottomPoint.x;
+			}
+			if (scaleLeftTopPoint.y > scaleRightBottomPoint.y){
+				smallY = scaleRightBottomPoint.y;
+				bigY = scaleLeftTopPoint.y;
+			}else{
+				smallY = scaleLeftTopPoint.y;
+				bigY = scaleRightBottomPoint.y;			
+			}	
+				
+			var lengthX = rbPoint.x - ltPoint.x;
+			var lengthY = rbPoint.y - ltPoint.y;
+			
+			ltPoint.x += lengthX*smallX/srcBounds.width;
+			ltPoint.y += lengthY*smallY/srcBounds.height;
+			rbPoint.x = ltPoint.x + lengthX*(bigX-smallX)/srcBounds.width;
+			rbPoint.y = ltPoint.y + lengthY*(bigY-smallY)/srcBounds.height;
+			
+			ctx.drawImage(img, ltPoint.x, ltPoint.y, (rbPoint.x-ltPoint.x), (rbPoint.y-ltPoint.y), srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+			//ctx.drawImage(img, scaleX*scaleLeftTopPoint.x+scaleBasePoint.x, scaleY*scaleLeftTopPoint.y+scaleBasePoint.y, scaleX*Math.abs(scaleRightBottomPoint.x-scaleLeftTopPoint.x), scaleY*Math.abs(scaleRightBottomPoint.y-scaleLeftTopPoint.y), srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);			
+			srcImageData = ctx.getImageData(srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+			
+			isScale = true;
+	
+	}else{
+	// 入力?像
+			ctx.putImageData(srcImageData, srcBounds.x, srcBounds.y);
+			
+	}	
+
+	// 出力?像
+	var dst = homographyTransform(srcImageData, DST_WIDTH, DST_HEIGHT, points[0], points[1], points[2], points[3]);
+	
+	
+	
+	
+	//alert((dstPoints[0].x+dstBounds.x)+","+ (dstPoints[0].y+dstBounds.y)+","+ (dstPoints[1].x-dstPoints[0].x)+","+ (dstPoints[2].y-dstPoints[0].y));
+	
+	
+	ctx.putImageData(dst, dstBounds.x, dstBounds.y);
+	var finalDst = context.getImageData(dstPoints[0].x+dstBounds.x, dstPoints[0].y+dstBounds.y, (dstPoints[1].x-dstPoints[0].x), (dstPoints[2].y-dstPoints[0].y));
+  							 ctx.putImageData(finalDst, finalDstBounds.x, finalDstBounds.y);
+	//*********new canvas *********//
+ 	ctx_store.putImageData(finalDst, 0, 0);
+	// ????
+	ctx.beginPath();
+	for (i = 0, len = points.length; i < len; i++) {
+		p = points[i];
+		ctx.moveTo(p.x + srcBounds.x, p.y + srcBounds.y);
+		ctx.arc(p.x + srcBounds.x, p.y + srcBounds.y, 2.5, 0, Math.PI * 2, false);
+	}
+	
+	for (i = 0, len = dstPoints.length; i < len; i++) {
+		p = dstPoints[i];
+		ctx.moveTo(p.x + dstBounds.x, p.y + dstBounds.y);
+		ctx.arc(p.x + dstBounds.x, p.y + dstBounds.y, 2.5, 0, Math.PI * 2, false);
+	}
+	
+	
+	
+	ctx.fill();
+
+	// ?????位置
+	for (i = 0, len = points.length; i < len; i++) {
+		p = points[i];
+		ctx.fillText(
+			i === 0 ? 'top, left' : i === 1 ? 'top, right' : i === 2 ? 'bottom, right' : 'bottom, left',
+			p.x + srcBounds.x + 5, p.y + srcBounds.y + 5
+		);
+	}
+	ctx.fill();
+
+	// ???
+	ctx.beginPath();
+	for (i = 0, len = points.length; i < len; i++) {
+		p = points[i];
+		ctx[i === 0 ? 'moveTo' : 'lineTo'](p.x + srcBounds.x, p.y + srcBounds.y);
+	}
+	
+	
+	
+	ctx.closePath();
+	
+	
+	
+	ctx.fillStyle = "rgba(255,255,0,0.1)";
+	ctx.fill();
+	ctx.fillStyle = 'yellow';
+	ctx.stroke();
+	
+	
+	ctx.beginPath();
+	for (i = 0, len = dstPoints.length; i < len; i++) {
+		p = dstPoints[i];
+		ctx[i === 0 ? 'moveTo' : 'lineTo'](p.x + dstBounds.x, p.y + dstBounds.y);
+		
+	}
+	ctx.closePath();
+	
+	//hcf - update()
+	
+	if ( document.getElementById("lengthListBox").selectedIndex != 0){
+		for (i=1; i<=numLineOfFinalDst; i++) {
+			ctx.moveTo(xAxisOfLine[i] + finalDstBounds.x, finalDstBounds.y);
+			ctx.lineTo(xAxisOfLine[i] + finalDstBounds.x, finalDstBounds.y + Math.abs(dstPoints[2].y-dstPoints[1].y));
+		}
+	}
+	//--
+	
+	//ctx.fill();
+	//ctx.closePath();
+	ctx.fillStyle = "rgba(255,255,0,0.1)";
+	ctx.fill();
+	ctx.fillStyle = 'yellow';
+	ctx.stroke();
+	
+	
+	if(scaleLeftTopPoint!=null && movePoint!=null){
+			ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
+			/****************Mandy add*******************************/
+			ctx.fillRect(scaleLeftTopPoint.x + 50, scaleLeftTopPoint.y + 200, movePoint.x-scaleLeftTopPoint.x, movePoint.y-scaleLeftTopPoint.y);
+			/****************Mandy end*******************************/
+			ctx.fillStyle = 'yellow';
+	}
+}
+
+
+//press to store
+function copy(filePath)
+{
+	//alert("uploadLPImage");
+	canvas_store.width = dstPoints[1].x-dstPoints[0].x;
+	canvas_store.height =dstPoints[2].y-dstPoints[0].y;
+	scaleLeftTopPoint = null,
+	scaleRightBottomPoint = null,
+	wheelEvent = "false"
+	update();
+	//alert(canvas_store.width+","+canvas_store.height);
+	var dataURL = canvas_store.toDataURL();
+	    $.ajax({
+	  	type: "POST",
+	  	url: "saveCanvas.php",
+	  	data: { 
+	     		imgBase64: dataURL,
+	     		filePath: filePath
+	  	      }
+	    }).done(function(o) {
+					//alert(o);  	
+		
+	   });	
+}
+
+
+/**
+ * homographyTransform
+ *
+ * @param {ImageData} src
+ * @param {Number} dstWidth
+ * @param {Number} dstHeight
+ * @param {Point} p0
+ * @param {Point} p1
+ * @param {Point} p2
+ * @param {Point} p3
+ * @return ImageData
+ */
+function homographyTransform(src, dstWidth, dstHeight, p0, p1, p2, p3) {
+	var sx, sy, dx1, dy1, dx2, dy2,
+		z, g, h,
+		m0, m1, m2, m3, m4, m5, m6, m7,
+		srcWidth, srcHeight, srcPixels,
+		dst, dstPixels,
+		x, y, yi, u, v, t, dx, dy, i, j;
+
+	sx = p0.x - p1.x + p2.x - p3.x;
+	sy = p0.y - p1.y + p2.y - p3.y;
+	dx1 = p1.x - p2.x;
+	dy1 = p1.y - p2.y;
+	dx2 = p3.x - p2.x;
+	dy2 = p3.y - p2.y;
+
+	z = dx1 * dy2 - dy1 * dx2;
+	g = (sx * dy2 - sy * dx2) / z;
+	h = (sy * dx1 - sx * dy1) / z;
+
+	m0 = p1.x - p0.x + g * p1.x;
+	m1 = p3.x - p0.x + h * p3.x;
+	m2 = p0.x;
+	m3 = p1.y - p0.y + g * p1.y;
+	m4 = p3.y - p0.y + h * p3.y;
+	m5 = p0.y;
+	m6 = g;
+	m7 = h;
+
+	srcWidth  = src.width;
+	srcHeight = src.height;
+	srcPixels = src.data;
+
+	dst = context.createImageData(dstWidth, dstHeight);
+	dstPixels = dst.data;
+
+	for (y = 0; y < dstHeight; y++) {
+		yi = y * dstWidth;
+		for (x = 0; x < dstWidth; x++) {
+			i = (yi + x) << 2;
+			u = x / dstWidth;
+			v = y / dstHeight;
+			t = m6 * u + m7 * v + 1;
+			dx = (m0 * u + m1 * v + m2) / t;
+			dy = (m3 * u + m4 * v + m5) / t;
+			if (dx >= 0 && dx < srcWidth && dy >= 0 && dy < srcHeight) {
+				j = ((dy | 0) * srcWidth + (dx | 0)) << 2;
+				dstPixels[i]     = srcPixels[j];
+				dstPixels[i + 1] = srcPixels[j + 1];
+				dstPixels[i + 2] = srcPixels[j + 2];
+			}
+			dstPixels[i + 3] = 255;
+		}
+	}
+
+	return dst;
+}
+
+function getParameter(name){
+	if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+	    return decodeURIComponent(name[1]);
+} 
+ 
+function initial(){
+		draggingPoint = null;
+		draggingDstPoint = null;
+		selectedDraggingDstPoint=null;
+		scaleLeftTopPoint = null;
+		scaleRightBottomPoint = null;
+		//scaleX=1;
+		//scaleY=1;
+		wheelEvent = "false";
+		wheelCnt=0;
+		ltPoint = new Point(0,0);
+		rbPoint = new Point(srcBounds.width, srcBounds.height);
+		isScale = false;
+		scaleValue = 0.02;
+		//scaleBasePoint = new Point(0,0);
+		
+		
+		var bounds = new Rect(0, 0, SRC_WIDTH, SRC_HEIGHT).inflate(-60, -60);
+		var dstBountsPoint = new Rect(0, 0, DST_WIDTH, DST_HEIGHT).inflate(-60, -60);
+		points = [
+			bounds.topLeft(),
+			bounds.topRight(),
+			bounds.bottomRight(),
+			bounds.bottomLeft()
+		];
+
+  	dstPoints = [
+  		dstBountsPoint.topLeft(),
+			dstBountsPoint.topRight(),
+			dstBountsPoint.bottomRight(),
+			dstBountsPoint.bottomLeft()
+  	];
+		context.drawImage(img, srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+		srcImageData = context.getImageData(srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+		
+		draggingFinalDstPoint = -1;
+		var xLen = Math.abs(dstPoints[1].x-dstPoints[0].x);
+		var yLen = Math.abs(dstPoints[2].y-dstPoints[1].y); 
+		var temp = xLen/(numLineOfFinalDst+1);	
+		for (i=1; i<=numLineOfFinalDst+1; i++) {
+			xAxisOfLine[i] = temp*i;
+		}
+		
+		update();
+}
+
+function initialCharSelect(){
+		draggingPoint = null;
+		draggingDstPoint = null;
+		selectedDraggingDstPoint=null;
+		scaleLeftTopPoint = null;
+		scaleRightBottomPoint = null;
+		//scaleX=1;
+		//scaleY=1;
+		
+		
+		var xLen = Math.abs(dstPoints[1].x-dstPoints[0].x);
+		var yLen = Math.abs(dstPoints[2].y-dstPoints[1].y); 
+		var temp = xLen/(numLineOfFinalDst+1);	
+		for (i=1; i<=numLineOfFinalDst+1; i++) {
+			xAxisOfLine[i] = temp*i;
+		}
+		update();
+}
+
+/**
+ * Point
+ */
+function Point(x, y) {
+	this.x = x || 0;
+	this.y = y || 0;
+}
+
+/**
+ * Rect
+ */
+function Rect(x, y, width, height) {
+	this.x = x || 0;
+	this.y = y || 0;
+	this.width = width || 0;
+	this.height = height || 0;
+}
+
+Rect.prototype.right = function() { return this.x + this.width; };
+Rect.prototype.bottom = function() { return this.y + this.height; };
+
+Rect.prototype.topLeft = function() { return new Point(this.x, this.y); };
+Rect.prototype.topRight = function() { return new Point(this.x + this.width, this.y); };
+Rect.prototype.bottomLeft = function() { return new Point(this.x, this.y + this.height); };
+Rect.prototype.bottomRight = function() { return new Point(this.x + this.width, this.y + this.height); };
+
+Rect.prototype.inflate = function(dx, dy) {
+	var rect = this.clone();
+
+	rect.x -= dx * 0.5;
+	rect.y -= dy * 0.5;
+	rect.width += dx;
+	rect.height += dy;
+
+	return rect;
+};
+
+Rect.prototype.clone = function(dx, dy) {
+	return new Rect(this.x, this.y, this.width, this.height);
+};
+
+/***************************add/delete License Plate Chars**********************************/
+var listBoxCnt = new Object();
+listBoxCnt["1Char"] = 0;
+listBoxCnt["2Char"] = 0;
+listBoxCnt["3Char"] = 0;
+listBoxCnt["4Char"] = 0;
+listBoxCnt["5Char"] = 0;
+listBoxCnt["6Char"] = 0;
+listBoxCnt["7Char"] = 0;
+
+
+
+function addListBoxValue(listBoxId) {
+		//var v = document.getElementById("txtValue").value;
+		if(listBoxCnt[listBoxId]>=3){
+				alert("最多選擇3種可能的字元");
+				return false;
+		}
+		
+		var sourceListBox = document.getElementById("sourceListBox");
+		var index = sourceListBox.selectedIndex;
+		var v = sourceListBox.options[index].value;
+		
+		for (var i = 0 ; i < listBoxCnt[listBoxId]; i++) {
+				if(document.getElementById(listBoxId).options[i].value == v){
+							alert("選擇重覆的字元，請重新選擇");
+							return false;
+				}
+		}
+		
+		var AddOpt = new Option(v, v);
+		document.getElementById(listBoxId).options[listBoxCnt[listBoxId]++] = AddOpt;
+		return true;
+}
+function deleteListBoxValue(listBoxId) {
+		var s = 1;
+		var index;
+		if (document.getElementById(listBoxId).selectedIndex == -1) {
+					alert("請選擇欲刪除的字元");
+					return true;
+		}
+		while (s > 0) {
+				index = document.getElementById(listBoxId).selectedIndex;
+				if (index >= 0) {
+						document.getElementById(listBoxId).options[index] = null;
+						--listBoxCnt[listBoxId];
+				}else{
+						s = 0;
+				}
+		}
+		return true;
+}
+
+function deleteAllListBoxValue(listBoxId) {
+		while (listBoxCnt[listBoxId] >= 0) {
+						document.getElementById(listBoxId).options[listBoxCnt[listBoxId]] = null;
+						--listBoxCnt[listBoxId];
+		}
+		listBoxCnt[listBoxId] = 0;
+		return true;
+}
+function hideAllCharListBox(){
+		document.getElementById("sourceListBox").style.display = 'none';
+  	for(var i=1;i<=7;i++){
+    		document.getElementById(i+"CharAddButton").style.display = 'none';
+    		document.getElementById(i+"Char").style.display = 'none';
+    		document.getElementById(i+"CharDelButton").style.display = 'none';
+  	}		
+}
+function showCharListBox(max){
+		document.getElementById("sourceListBox").style.display = 'inline';
+  	for(var i=1;i<=max;i++){
+    		document.getElementById(i+"CharAddButton").style.display = 'inline';
+        document.getElementById(i+"Char").style.display = 'inline';
+        document.getElementById(i+"CharDelButton").style.display = 'inline';
+    }
+}	
+//--
+function lengthListBoxOnChange(index)
+{	  
+	hideAllCharListBox();
+  
+  switch (index) {
+     case "0":
+       break;
+			
+     case "1"://6碼=>2-4
+     		showCharListBox(6);
+      		numLineOfFinalDst = 5;
+      /****************Mandy add*******************************/			
+			document.getElementById("image").src = "./images1/ex1.png";
+      	break;
+     case "2"://6碼=>4-2
+     		showCharListBox(6);
+     		numLineOfFinalDst = 5;
+			document.getElementById("image").src = "./images1/ex2.png";
+      	break;
+     case "3"://6碼=>3-3
+        	showCharListBox(6); 
+     		numLineOfFinalDst = 5;
+			document.getElementById("image").src = "./images1/ex3.png";
+      	break;
+     case "4"://7碼=>3-4
+        	showCharListBox(7); 
+     		numLineOfFinalDst = 6;
+			document.getElementById("image").src = "./images1/ex4.png";
+      	break;
+     case "5"://5碼=>2-3
+        	showCharListBox(5); 
+     		numLineOfFinalDst = 4;
+			document.getElementById("image").src = "./images1/ex5.png";
+      	break;
+     case "6"://5碼=>3-2
+        	showCharListBox(5); 
+    		numLineOfFinalDst = 4;
+			document.getElementById("image").src = "./images1/ex6.png";
+      	break;
+      case "7"://4碼=>2-2
+      		showCharListBox(4); 
+    		numLineOfFinalDst = 3;
+			document.getElementById("image").src = "./images1/ex7.png";
+  	}
+  	initialCharSelect();
+} 
+function getListBoxIndex(id){
+	return document.getElementById(id).selectedIndex;
+}
+
+function getCheckBoxChecked(id){
+	if(document.getElementById(id).checked)
+			return "1";
+	else
+			return "0";
+}
+/****************Mandy add*******************************/
+var page = 1;
+var str = "";
+function next()
+{
+	if(page < 5 )
+  		page++;	
+	show();
+}
+function backpage()
+{
+	if(page > 0)
+		page--;
+	show();
+}
+function show()
+{
+  var str = "";  
+  
+  if(page < 2)
+  {
+	 document.getElementById("btn-black").innerHTML="重新設定";
+  }	
+  else
+  {
+	  document.getElementById("btn-black").innerHTML="上一步";
+  }
+switch(page)
+  {	 
+  	   case 0:
+	   initial();
+	   page = 1;
+	   break;
+  	   case 1:
+	   str = "從車牌影像中，選取辨識目標，<br>執行車牌校正功能。<br><br>目標擷取完整有利於車牌辨識的結果。<br><br>1.還原原始預設，請按重新選取<br>2.目標擷取後請按確認鍵";
+	   txt.innerHTML = str;
+	   document.getElementById("Progres").style.background= "url('images1/Progres1.png')";
+	   document.getElementById("title").style.background="url('images1/title1.png')";
+	   var div =  document.getElementById("content4");
+	   div.style.top='50px';
+	   div.style.height='280px';
+	   document.getElementById("explain").style.height='250px';
+	   document.getElementById("content2").style.display='none';
+	   document.getElementById("content2-1").style.display='none';	   
+	   break;		
+	   case 2:
+	   str = "1.請參考範例圖示延車牌字體邊沿框選<br>2.選擇車牌號碼類型。";
+	   txt.innerHTML = str;
+	   document.getElementById("content2").style.display='';
+	   document.getElementById("content2-1").style.display='';	   
+	   var div =  document.getElementById("content4");
+	   div.style.top='0px';
+	   div.style.height='150px';
+	   document.getElementById("explain").style.height='120px';
+	   document.getElementById("Progres").style.background= "url('images1/Progres2.png')";
+	   document.getElementById("title").style.background="url('images1/title2.png')";
+	   document.getElementById('content3').style.display='none';
+	   document.getElementById('content3-1').style.visibility='';
+	   break;
+	   case 3:
+	   str = "在<b>分割影像</b>中的辨識字體，<br>調整邊緣分割線。";
+	   txt.innerHTML = str;
+	   document.getElementById('content3').style.display='';
+	   document.getElementById('content3-1').style.visibility='hidden';
+	    document.getElementById("content5").style.display='none';
+	   document.getElementById("content6").style.display='none';
+	   break;
+	   case 4:
+	   str = "1.挑選適合的字元號碼<br>2.選擇車輛類型，確認後預測車牌組合";
+	   txt.innerHTML = str;
+	   document.getElementById("content5").style.display='';
+	   document.getElementById("content6").style.display='';
+	   document.getElementById("Progres").style.background= "url('images1/Progres3.png')";
+	   document.getElementById("title").style.background= "url('images1/title3.png')";
+	   document.getElementById("btn-next").style.visibility='';
+	   break;
+	   case 5:
+	   str = "點選系統分析後車號，<br>將呈現車號完整資訊。";
+	   txt.innerHTML = str;
+	   document.getElementById("content5").style.display='';
+	   document.getElementById("content6").style.display='';
+	   document.getElementById("Progres").style.background= "url('images1/Progres4.png')";
+	   document.getElementById("title").style.background= "url('images1/title4.png')";
+	   document.getElementById("btn-next").style.visibility='hidden';
+	   break;
+  }   
+}
+/****************Mandy end***************************/
+</script>
+<div id="container">
+ <canvas id='c'></canvas>
+ <canvas id='new' style="display: none"></canvas> 
+</div>
+<div id="top"></div>
+<div id="Progres">  
+</div>
+        <div id="header">
+        <table id="title" width="100%" border="0">
+  			<tbody>
+            <tr>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+		</div>
+        <div id="content1">
+        <table id="img01" width="360px">
+  			<tbody>
+            <tr>
+              <td height="29" style="font-size: medium">車牌影像</td>
+            </tr>
+            <tr>
+              <td height="290">&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+<div id="content2" style='display:none'>
+         <table id="img02" width="338px">
+  			<tr>
+              <td height="29" style="font-size: medium">校正影像</td>
+            </tr>
+            <tr>
+              <td height="130">&nbsp;</td>
+            </tr>
+        </table>
+        </div>
+<div id="content2-1" style='display:none'>
+         <table id="img03" width="338px" border="0">
+           <tbody>
+             <tr>
+               <td height="1px">&nbsp;</td>
+             </tr>
+             <tr>
+               <td style="font-size: 16px">&nbsp;<strong>車牌類型</strong></td>
+               <td width="100" style="font-size: 16px" align="center"><strong>參考圖示</strong></td>
+             </tr>
+             <tr>
+               <td>
+               <select size="1" id="lengthListBox" style="width:150" onchange="lengthListBoxOnChange(this.options[this.options.selectedIndex].value)">
+                 <option value="0">請選擇</option>
+                 <option value="1">6碼=>2-4</option>
+                 <option value="2">6碼=>4-2</option>
+                 <option value="3">6碼=>3-3</option>
+                 <option value="4">7碼=>3-4</option>
+                 <option value="5">5碼=>2-3</option>
+                 <option value="6">5碼=>3-2</option>
+                 <option value="7">4碼=>2-2</option>
+               </select>
+               </td>
+               <td><img id="image" src="" width="100" height="44" alt=""/></td>
+             </tr>
+             <tr>
+               <td style="font-size: 12px"><input type="checkbox" id="whiteWordCheckBox">
+               <label for="checkbox">是否為白色字體 </label></td>
+               <td>&nbsp;</td>
+             </tr>
+             <tr>
+               <td height="30" style="font-size: 12px; color: #E00305;" >(非白色字體為，EX:黑、紅、綠 均不勾選)</td>
+               
+             </tr>
+           </tbody>
+         </table>
+        
+</div>
+<div id="content3-1" ></div>
+        <div id="content3"  style='display:none'>
+         <table id="img04" width="360px">
+  			<tbody>
+            <tr>
+              <td height="29" style="font-size: medium">分割影像</td>
+            </tr>
+            <tr>
+              <td height="88">&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <div id="content4">        	
+        	 <div id="explain">
+        	   <h1><br>               
+        	   <hr>               
+      	     </h1>
+             <h2 id="txt">從車牌影像中，選取辨識目標，<br>執行車牌校正功能。<br><br>目標擷取完整有利於車牌辨識的結果。<br><br>1.還原原始預設，請按重新選取<br>2.目標擷取後請按確認鍵</h2>
+             
+</div>
+</div>
+  <div id="content5"  style='display:none'>
+         <table id="img05" width="590px ">
+  			<tbody>
+            <tr>
+              <td height="29" colspan="17" style="font-size: medium">挑選車號 </td>
+            </tr>
+            <tr>
+              <td height="130">
+                <select size="5" id="sourceListBox" style="width:150;display: none">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+                <option value="J">J</option>
+                <option value="K">K</option>
+                <option value="L">L</option>
+                <option value="M">M</option>
+                <option value="N">N</option>
+                <option value="O">O</option>
+                <option value="P">P</option>
+                <option value="Q">Q</option>
+                <option value="R">R</option>
+                <option value="S">S</option>
+                <option value="T">T</option>
+                <option value="U">U</option>
+                <option value="V">V</option>
+                <option value="W">W</option>
+                <option value="X">X</option>
+                <option value="Y">Y</option>
+                <option value="Z">Z</option>			
+        		</select>
+    		</td>
+            <td>
+            	<select id="1Char" multiple ><option value="empty"></select>
+            </td>
+            <td>    
+                <input class="button" type="button" id="1CharDelButton" value="-" onclick="deleteListBoxValue('1Char');" /><br>
+                <input class="button" type="button" id="1CharAddButton" value="+" onclick="addListBoxValue('1Char');" />
+            </td>
+            <td>
+                 <select id="2Char" multiple ><option value="empty"></select>     
+            </td>
+            <td>
+                 <input class="button" type="button" id="2CharDelButton" value="-"  onclick="deleteListBoxValue('2Char');" />
+                 <input class="button" type="button" id="2CharAddButton" value="+"  onclick="addListBoxValue('2Char');" />
+            </td>
+            <td>
+                <select id="3Char" multiple ><option value="empty"></select>   
+             </td>
+            <td>
+                <input class="button" type="button" id="3CharDelButton" value="-"  onclick="deleteListBoxValue('3Char');" />
+                <input class="button" type="button" id="3CharAddButton" value="+"  onclick="addListBoxValue('3Char');" />	
+            </td>
+            <td>
+                <select id="4Char" multiple ><option value="empty"></select>   
+             </td>
+            <td>
+                <input class="button" type="button" id="4CharDelButton" value="-"  onclick="deleteListBoxValue('4Char');" />
+                <input class="button" type="button" id="4CharAddButton" value="+"  onclick="addListBoxValue('4Char');" />
+            </td>
+            <td>
+            	<select id="5Char" multiple ><option value="empty"></select>	
+            </td>
+            <td>
+                <input class="button" type="button" id="5CharDelButton" value="-"  onclick="deleteListBoxValue('5Char');" />
+                <input class="button" type="button" id="5CharAddButton" value="+"  onclick="addListBoxValue('5Char');" />
+            </td>
+            <td>
+                <select id="6Char" multiple ><option value="empty"></select>	
+             </td>
+            <td>
+                <input class="button" type="button" id="6CharDelButton" value="-"  onclick="deleteListBoxValue('6Char');" />
+                <input class="button" type="button" id="6CharAddButton" value="+"  onclick="addListBoxValue('6Char');" />
+            </td>
+            <td>
+                <select id="7Char" multiple ><option value="empty"></select>	
+             </td>
+            <td>   
+                <input class="button" type="button" id="7CharDelButton" value="-"  onclick="deleteListBoxValue('7Char');" />
+                <input class="button" type="button" id="7CharAddButton" value="+"  onclick="addListBoxValue('7Char');" />
+            </td>
+        </tr>
+      </tbody>
+    </table>
+         <h1><strong>預測分析數量</strong>：共&nbsp;N&nbsp;筆結果</h1>
+  </div>
+  <div id="content6"  style='display: none;'>
+    <h1>車輛類型<br>
+    </h1>
+    <h2>車種&nbsp;&nbsp;&nbsp;&nbsp;
+    <select size="1" id="classListBox" style="width:150">
+			<option value="0">請選擇</option>
+			<option value="A">汽車</option>
+			<option value="H">重機</option>
+			<option value="L">輕機</option>
+			<option value="D">臨時汽車</option>
+			<option value="E">臨時重機</option>
+			<option value="F">臨時輕機</option>
+			<option value="T">拖車</option>
+	</select>
+    </h2>
+        <h3>顏色&nbsp;&nbsp;&nbsp;&nbsp;
+        <select size="5" multiple id="colorListBox" style="width:150">
+			<!--<option disabled>車色</option>-->
+			<option value="A">紅</option>
+			<option value="B">粉紅</option>
+			<option value="C">深紅</option>
+			<option value="D">橙黃</option>
+			<option value="E">黃</option>
+			<option value="F">淺黃</option>
+			<option value="G">深黃</option>
+			<option value="H">綠</option>
+			<option value="I">淺綠</option>
+			<option value="J">深綠</option>
+			<option value="K">藍</option>
+			<option value="L">淺藍</option>
+			<option value="M">深藍</option>
+			<option value="N">紫</option>
+			<option value="O">淺紫</option>
+			<option value="P">深紫</option>
+			<option value="Q">白</option>
+			<option value="R">灰</option>
+			<option value="S">淺灰</option>
+			<option value="T">深灰</option>
+			<option value="U">棕</option>
+			<option value="V">淺棕</option>
+			<option value="W">深棕</option>
+			<option value="X">黑</option>
+			<option value="Y">銀</option>
+			<option value="Z">彩繪</option>
+			<option value="9">金</option>
+	</select>
+        </h3>
+  </div> 
+    <div id="content7"></div>		
+<div id="footer1"> <button id="btn-black" type="button" onClick='backpage()'><strong>重新設定</strong></button></div>
+ <div id="footer2"><button id="btn-next" type="button" onClick='next()'><strong>下一步</strong></button>
+         </div>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <p><font size="6"><u>Instructions:</u></font>
+        <ul>
+        </ul>
+    </p>
+    <table>
+            <td valign="top">
+                <div id="side-container">
+                    <table class="table" rules="rows" cellpadding="10">
+                        <font size="5"><b>Current Area:</b></font>
+                        <tr>
+                            <td>Area</td>
+                            <td>
+                                <div id="info" class="INFO"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Coord.</td>
+                            <td>
+                                <div id="info1" class="INFO"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Total Area</td>
+                            <td>
+                                <div id="info2" class="INFO"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Total People</td>
+                            <td>
+                                <div id="info3" class="INFO"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td>
+                <div id="map_canvas">
+                    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                    <div id="map" class="MAP"></div>
+                </div>
+            </td>
+
+        </tr>
+    </table>
+    <div>
+        <input onclick="newItem();" type="button" value="New Polygon" class="New_Polygon_button">
+    </div>
+    <div>
+        <input onclick="deletePoints();" type="button" value="Delete all" class="Delete_all_button">
+    </div>
+    <div>
+        <input onclick="deleteLast();" type="button" value="Delete Last Point" class="Delete_Last_Point_button">
+    </div>
+    <div>
+        <input onclick="showMarkers();" type="button" value="Toggle Markers" class="Toggle_Markers">
+    </div>
+    <div>
+        <input onclick="store();" type="button" value="Store">
+    </div>
+    <div>
+        <input onclick="readtxt();" type="button" value="Return">
+    </div>
+	<p>
+    <table id ="PolyInfo" class="highlight" >
+    <tbody >
+	<tr>
+		<th>編號</th><th>面積 (平方公尺)</th><th>密度 (人數/平方公尺)</th><th>人數</th>
+	</tr>
+	</tbody>
+	<div>
+        <input onclick="refreshTable();" type="button" value="delet all rows">
+    </div>
+	<p>
+    </table>
+    <style>
+        .MAP {
+            width: 960px;
+            height: 480px;
+        }
+        .New_Polygon_button {
+            text-align: center;
+            width: 160px;
+            height: 40px;
+            border: 3px orange outset;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: B9D3EE;
+            position: absolute;
+        }
+        .Delete_all_button {
+            text-align: center;
+            width: 160px;
+            height: 40px;
+            border: 3px orange outset;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: B9D3EE;
+            position: absolute;
+        }
+        .Delete_Last_Point_button {
+            text-align: center;
+            width: 160px;
+            height: 40px;
+            border: 3px orange outset;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: B9D3EE;
+            position: absolute;
+        }
+        .Toggle_Markers {
+            text-align: center;
+            width: 160px;
+            height: 40px;
+            border: 3px orange outset;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: B9D3EE;
+            position: absolute;
+        }
+        .INFO {
+            text-align: center;
+            color: 8B0A50;
+        }
+        .table {
+            background-color: FEFAE5;
+            font-size: 20px;
+            border-style: solid;
+            border-color: 551A8B;
+        }
+		.table tr:hover {
+			background-color: #FFE768;
+		}		
+        #pac-input {
+            background-color: #fff;
+            padding: 0 11px 0 13px;
+            width: 400px;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            text-overflow: ellipsis;
+        }
+        #pac-input:focus {
+            border-color: #4d90fe;
+            margin-left: -1px;
+            padding-left: 14px;
+            /* Regular padding-left + 1. */
+            
+            width: 401px;
+        }
+        .controls {
+            margin-top: 16px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        #map_canvas {
+            border: 5px solid rgb(255, 183, 111);
+            width: 680px;
+            height: 480px;
+        }
+        #side-container {
+            border: 5px solid rgb(38, 132, 255);
+            text-align: center;
+            width: 300px;
+        }
+		.highlight{
+			border-collapse:collapse; 
+		}
+		.highlight th{ 
+			background: #F2F2F2;
+			padding:7px; border: 1px solid;
+		}	
+		.highlight td{ 
+			padding:7px; border: 1px solid;
+		}
+		/* Define the default color for all the table rows */
+		.highlight tr{
+			background: #FFFFCC;
+		}
+		/* Define the hover highlight color for the table row */
+		.highlight tr:hover {
+			  background-color: #FFFF99;
+		}
+	
+    </style>
+
+</head>
+
+<body onload="initialize()">
+    <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    <script type="text/javascript" src="maplabel.js"></script>
+    <script type="text/javascript">
+        var poly = [];
+        var path = [];
+        var map;
+        var mapLabel = [];
+        var markers = [];
+        var density = [];
+        var cnt = 0;
+        var view = 1;
+        var endPoint = [];
+        var PolyID = [];
+        var PolygonArea = [];
+        var PeopleNum = [];
+
+        function initialize() {
+            //Set Map
+            var JingFuGate = new google.maps.LatLng(25.039027, 121.517368);
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 18,
+                center: JingFuGate,
+                mapTypeId: google.maps.MapTypeId.SATELLITE
+            });
+			
+            // Create the search box and link it to the UI element.
+            var input = /** @type {HTMLInputElement} */ (
+                document.getElementById('pac-input'));
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            // [START region_getplaces]
+            // Listen for the event fired when the user selects an item from the
+            // pick list. Retrieve the matching places for that item.
+            var searchBox = new google.maps.places.SearchBox(
+                /** @type {HTMLInputElement} */
+                (input));
+            google.maps.event.addListener(searchBox, 'places_changed', function() {
+                var places = searchBox.getPlaces();
+                if (places.length == 0) {
+                    return;
+                }
+                // For each place, get the icon, place name, and location.
+                var bounds = new google.maps.LatLngBounds();
+                for (var i = 0, place; place = places[i]; i++) {
+
+                    bounds.extend(place.geometry.location);
+                }
+                map.fitBounds(bounds);
+                map.setZoom(18);
+            });
+            // [END region_getplaces]
+            // Bias the SearchBox results towards places that are within the bounds of the
+            // current map's viewport.
+            google.maps.event.addListener(map, 'bounds_changed', function() {
+                var bounds = map.getBounds();
+                searchBox.setBounds(bounds);
+            });
+			newPoly(0);
+            // Add a listener for the Map.
+            google.maps.event.addListener(map, 'click', addPoint);
+            infoWindow = new google.maps.InfoWindow();
+        }
+
+        function newItem() {
+			infoWindow.close(map);
+            if (PolygonArea[cnt] >0) {
+				cnt = cnt+1;
+			if (PolygonArea[cnt]==null || PolygonArea[cnt]<=0)
+				newPoly(cnt);
+			}
+        }
+		
+		
+		function newPoly(num){
+           path[num] = new google.maps.MVCArray;
+            // Add Polygon.	
+            poly[num] = new google.maps.Polygon({
+                strokeWeight: 1,
+                fillColor: '#00ffff',
+                indexID: num,
+                draggable: true
+            });
+            //poly[num].setMap(map);
+            poly[num].setPaths(new google.maps.MVCArray([path[num]]));
+			poly[num].setMap(null);
+            poly[num].setMap(map);
+            mapLabel[num] = new MapLabel({
+                //position: JingFuGate,
+                map: map,
+                fontSize: 12,
+                align: 'center'
+            });
+			initialTable();
+            google.maps.event.addListener(poly[num], 'click', getDensityValue);
+            google.maps.event.addListener(poly[num], 'rightclick', deletePoly);
+            google.maps.event.addListener(poly[num], 'dragend', movePolygon);		
+			google.maps.event.addListener(poly[num], 'mouseover',mouseoverPoly);
+			google.maps.event.addListener(poly[num], 'mouseout',mouseoutPoly);		
+		}
+		function mouseoverPoly(event){
+				var table = document.getElementById("PolyInfo");			
+			   for (var i = 1; i<table.rows.length; i++) {
+			   //iterate through rows
+			   var value = table.rows[i].cells[0].innerHTML;
+			   if (value ==this.indexID){		   
+					table.rows[i].style.background = "#FFFF99"; 
+					//this.setOptions({fillColor: "#FFFF99"});
+			   }
+			}	
+			//document.getElementById("PolyInfo").rows[1].style.background = "#FFFF99"; 
+		}
+		function mouseoutPoly(num){
+				var table = document.getElementById("PolyInfo");			
+			   for (var i = 1; i<table.rows.length; i++) {
+			   //iterate through rows
+			   var value = table.rows[i].cells[0].innerHTML;
+			   //if (value ==this.indexID){		   
+					table.rows[i].style = "#FFFFCC"; 
+				//if (density[this.indexID] != null) {
+					//this.setOptions({fillColor: "red"});
+				//}
+				//else {	
+					//this.setOptions({fillColor: "#00ffff"});
+					//poly[temp].fillColor = '#00ffff';
+				//}
+			   //}
+			}	
+			//document.getElementById("PolyInfo").rows[1].style.background = "#FFFFCC"; 
+		}
+		
+
+		function initialTable(){
+		    var table = document.getElementById("PolyInfo");
+			var length= table.rows.length;
+			var row   = table.insertRow(length);
+			var cell1 = row.insertCell(0);
+			cell1.innerHTML=cnt;
+			var cell2 = row.insertCell(1);
+			var cell3 = row.insertCell(2);
+			var cell4 = row.insertCell(3);
+			row.onmouseover = function(){
+				var temp = row.cells[0].innerHTML;
+				poly[temp].setMap(null);
+				poly[temp].setPaths(new google.maps.MVCArray([path[temp]]));
+				poly[temp].fillColor = 'yellow';
+				poly[temp].setMap(map);
+			} 
+			row.onmouseout  = function(){
+				//cell1.innerHTML = "88";
+				var temp = row.cells[0].innerHTML;
+				poly[temp].setMap(null);
+				//poly[cnt].setPaths(new google.maps.MVCArray([path[cnt]]));
+				if (density[temp] != null) {
+					poly[temp].fillColor = 'red';
+				}
+				else {	
+					poly[temp].fillColor = '#00ffff';
+				}
+				poly[temp].setMap(map);
+			}
+		
+		}
+		
+        //Delete Poly
+        function deletePoly(event) {
+			PolyID = this.indexID;
+            var html = "<table>" +
+                "<tr><td></td><td><input type='button' value='Delete' onclick='deletePolygon()'/></td></tr>";
+            infoWindow.setContent(html);
+            infoWindow.setPosition(event.latLng);
+            infoWindow.open(map);
+        }
+        function deletePolygon() {
+			while (1){
+				var index = endPoint.indexOf(PolyID);
+				if (index > -1){
+					markers[index].setMap(null);
+					endPoint.splice(index, 1);
+					markers.splice(index, 1);
+					path[PolyID].removeAt(path[PolyID].length - 1);
+				}
+				else 
+					break;
+			}
+			density[PolyID]=null;
+			returnArea(density[PolyID], PolyID);
+			infoWindow.close(map);
+			var table = document.getElementById("PolyInfo");
+			for (var i = 1; i<table.rows.length; i++) {
+			   //iterate through rows
+			   var value = table.rows[i].cells[0].innerHTML;
+			   if (value ==PolyID){		   
+			   table.deleteRow(i);
+			   }
+			}	
+			if (table.rows.length==1){
+				initialTable();
+			}
+			else{
+				cnt = cnt+1;
+				newPoly(cnt);
+			}
+        }		
+		
+
+
+        //Drag Polygon
+        function movePolygon(event) {
+            var len = poly[this.indexID].getPath().getLength();
+            var htmlStr = "";
+            for (var i = 0; i < len; i++) {
+                htmlStr += poly[this.indexID].getPath().getAt(i).toUrlValue(5) + "<br>";
+                markers[i + endPoint.indexOf(this.indexID)].setPosition(poly[this.indexID].getPath().getAt(i));
+            }
+            //document.getElementById('info1').innerHTML = htmlStr;
+            returnArea(density[this.indexID], this.indexID);
+        };
+
+
+
+        //Density Input 
+        function getDensityValue(event) {
+            PolyID = this.indexID;
+            var html = "<table>" +
+                "<tr><td>Density:</td> <td><input type='text' id='name'/> </td> </tr>" +
+                "<tr><td></td><td><input type='button' value='Save' onclick='saveData()'/></td><td><div id='warning' ></div></td></tr>";
+            infoWindow.setContent(html);
+            infoWindow.setPosition(event.latLng);
+            infoWindow.open(map);
+        }
+
+        function saveData() {
+			var input = document.getElementById("name").value;
+			if (!isNaN(input)&& input>0){
+            density[PolyID] = input
+            returnArea(density[PolyID], PolyID);
+            infoWindow.close(map);
+            poly[PolyID].fillColor = 'red';
+            poly[PolyID].setMap(null);
+            poly[PolyID].setMap(map);
+			}
+			document.getElementById('warning').innerHTML = "請輸入數字，PLZ ";
+        }
+
+        function returnArea(density, ind) {
+            var Area = google.maps.geometry.spherical.computeArea(path[ind]);
+            //document.getElementById('info').innerHTML = Area.toFixed(2) + " sq meters";
+            //document.getElementById('info').innerHTML += "<br>" + (Area / (1000 * 1000)).toFixed(2) + " sq km";
+            var bounds = new google.maps.LatLngBounds();
+            var len = path[ind].length;
+            if (len >= 3) {
+                //poly[cnt].fillColor('005FF66');
+                var points = path[ind].getArray();
+                for (var n = 0; n < path[ind].length; n++) {
+                    bounds.extend(points[n]);
+                }
+                if (density != null) {
+                    var people = Math.round(density * Area);
+                    //var str = 'People Num: ' + people + '\n' + 'Density: ' + density + '/m\u00b2' + 'Area :' + Area.toFixed(2);
+                    var str ='NO.'+ind;
+					mapLabel[ind].set('text', str);
+					var Table = document.getElementById('PolyInfo');
+					for (i=1;i<Table.rows.length-1;i++){
+						if (ind==Table.rows[i].cells[0].innerHTML){
+							break;
+						}		
+					}
+					//Table.rows[TableLen].cells[0].innerHTML = ind;
+					Table.rows[i].cells[1].innerHTML = Area.toFixed(2);
+					Table.rows[i].cells[2].innerHTML = density;
+					Table.rows[i].cells[3].innerHTML = people;
+                } 
+				else {
+					var people = Math.round(density * Area);
+                    //mapLabel[ind].set('text', Area.toFixed(2) + ' sq meters '+ind);
+					mapLabel[ind].set('text','NO.'+ind);
+					var Table = document.getElementById('PolyInfo');
+					for (i=1;i<Table.rows.length-1;i++){
+						if (ind==Table.rows[i].cells[0].innerHTML){
+							break;
+						}		
+					}
+					if(cnt==0){					
+					Table.rows[1].cells[0].innerHTML = 0;
+					}
+					Table.rows[i].cells[1].innerHTML = Area.toFixed(2);
+					Table.rows[i].cells[2].innerHTML = density;
+					Table.rows[i].cells[3].innerHTML = people;
+                }
+                mapLabel[ind].set('position', bounds.getCenter());
+                mapLabel[ind].setMap(map);
+            }
+
+            if (len <= 2) {
+                mapLabel[ind].setMap(null);
+            }
+            PolygonArea[ind] = Area;
+            PeopleNum[ind] = people;
+            var TotalArea = 0;
+            var TotalNum = 0;
+            for (var i = 0; i < PolygonArea.length; i++) {
+                if (PolygonArea[i] != null)
+                    TotalArea += PolygonArea[i];
+            }
+            for (var i = 0; i < PeopleNum.length; i++) {
+                if (PeopleNum[i] != null)
+                    TotalNum += PeopleNum[i];
+            }
+            document.getElementById('info2').innerHTML = TotalArea.toFixed(2) + " sq meters";
+            document.getElementById('info3').innerHTML = TotalNum + "People";
+        }
+
+        //Mouse click event 
+        function addPoint(event) {
+            path[cnt].insertAt(path[cnt].length, event.latLng);
+            var marker = new google.maps.Marker({
+                position: event.latLng,
+                map: map,
+                draggable: true
+            });
+				poly[cnt].setMap(null);
+				//poly[cnt].setPaths(new google.maps.MVCArray([path[cnt]]));
+				if (density[cnt] != null) {
+					poly[cnt].fillColor = 'red';
+				}
+				else {	
+					poly[cnt].fillColor = '#00ffff';
+				}
+				poly[cnt].setMap(map);            
+            marker.setIcon('images/police.png');
+            markers.push(marker);
+            endPoint.push(cnt);
+            returnArea(density[endPoint[markers.length - 1]], endPoint[markers.length - 1]);
+            //google.maps.event.addListener(marker, 'click', function() {
+            //	marker.setMap(null);
+            //	for (var i = 0, I = markers.length; i < I && markers[i] != marker; ++i);
+            //	markers.splice(i, 1);
+            //	path[endPoint[i]].removeAt(i-endPoint.indexOf(endPoint[i]));
+            //  });
+
+            google.maps.event.addListener(marker, 'dragend', function() {
+                for (var i = 0, I = markers.length; i < I && markers[i] != marker; ++i);
+                path[endPoint[i]].setAt(i - endPoint.indexOf(endPoint[i]), marker.getPosition());
+                returnArea(density[endPoint[i]], endPoint[i]);
+            });
+        }
+
+        function showMarkers() {
+			infoWindow.close(map);
+            view = view * (-1);
+            for (var i = 0; i < markers.length; i++) {
+                if (view > 0)
+                    markers[i].setMap(map);
+                else
+                    markers[i].setMap(null);
+            }
+        }
+
+
+        // Deletes all markers in the array by removing references to them.
+        function deletePoints() {
+				infoWindow.close(map);
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(null);
+                }
+                endPoint = [];
+                markers = [];
+                PolygonArea = [];
+                PeopleNum = [];
+                density = [];
+                cnt = 0;
+                for (var i = 0; i < path.length; i++) {
+                    path[i].clear();
+                    mapLabel[i].setMap(null);
+                }
+                //document.getElementById('info').innerHTML = "0 sq meters";
+                //document.getElementById('info').innerHTML += "<br>" + "0 sq km";
+                //document.getElementById('info1').innerHTML = " ";
+                document.getElementById('info2').innerHTML = " ";
+                document.getElementById('info3').innerHTML = " ";
+                TotalArea = 0;
+                TotalNum = 0;
+				refreshTable();
+				initialTable();
+            }
+            // Delete Last Point
+        function deleteLast() {
+			infoWindow.close(map);
+            var ind = endPoint[markers.length - 1];
+			var org =ind;
+			if (path[ind]!= null)
+			{
+					
+				if (path[ind].length == 1 && density[ind] != null) {
+					density.pop();
+				}
+				markers[markers.length - 1].setMap(null);
+				path[ind].removeAt(path[ind].length - 1);
+				markers.pop();
+				endPoint.pop();
+				ind = endPoint[markers.length - 1];
+				returnArea(density[ind], ind);
+				if (cnt != 0) {
+					cnt = ind;
+				}	
+			}
+			if (org-ind !=0){
+			    var table = document.getElementById("PolyInfo");
+				table.deleteRow(table.rows.length -1);
+				
+			}
+			returnArea(density[ind], ind);	
+
+        }
+
+        function store() {
+            var len;
+            var htmlStr = [];
+            for (var j = 0; j <= cnt; j++) {
+                len = poly[j].getPath().getLength();
+                var tmp = "";
+                for (var i = 0; i < len; i++) {
+                    tmp += poly[j].getPath().getAt(i).toUrlValue(5) + "\n";
+                }
+                htmlStr[j] = tmp;
+            }
+			
+            $.ajax({
+                type: "POST",
+                url: "saveInfor.php",
+                data: {
+                    density: density,
+                    cnt: cnt,
+                    coord: htmlStr
+                },
+				success: function(response) {
+                        alert(response);
+						alert('yes');
+                },
+				fail: function(response) {
+                        alert(response);
+						alert('fuck');
+                }
+            });
+			
+			
+
+	
+        }
+
+        function readtxt() {
+
+
+            $.ajax({
+                type: "POST",
+                url: "readtxt.php"
+
+            }).done(function(o) {
+                alert(o);
+
+            });
+
+
+        }
+		
+		// dynamic PolyInfo Talbe
+		function refreshTable() {
+			var table = document.getElementById("PolyInfo");
+			for(var i = table.rows.length - 1; i > 0; i--)
+			table.deleteRow(i);
+		}		
+    </script>
+
+</body>
+
+</html>
